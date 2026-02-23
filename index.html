@@ -1,590 +1,837 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
+<html lang="ja"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>季語辞典</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&amp;family=Noto+Sans+JP:wght@300;400&amp;display=swap" rel="stylesheet">
 <style>
-:root {
---washi: #f5f0e8;
---washi-dark: #ede5d8;
---sumi: #1a1612;
---sumi-light: #3d3530;
---sumi-faint: #6b5f56;
---vermillion: #c0392b;
---spring: #c0607a;
---summer: #2e7ea6;
---autumn: #b8672b;
---winter: #4a6e9e;
---newyear: #7b4f8e;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-font-family: 'Noto Serif JP', serif;
-background: var(--washi);
-color: var(--sumi);
-min-height: 100vh;
-}
-body::before {
-content: '';
-position: fixed; inset: 0;
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-pointer-events: none; z-index: 999;
-}
-header {
-background: var(--sumi);
-color: var(--washi);
-padding: 1.8rem 2rem 1.4rem;
-position: relative;
-}
-header::after {
-content: '';
-position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-background: linear-gradient(90deg, transparent 0%, var(--vermillion) 30%, #e8a020 60%, transparent 100%);
-}
-.header-inner {
-max-width: 1200px; margin: 0 auto;
-display: flex; align-items: center; gap: 1.5rem;
-}
-.title-block { display: flex; align-items: baseline; gap: 0.8rem; }
-.site-title {
-font-size: 2.4rem; font-weight: 300;
-letter-spacing: 0.35em; line-height: 1;
-}
-.site-en {
-font-family: 'Noto Sans JP', sans-serif;
-font-size: 0.65rem; color: #8a7a70;
-letter-spacing: 0.3em; font-weight: 300;
-}
-.header-stats {
-margin-left: auto;
-text-align: right;
-font-family: 'Noto Sans JP', sans-serif;
-font-size: 0.7rem; color: #8a7a70;
-letter-spacing: 0.1em;
-}
-.header-stats .num { font-size: 1.6rem; color: var(--vermillion); font-weight: 700; line-height: 1; }
+  :root {
+    --washi: #f5f0e8;
+    --washi-dark: #ede5d8;
+    --sumi: #1a1612;
+    --sumi-light: #3d3530;
+    --sumi-faint: #6b5f56;
+    --vermillion: #c0392b;
+    --spring: #c0607a;
+    --summer: #2e7ea6;
+    --autumn: #b8672b;
+    --winter: #4a6e9e;
+    --newyear: #7b4f8e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Serif JP', serif;
+    background: var(--washi);
+    color: var(--sumi);
+    min-height: 100vh;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 999;
+  }
+  header {
+    background: var(--sumi);
+    color: var(--washi);
+    padding: 1.8rem 2rem 1.4rem;
+    position: relative;
+  }
+  header::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent 0%, var(--vermillion) 30%, #e8a020 60%, transparent 100%);
+  }
+  .header-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .title-block { display: flex; align-items: baseline; gap: 0.8rem; }
+  .site-title {
+    font-size: 2.4rem; font-weight: 300;
+    letter-spacing: 0.35em; line-height: 1;
+  }
+  .site-en {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.65rem; color: #8a7a70;
+    letter-spacing: 0.3em; font-weight: 300;
+  }
+  .header-stats {
+    margin-left: auto;
+    text-align: right;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.7rem; color: #8a7a70;
+    letter-spacing: 0.1em;
+  }
+  .header-stats .num { font-size: 1.6rem; color: var(--vermillion); font-weight: 700; line-height: 1; }
 
-.main-container {
-max-width: 1200px; margin: 0 auto;
-padding: 1.5rem 2rem;
-display: grid;
-grid-template-columns: 260px 1fr;
-gap: 2rem;
-align-items: start;
-}
+  .main-container {
+    max-width: 1200px; margin: 0 auto;
+    padding: 1.5rem 2rem;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
 
-/* Sidebar */
-.sidebar { position: sticky; top: 1rem; }
-.search-wrap { position: relative; margin-bottom: 1.2rem; }
-.search-box {
-width: 100%; padding: 0.65rem 2.2rem 0.65rem 0.9rem;
-border: 1px solid #c4b8a8; background: white;
-font-family: 'Noto Serif JP', serif; font-size: 0.95rem; color: var(--sumi);
-outline: none; transition: border-color 0.2s; border-radius: 0;
-}
-.search-box:focus { border-color: var(--vermillion); }
-.search-box::placeholder { color: #b0a090; }
-.search-clear {
-position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%);
-background: none; border: none; cursor: pointer;
-color: #b0a090; font-size: 1rem; display: none;
-}
-.search-clear.visible { display: block; }
+  /* Sidebar */
+  .sidebar { position: sticky; top: 1rem; }
+  .search-wrap { position: relative; margin-bottom: 1.2rem; }
+  .search-box {
+    width: 100%; padding: 0.65rem 2.2rem 0.65rem 0.9rem;
+    border: 1px solid #c4b8a8; background: white;
+    font-family: 'Noto Serif JP', serif; font-size: 0.95rem; color: var(--sumi);
+    outline: none; transition: border-color 0.2s; border-radius: 0;
+  }
+  .search-box:focus { border-color: var(--vermillion); }
+  .search-box::placeholder { color: #b0a090; }
+  .search-clear {
+    position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    color: #b0a090; font-size: 1rem; display: none;
+  }
+  .search-clear.visible { display: block; }
 
-.panel-label {
-font-size: 0.62rem; font-family: 'Noto Sans JP', sans-serif;
-font-weight: 400; letter-spacing: 0.3em; color: var(--sumi-faint);
-margin-bottom: 0.5rem; padding-bottom: 0.35rem;
-border-bottom: 1px solid #d4c8b8;
-}
+  .panel-label {
+    font-size: 0.62rem; font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 400; letter-spacing: 0.3em; color: var(--sumi-faint);
+    margin-bottom: 0.5rem; padding-bottom: 0.35rem;
+    border-bottom: 1px solid #d4c8b8;
+  }
 
-.season-grid {
-display: grid; grid-template-columns: 1fr 1fr;
-gap: 0.35rem; margin-bottom: 1.2rem;
-}
-.season-btn {
-padding: 0.45rem 0.5rem;
-border: 1px solid transparent;
-background: transparent;
-font-family: 'Noto Serif JP', serif; font-size: 0.85rem;
-cursor: pointer; text-align: center;
-transition: all 0.15s;
-display: flex; align-items: center; justify-content: center; gap: 0.4rem;
-color: var(--sumi);
-}
-.season-btn:hover { background: var(--washi-dark); }
-.season-btn.active { background: var(--sumi); color: var(--washi); }
-.season-btn.all { grid-column: 1 / -1; }
-.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .season-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0.35rem; margin-bottom: 1.2rem;
+  }
+  .season-btn {
+    padding: 0.45rem 0.5rem;
+    border: 1px solid transparent;
+    background: transparent;
+    font-family: 'Noto Serif JP', serif; font-size: 0.85rem;
+    cursor: pointer; text-align: center;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+    color: var(--sumi);
+  }
+  .season-btn:hover { background: var(--washi-dark); }
+  .season-btn.active { background: var(--sumi); color: var(--washi); }
+  .season-btn.all { grid-column: 1 / -1; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-.period-section { margin-bottom: 1.2rem; }
-.period-group { margin-bottom: 0.5rem; }
-.period-header {
-font-size: 0.62rem; font-family: 'Noto Sans JP', sans-serif;
-color: #b0a090; letter-spacing: 0.15em; padding: 0.2rem 0.5rem;
-display: flex; align-items: center; gap: 0.3rem;
-}
-.period-btns { display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 0 0.2rem; }
-.period-btn {
-padding: 0.25rem 0.55rem;
-border: 1px solid #d8cfc4; background: transparent;
-font-family: 'Noto Sans JP', sans-serif; font-size: 0.72rem;
-cursor: pointer; color: var(--sumi-faint); transition: all 0.15s;
-}
-.period-btn:hover { border-color: var(--sumi-faint); color: var(--sumi); }
-.period-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
+  .period-section { margin-bottom: 1.2rem; }
+  .period-group { margin-bottom: 0.5rem; }
+  .period-header {
+    font-size: 0.62rem; font-family: 'Noto Sans JP', sans-serif;
+    color: #b0a090; letter-spacing: 0.15em; padding: 0.2rem 0.5rem;
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+  .period-btns { display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 0 0.2rem; }
+  .period-btn {
+    padding: 0.25rem 0.55rem;
+    border: 1px solid #d8cfc4; background: transparent;
+    font-family: 'Noto Sans JP', sans-serif; font-size: 0.72rem;
+    cursor: pointer; color: var(--sumi-faint); transition: all 0.15s;
+  }
+  .period-btn:hover { border-color: var(--sumi-faint); color: var(--sumi); }
+  .period-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
 
-.cat-section { margin-bottom: 1.2rem; }
-.cat-btns { display: flex; flex-wrap: wrap; gap: 0.3rem; }
-.cat-btn {
-padding: 0.3rem 0.7rem;
-border: 1px solid #d8cfc4; background: transparent;
-font-family: 'Noto Sans JP', sans-serif; font-size: 0.75rem;
-cursor: pointer; color: var(--sumi-faint); transition: all 0.15s;
-}
-.cat-btn:hover { color: var(--sumi); border-color: #a09080; }
-.cat-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
+  .cat-section { margin-bottom: 1.2rem; }
+  .cat-btns { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .cat-btn {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid #d8cfc4; background: transparent;
+    font-family: 'Noto Sans JP', sans-serif; font-size: 0.75rem;
+    cursor: pointer; color: var(--sumi-faint); transition: all 0.15s;
+  }
+  .cat-btn:hover { color: var(--sumi); border-color: #a09080; }
+  .cat-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
 
-/* Content */
-.result-bar {
-display: flex; align-items: center; justify-content: space-between;
-margin-bottom: 1rem;
-}
-.result-info {
-font-family: 'Noto Sans JP', sans-serif; font-size: 0.72rem;
-color: var(--sumi-faint); letter-spacing: 0.1em;
-}
-.view-toggle { display: flex; gap: 0.3rem; }
-.view-btn {
-padding: 0.25rem 0.6rem; border: 1px solid #d4c8b8;
-background: transparent; cursor: pointer; font-size: 0.9rem;
-color: var(--sumi-faint); transition: all 0.15s;
-}
-.view-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
+  /* Content */
+  .result-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .result-info {
+    font-family: 'Noto Sans JP', sans-serif; font-size: 0.72rem;
+    color: var(--sumi-faint); letter-spacing: 0.1em;
+  }
+  .view-toggle { display: flex; gap: 0.3rem; }
+  .view-btn {
+    padding: 0.25rem 0.6rem; border: 1px solid #d4c8b8;
+    background: transparent; cursor: pointer; font-size: 0.9rem;
+    color: var(--sumi-faint); transition: all 0.15s;
+  }
+  .view-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
 
-/* Grid view */
-.kigo-grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-gap: 1px; background: #d4c8b8;
-border: 1px solid #d4c8b8;
-}
-.kigo-card {
-background: var(--washi); padding: 1rem 1.1rem;
-cursor: pointer; transition: background 0.12s;
-position: relative; min-height: 80px;
-display: flex; flex-direction: column; justify-content: center;
-}
-.kigo-card:hover { background: #fdfaf5; }
-.kigo-card.selected { background: var(--sumi) !important; color: var(--washi); }
-.kigo-word { font-size: 1.2rem; font-weight: 300; letter-spacing: 0.08em; line-height: 1.2; }
-.kigo-kana {
-font-family: 'Noto Sans JP', sans-serif; font-size: 0.6rem;
-color: var(--sumi-faint); letter-spacing: 0.15em; margin-top: 0.3rem;
-}
-.kigo-card.selected .kigo-kana { color: #a09080; }
-.kigo-season-dot {
-position: absolute; top: 0.5rem; right: 0.5rem;
-width: 6px; height: 6px; border-radius: 50%;
-}
+  /* Grid view */
+  .kigo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1px; background: #d4c8b8;
+    border: 1px solid #d4c8b8;
+  }
+  .kigo-card {
+    background: var(--washi); padding: 1rem 1.1rem;
+    cursor: pointer; transition: background 0.12s;
+    position: relative; min-height: 80px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .kigo-card:hover { background: #fdfaf5; }
+  .kigo-card.selected { background: var(--sumi) !important; color: var(--washi); }
+  .kigo-word { font-size: 1.2rem; font-weight: 300; letter-spacing: 0.08em; line-height: 1.2; }
+  .kigo-kana {
+    font-family: 'Noto Sans JP', sans-serif; font-size: 0.6rem;
+    color: var(--sumi-faint); letter-spacing: 0.15em; margin-top: 0.3rem;
+  }
+  .kigo-card.selected .kigo-kana { color: #a09080; }
+  .kigo-season-dot {
+    position: absolute; top: 0.5rem; right: 0.5rem;
+    width: 6px; height: 6px; border-radius: 50%;
+  }
 
-/* List view */
-.kigo-list { display: none; border: 1px solid #d4c8b8; }
-.kigo-list.visible { display: block; }
-.kigo-grid.list-mode { display: none; }
-.kigo-row {
-display: grid; grid-template-columns: 140px 1fr 80px 80px;
-gap: 1rem; align-items: center;
-padding: 0.6rem 1rem; border-bottom: 1px solid #e8e0d8;
-cursor: pointer; transition: background 0.12s; background: var(--washi);
-}
-.kigo-row:last-child { border-bottom: none; }
-.kigo-row:hover { background: #fdfaf5; }
-.kigo-row.selected { background: var(--sumi); color: var(--washi); }
-.row-word { font-size: 1.05rem; font-weight: 300; letter-spacing: 0.06em; }
-.row-kana { font-family: 'Noto Sans JP', sans-serif; font-size: 0.7rem; color: var(--sumi-faint); }
-.kigo-row.selected .row-kana { color: #a09080; }
-.row-badge {
-font-family: 'Noto Sans JP', sans-serif; font-size: 0.65rem;
-padding: 0.15rem 0.5rem; text-align: center;
-border: 1px solid currentColor; white-space: nowrap;
-}
-.list-header {
-display: grid; grid-template-columns: 140px 1fr 80px 80px;
-gap: 1rem; padding: 0.45rem 1rem;
-background: #ede5d8; border-bottom: 2px solid #d4c8b8;
-font-family: 'Noto Sans JP', sans-serif; font-size: 0.65rem;
-color: var(--sumi-faint); letter-spacing: 0.15em;
-}
+  /* List view */
+  .kigo-list { display: none; border: 1px solid #d4c8b8; }
+  .kigo-list.visible { display: block; }
+  .kigo-grid.list-mode { display: none; }
+  .kigo-row {
+    display: grid; grid-template-columns: 140px 1fr 80px 80px;
+    gap: 1rem; align-items: center;
+    padding: 0.6rem 1rem; border-bottom: 1px solid #e8e0d8;
+    cursor: pointer; transition: background 0.12s; background: var(--washi);
+  }
+  .kigo-row:last-child { border-bottom: none; }
+  .kigo-row:hover { background: #fdfaf5; }
+  .kigo-row.selected { background: var(--sumi); color: var(--washi); }
+  .row-word { font-size: 1.05rem; font-weight: 300; letter-spacing: 0.06em; }
+  .row-kana { font-family: 'Noto Sans JP', sans-serif; font-size: 0.7rem; color: var(--sumi-faint); }
+  .kigo-row.selected .row-kana { color: #a09080; }
+  .row-badge {
+    font-family: 'Noto Sans JP', sans-serif; font-size: 0.65rem;
+    padding: 0.15rem 0.5rem; text-align: center;
+    border: 1px solid currentColor; white-space: nowrap;
+  }
+  .list-header {
+    display: grid; grid-template-columns: 140px 1fr 80px 80px;
+    gap: 1rem; padding: 0.45rem 1rem;
+    background: #ede5d8; border-bottom: 2px solid #d4c8b8;
+    font-family: 'Noto Sans JP', sans-serif; font-size: 0.65rem;
+    color: var(--sumi-faint); letter-spacing: 0.15em;
+  }
 
-/* Pagination */
-.pagination {
-display: flex; gap: 0.4rem; margin-top: 1.2rem;
-align-items: center; flex-wrap: wrap;
-}
-.page-btn {
-padding: 0.35rem 0.75rem; border: 1px solid #d4c8b8;
-background: var(--washi); font-family: 'Noto Sans JP', sans-serif;
-font-size: 0.78rem; cursor: pointer; transition: all 0.15s; min-width: 36px; text-align: center;
-}
-.page-btn:hover:not(:disabled) { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
-.page-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
-.page-btn:disabled { opacity: 0.3; cursor: default; }
-.page-ellipsis { padding: 0.35rem 0.3rem; font-size: 0.78rem; color: #aaa; }
+  /* Pagination */
+  .pagination {
+    display: flex; gap: 0.4rem; margin-top: 1.2rem;
+    align-items: center; flex-wrap: wrap;
+  }
+  .page-btn {
+    padding: 0.35rem 0.75rem; border: 1px solid #d4c8b8;
+    background: var(--washi); font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.78rem; cursor: pointer; transition: all 0.15s; min-width: 36px; text-align: center;
+  }
+  .page-btn:hover:not(:disabled) { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
+  .page-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
+  .page-btn:disabled { opacity: 0.3; cursor: default; }
+  .page-ellipsis { padding: 0.35rem 0.3rem; font-size: 0.78rem; color: #aaa; }
 
-/* Detail panel */
-.detail-panel {
-position: fixed; right: 0; top: 0; bottom: 0; width: 380px;
-background: white; border-left: 1px solid #d4c8b8;
-transform: translateX(100%); transition: transform 0.28s ease;
-overflow-y: auto; z-index: 200;
-box-shadow: -12px 0 50px rgba(0,0,0,0.08);
-}
-.detail-panel.open { transform: translateX(0); }
-.detail-close {
-position: sticky; top: 0; z-index: 1;
-display: flex; align-items: center; justify-content: flex-end;
-padding: 0.8rem 1rem;
-background: white; border-bottom: 1px solid #f0e8e0;
-}
-.close-btn {
-background: none; border: 1px solid #d4c8b8; cursor: pointer;
-color: var(--sumi-faint); width: 28px; height: 28px;
-display: flex; align-items: center; justify-content: center;
-font-size: 0.9rem; transition: all 0.15s;
-}
-.close-btn:hover { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
-.detail-body { padding: 1.5rem 2rem 3rem; }
-.detail-season-bar {
-height: 3px; width: 40px; margin-bottom: 1.2rem;
-border-radius: 2px;
-}
-.detail-word { font-size: 3.2rem; font-weight: 300; letter-spacing: 0.12em; line-height: 1; margin-bottom: 0.4rem; }
-.detail-kana {
-font-family: 'Noto Sans JP', sans-serif; font-size: 0.85rem;
-color: var(--sumi-faint); letter-spacing: 0.25em; margin-bottom: 1.2rem;
-}
-.detail-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-.dtag {
-font-family: 'Noto Sans JP', sans-serif; font-size: 0.65rem;
-letter-spacing: 0.1em; padding: 0.2rem 0.65rem;
-border: 1px solid currentColor;
-}
-.detail-divider { border: none; border-top: 1px solid #e8e0d8; margin: 1.2rem 0; }
-.detail-section-label {
-font-family: 'Noto Sans JP', sans-serif; font-size: 0.62rem;
-color: var(--sumi-faint); letter-spacing: 0.25em; margin-bottom: 0.6rem;
-}
-.related-words { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.related-chip {
-font-size: 0.82rem; padding: 0.25rem 0.65rem;
-background: var(--washi); border: 1px solid #d4c8b8;
-cursor: pointer; transition: all 0.15s;
-}
-.related-chip:hover { background: var(--sumi); color: var(--washi); }
-.boudai-list {
-display: flex; flex-wrap: wrap; gap: 0.45rem;
-}
-.boudai-tag {
-font-size: 0.82rem; padding: 0.28rem 0.72rem;
-background: var(--washi-dark); border: 1px solid #c4b8a8;
-color: var(--sumi-light); font-family: 'Noto Serif JP', serif;
-letter-spacing: 0.05em;
-}
+  /* Detail panel */
+  .detail-panel {
+    position: fixed; right: 0; top: 0; bottom: 0; width: 380px;
+    background: white; border-left: 1px solid #d4c8b8;
+    transform: translateX(100%); transition: transform 0.28s ease;
+    overflow-y: auto; z-index: 200;
+    box-shadow: -12px 0 50px rgba(0,0,0,0.08);
+  }
+  .detail-panel.open { transform: translateX(0); }
+  .detail-close {
+    position: sticky; top: 0; z-index: 1;
+    display: flex; align-items: center; justify-content: flex-end;
+    padding: 0.8rem 1rem;
+    background: white; border-bottom: 1px solid #f0e8e0;
+  }
+  .close-btn {
+    background: none; border: 1px solid #d4c8b8; cursor: pointer;
+    color: var(--sumi-faint); width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; transition: all 0.15s;
+  }
+  .close-btn:hover { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
+  .detail-body { padding: 1.5rem 2rem 3rem; }
+  .detail-season-bar {
+    height: 3px; width: 40px; margin-bottom: 1.2rem;
+    border-radius: 2px;
+  }
+  .detail-word { font-size: 3.2rem; font-weight: 300; letter-spacing: 0.12em; line-height: 1; margin-bottom: 0.4rem; }
+  .detail-kana {
+    font-family: 'Noto Sans JP', sans-serif; font-size: 0.85rem;
+    color: var(--sumi-faint); letter-spacing: 0.25em; margin-bottom: 1.2rem;
+  }
+  .detail-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .dtag {
+    font-family: 'Noto Sans JP', sans-serif; font-size: 0.65rem;
+    letter-spacing: 0.1em; padding: 0.2rem 0.65rem;
+    border: 1px solid currentColor;
+  }
+  .detail-divider { border: none; border-top: 1px solid #e8e0d8; margin: 1.2rem 0; }
+  .detail-section-label {
+    font-family: 'Noto Sans JP', sans-serif; font-size: 0.62rem;
+    color: var(--sumi-faint); letter-spacing: 0.25em; margin-bottom: 0.6rem;
+  }
+  .related-words { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .related-chip {
+    font-size: 0.82rem; padding: 0.25rem 0.65rem;
+    background: var(--washi); border: 1px solid #d4c8b8;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .related-chip:hover { background: var(--sumi); color: var(--washi); }
+  .boudai-list {
+    display: flex; flex-wrap: wrap; gap: 0.45rem;
+  }
+  .boudai-tag {
+    font-size: 0.82rem; padding: 0.28rem 0.72rem;
+    background: var(--washi-dark); border: 1px solid #c4b8a8;
+    color: var(--sumi-light); font-family: 'Noto Serif JP', serif;
+    letter-spacing: 0.05em;
+  }
 
-@media (max-width: 900px) {
-.main-container { grid-template-columns: 1fr; padding: 1rem; }
-.sidebar { position: static; }
-.detail-panel { width: 100%; }
-.kigo-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-.kigo-row { grid-template-columns: 1fr 80px; }
-.kigo-row .row-kana, .kigo-row .row-cat { display: none; }
-.list-header { grid-template-columns: 1fr 80px; }
-.list-header .lh-kana, .list-header .lh-cat { display: none; }
-}
+  @media (max-width: 900px) {
+    .main-container { grid-template-columns: 1fr; padding: 1rem; }
+    .sidebar { position: static; }
+    .detail-panel { width: 100%; }
+    .kigo-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    .kigo-row { grid-template-columns: 1fr 80px; }
+    .kigo-row .row-kana, .kigo-row .row-cat { display: none; }
+    .list-header { grid-template-columns: 1fr 80px; }
+    .list-header .lh-kana, .list-header .lh-cat { display: none; }
+  }
 
-/* ── 編集モーダル ── */
-.edit-btn {
-background: none; border: 1.5px solid var(--sumi-faint); color: var(--sumi-faint);
-border-radius: 6px; padding: 4px 12px; font-size: 12px; cursor: pointer;
-transition: all .15s; font-family: inherit;
-}
-.edit-btn:hover { border-color: var(--sumi-light); color: var(--sumi-light); background: var(--washi-dark); }
-.add-btn {
-background: var(--vermillion); border: none; color: #fff;
-border-radius: 6px; padding: 6px 16px; font-size: 13px; cursor: pointer;
-font-family: inherit; transition: opacity .15s;
-}
-.add-btn:hover { opacity: .85; }
+  /* ── 編集モーダル ── */
+  .edit-btn {
+    background: none; border: 1.5px solid var(--sumi-faint); color: var(--sumi-faint);
+    border-radius: 6px; padding: 4px 12px; font-size: 12px; cursor: pointer;
+    transition: all .15s; font-family: inherit;
+  }
+  .edit-btn:hover { border-color: var(--sumi-light); color: var(--sumi-light); background: var(--washi-dark); }
+  .add-btn {
+    background: var(--vermillion); border: none; color: #fff;
+    border-radius: 6px; padding: 6px 16px; font-size: 13px; cursor: pointer;
+    font-family: inherit; transition: opacity .15s;
+  }
+  .add-btn:hover { opacity: .85; }
 
-.modal-overlay {
-display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
-z-index: 200; align-items: center; justify-content: center;
-}
-.modal-overlay.open { display: flex; }
-.modal-box {
-background: var(--washi); border-radius: 12px; padding: 28px 32px;
-width: min(560px, 92vw); max-height: 90vh; overflow-y: auto;
-box-shadow: 0 8px 40px rgba(0,0,0,.25);
-font-family: inherit;
-}
-.modal-title {
-font-size: 17px; font-weight: bold; color: var(--sumi-light);
-margin-bottom: 20px; border-bottom: 1px solid var(--washi-dark); padding-bottom: 10px;
-display: flex; align-items: center; gap: 8px;
-}
-.modal-title .modal-close {
-margin-left: auto; background: none; border: none; font-size: 18px;
-cursor: pointer; color: var(--sumi-faint); line-height: 1;
-}
-.form-row { margin-bottom: 14px; }
-.form-row label { display: block; font-size: 12px; color: var(--sumi-faint); margin-bottom: 4px; }
-.form-row input, .form-row select, .form-row textarea {
-width: 100%; box-sizing: border-box;
-border: 1.5px solid #d4c8b8; border-radius: 6px;
-padding: 7px 10px; font-size: 14px; font-family: inherit;
-background: #fff; color: var(--sumi); outline: none;
-transition: border-color .15s;
-}
-.form-row input:focus, .form-row select:focus, .form-row textarea:focus {
-border-color: var(--sumi-light);
-}
-.form-row textarea { resize: vertical; min-height: 72px; }
-.form-row-half { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-.modal-actions .btn-save {
-background: var(--vermillion); border: none; color: #fff;
-border-radius: 6px; padding: 8px 22px; font-size: 14px;
-cursor: pointer; font-family: inherit; transition: opacity .15s;
-}
-.modal-actions .btn-save:hover { opacity: .85; }
-.modal-actions .btn-cancel {
-background: none; border: 1.5px solid #d4c8b8; color: var(--sumi-faint);
-border-radius: 6px; padding: 8px 18px; font-size: 14px;
-cursor: pointer; font-family: inherit; transition: all .15s;
-}
-.modal-actions .btn-cancel:hover { border-color: var(--sumi-faint); }
-.modal-actions .btn-delete {
-background: none; border: 1.5px solid #e07070; color: #c0392b;
-border-radius: 6px; padding: 8px 18px; font-size: 14px;
-cursor: pointer; font-family: inherit; margin-right: auto; transition: all .15s;
-}
-.modal-actions .btn-delete:hover { background: #fdf0f0; }
-.boudai-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-.boudai-input-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
-.boudai-input-row input { flex: 1; }
-.boudai-input-row input.kana-input { width: 100px; flex: none; }
-.btn-add-boudai {
-background: none; border: 1.5px dashed #b0a090; color: var(--sumi-faint);
-border-radius: 6px; padding: 5px 12px; font-size: 12px; cursor: pointer;
-font-family: inherit; white-space: nowrap; transition: all .15s;
-}
-.btn-add-boudai:hover { border-color: var(--sumi-faint); color: var(--sumi-light); }
-.boudai-row-remove {
-background: none; border: none; color: #c0392b; font-size: 15px;
-cursor: pointer; padding: 0 4px; line-height: 1;
-}
-.toast {
-position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-background: var(--sumi-light); color: #fff; border-radius: 8px;
-padding: 10px 22px; font-size: 13px; z-index: 300;
-opacity: 0; transition: opacity .3s; pointer-events: none;
-}
-.toast.show { opacity: 1; }
-.detail-edit-row { display: flex; justify-content: flex-end; margin-bottom: 6px; }
-.toolbar-add { display: flex; justify-content: flex-end; padding: 0 0 8px 0; }
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
+    z-index: 200; align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--washi); border-radius: 12px; padding: 28px 32px;
+    width: min(560px, 92vw); max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 8px 40px rgba(0,0,0,.25);
+    font-family: inherit;
+  }
+  .modal-title {
+    font-size: 17px; font-weight: bold; color: var(--sumi-light);
+    margin-bottom: 20px; border-bottom: 1px solid var(--washi-dark); padding-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .modal-title .modal-close {
+    margin-left: auto; background: none; border: none; font-size: 18px;
+    cursor: pointer; color: var(--sumi-faint); line-height: 1;
+  }
+  .form-row { margin-bottom: 14px; }
+  .form-row label { display: block; font-size: 12px; color: var(--sumi-faint); margin-bottom: 4px; }
+  .form-row input, .form-row select, .form-row textarea {
+    width: 100%; box-sizing: border-box;
+    border: 1.5px solid #d4c8b8; border-radius: 6px;
+    padding: 7px 10px; font-size: 14px; font-family: inherit;
+    background: #fff; color: var(--sumi); outline: none;
+    transition: border-color .15s;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+    border-color: var(--sumi-light);
+  }
+  .form-row textarea { resize: vertical; min-height: 72px; }
+  .form-row-half { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+  .modal-actions .btn-save {
+    background: var(--vermillion); border: none; color: #fff;
+    border-radius: 6px; padding: 8px 22px; font-size: 14px;
+    cursor: pointer; font-family: inherit; transition: opacity .15s;
+  }
+  .modal-actions .btn-save:hover { opacity: .85; }
+  .modal-actions .btn-cancel {
+    background: none; border: 1.5px solid #d4c8b8; color: var(--sumi-faint);
+    border-radius: 6px; padding: 8px 18px; font-size: 14px;
+    cursor: pointer; font-family: inherit; transition: all .15s;
+  }
+  .modal-actions .btn-cancel:hover { border-color: var(--sumi-faint); }
+  .modal-actions .btn-delete {
+    background: none; border: 1.5px solid #e07070; color: #c0392b;
+    border-radius: 6px; padding: 8px 18px; font-size: 14px;
+    cursor: pointer; font-family: inherit; margin-right: auto; transition: all .15s;
+  }
+  .modal-actions .btn-delete:hover { background: #fdf0f0; }
+  .boudai-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .boudai-input-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+  .boudai-input-row input { flex: 1; }
+  .boudai-input-row input.kana-input { width: 100px; flex: none; }
+  .btn-add-boudai {
+    background: none; border: 1.5px dashed #b0a090; color: var(--sumi-faint);
+    border-radius: 6px; padding: 5px 12px; font-size: 12px; cursor: pointer;
+    font-family: inherit; white-space: nowrap; transition: all .15s;
+  }
+  .btn-add-boudai:hover { border-color: var(--sumi-faint); color: var(--sumi-light); }
+  .boudai-row-remove {
+    background: none; border: none; color: #c0392b; font-size: 15px;
+    cursor: pointer; padding: 0 4px; line-height: 1;
+  }
+  .toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    background: var(--sumi-light); color: #fff; border-radius: 8px;
+    padding: 10px 22px; font-size: 13px; z-index: 300;
+    opacity: 0; transition: opacity .3s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+  .detail-edit-row { display: flex; justify-content: flex-end; margin-bottom: 6px; }
+  .toolbar-add { display: flex; justify-content: flex-end; padding: 0 0 8px 0; }
 </style>
 </head>
 <body>
 
 <header>
-<div class="header-inner">
-<div class="title-block">
-<h1 class="site-title">季語辞典</h1>
-<span class="site-en">KIGO DICTIONARY</span>
-</div>
-<div class="header-stats">
-<div class="num" id="totalCount">0</div>
-<div>語収録</div>
-</div>
-</div>
+  <div class="header-inner">
+    <div class="title-block">
+      <h1 class="site-title">季語辞典</h1>
+      <span class="site-en">KIGO DICTIONARY</span>
+    </div>
+    <div class="header-stats">
+      <div class="num" id="totalCount">2,628</div>
+      <div>語収録</div>
+    </div>
+  </div>
 </header>
 
 <div class="main-container">
-<aside class="sidebar">
-<div class="search-wrap">
-<input type="text" class="search-box" id="searchBox" placeholder="季語・読み方を検索…" oninput="onSearch(this.value)">
-<button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
-</div>
+  <aside class="sidebar">
+    <div class="search-wrap">
+      <input type="text" class="search-box" id="searchBox" placeholder="季語・読み方を検索…" oninput="onSearch(this.value)">
+      <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+    </div>
 
-<div class="panel-label">季節</div>
-<div class="season-grid">
-<button class="season-btn all active" onclick="setFilter('season','all')" id="sb-all">
-<span class="dot" style="background:#888"></span> すべて
-</button>
-<button class="season-btn" onclick="setFilter('season','新年')" id="sb-新年">
-<span class="dot" style="background:var(--newyear)"></span> 新年
-</button>
-<button class="season-btn" onclick="setFilter('season','春')" id="sb-春">
-<span class="dot" style="background:var(--spring)"></span> 春
-</button>
-<button class="season-btn" onclick="setFilter('season','夏')" id="sb-夏">
-<span class="dot" style="background:var(--summer)"></span> 夏
-</button>
-<button class="season-btn" onclick="setFilter('season','秋')" id="sb-秋">
-<span class="dot" style="background:var(--autumn)"></span> 秋
-</button>
-<button class="season-btn" onclick="setFilter('season','冬')" id="sb-冬">
-<span class="dot" style="background:var(--winter)"></span> 冬
-</button>
-</div>
+    <div class="panel-label">季節</div>
+    <div class="season-grid">
+      <button class="season-btn all active" onclick="setFilter('season','all')" id="sb-all">
+        <span class="dot" style="background:#888"></span> すべて
+      </button>
+      <button class="season-btn" onclick="setFilter('season','新年')" id="sb-新年">
+        <span class="dot" style="background:var(--newyear)"></span> 新年
+      </button>
+      <button class="season-btn" onclick="setFilter('season','春')" id="sb-春">
+        <span class="dot" style="background:var(--spring)"></span> 春
+      </button>
+      <button class="season-btn" onclick="setFilter('season','夏')" id="sb-夏">
+        <span class="dot" style="background:var(--summer)"></span> 夏
+      </button>
+      <button class="season-btn" onclick="setFilter('season','秋')" id="sb-秋">
+        <span class="dot" style="background:var(--autumn)"></span> 秋
+      </button>
+      <button class="season-btn" onclick="setFilter('season','冬')" id="sb-冬">
+        <span class="dot" style="background:var(--winter)"></span> 冬
+      </button>
+    </div>
 
-<div class="period-section">
-<div class="panel-label">時期</div>
-<div id="periodList"></div>
-</div>
+    <div class="period-section">
+      <div class="panel-label">時期</div>
+      <div id="periodList"><div class="period-group"><div class="period-header"><span class="dot" style="background:var(--newyear)"></span>新年</div><div class="period-btns"><button class="period-btn">全新年 37</button><button class="period-btn">上新年 158</button><button class="period-btn">中新年 34</button><button class="period-btn">下新年 6</button></div></div><div class="period-group"><div class="period-header"><span class="dot" style="background:var(--spring)"></span>春</div><div class="period-btns"><button class="period-btn">三春 137</button><button class="period-btn">初春 76</button><button class="period-btn">仲春 139</button><button class="period-btn">晩春 225</button></div></div><div class="period-group"><div class="period-header"><span class="dot" style="background:var(--summer)"></span>夏</div><div class="period-btns"><button class="period-btn">三夏 307</button><button class="period-btn">初夏 126</button><button class="period-btn">仲夏 116</button><button class="period-btn">晩夏 186</button></div></div><div class="period-group"><div class="period-header"><span class="dot" style="background:var(--autumn)"></span>秋</div><div class="period-btns"><button class="period-btn">三秋 132</button><button class="period-btn">初秋 122</button><button class="period-btn">仲秋 134</button><button class="period-btn">晩秋 156</button></div></div><div class="period-group"><div class="period-header"><span class="dot" style="background:var(--winter)"></span>冬</div><div class="period-btns"><button class="period-btn">三冬 299</button><button class="period-btn">初冬 72</button><button class="period-btn">仲冬 73</button><button class="period-btn">晩冬 93</button></div></div></div>
+    </div>
 
-<div class="cat-section">
-<div class="panel-label">部類</div>
-<div class="cat-btns" id="catBtns"></div>
-</div>
-</aside>
+    <div class="cat-section">
+      <div class="panel-label">部類</div>
+      <div class="cat-btns" id="catBtns"><button class="cat-btn">時候 217</button><button class="cat-btn">天文 192</button><button class="cat-btn">地理 95</button><button class="cat-btn">生活 713</button><button class="cat-btn">行事 345</button><button class="cat-btn">動物 333</button><button class="cat-btn active">植物 733</button></div>
+    </div>
+  </aside>
 
-<main>
-<div class="result-bar">
-<div class="result-info" id="resultInfo"></div>
-<div class="view-toggle">
-<button class="view-btn active" id="vbGrid" onclick="setView('grid')" title="グリッド表示">⊞</button>
-<button class="view-btn" id="vbList" onclick="setView('list')" title="リスト表示">☰</button>
-</div>
-<button class="add-btn" onclick="openAddModal()" style="margin-left:10px">＋ 新規登録</button>
-<button class="edit-btn" onclick="openExportModal()" style="margin-left:8px" title="データをエクスポート">↓ 保存</button>    </div>
-<div class="kigo-grid" id="kigoGrid"></div>
-<div class="kigo-list" id="kigoList">
-<div class="list-header">
-<span>季語</span><span class="lh-kana">読み</span><span class="lh-cat">部類</span><span>季節</span>
-</div>
-<div id="kigoListBody"></div>
-</div>
-<div class="pagination" id="pagination"></div>
-</main>
+  <main>
+    <div class="result-bar">
+      <div class="result-info" id="resultInfo">733 語</div>
+      <div class="view-toggle">
+        <button class="view-btn active" id="vbGrid" onclick="setView('grid')" title="グリッド表示">⊞</button>
+        <button class="view-btn" id="vbList" onclick="setView('list')" title="リスト表示">☰</button>
+      </div>
+      <button class="add-btn" onclick="openAddModal()" style="margin-left:10px">＋ 新規登録</button>
+      <button class="edit-btn" onclick="openExportModal()" style="margin-left:8px" title="データをエクスポート">↓ 保存</button>
+    </div>
+    <div class="kigo-grid" id="kigoGrid"><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--newyear)"></span>
+        <div class="kigo-word">楪</div>
+        <div class="kigo-kana">ゆずりは</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--newyear)"></span>
+        <div class="kigo-word">歯朶</div>
+        <div class="kigo-kana">しだ</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--newyear)"></span>
+        <div class="kigo-word">福寿草</div>
+        <div class="kigo-kana">ふくじゅそう</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--newyear)"></span>
+        <div class="kigo-word">若菜</div>
+        <div class="kigo-kana">わかな</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--newyear)"></span>
+        <div class="kigo-word">薺</div>
+        <div class="kigo-kana">なずな</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--newyear)"></span>
+        <div class="kigo-word">春の七草</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--newyear)"></span>
+        <div class="kigo-word">根白草</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--newyear)"></span>
+        <div class="kigo-word">御行</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--newyear)"></span>
+        <div class="kigo-word">仏の座</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--newyear)"></span>
+        <div class="kigo-word">菘</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--newyear)"></span>
+        <div class="kigo-word">蘿蔔</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--newyear)"></span>
+        <div class="kigo-word">子日草</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">椿</div>
+        <div class="kigo-kana">つばき</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">木の芽</div>
+        <div class="kigo-kana">このめ</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">春菊</div>
+        <div class="kigo-kana">しゅんぎく</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">菫</div>
+        <div class="kigo-kana">すみれ</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">薺の花</div>
+        <div class="kigo-kana">なずなのはな</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">蒲公英</div>
+        <div class="kigo-kana">たんぽぽ</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">蘩蔞</div>
+        <div class="kigo-kana">はこべ</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">芹</div>
+        <div class="kigo-kana">せり</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">蓬</div>
+        <div class="kigo-kana">よもぎ</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">若布</div>
+        <div class="kigo-kana">わかめ</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">雛菊</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">ムスカリ</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">シクラメン</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">花韮</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">萵苣</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">茎立</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">芥菜</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">三葉芹</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">防風</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">青麦</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">種芋</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">春の草</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">春椎茸</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">搗布</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">鹿尾菜</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">角叉</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">海雲</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">石蓴</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">海髪</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">梅</div>
+        <div class="kigo-kana">うめ</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">紅梅</div>
+        <div class="kigo-kana">こうばい</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">ミモザ</div>
+        <div class="kigo-kana">みもざ</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">猫柳</div>
+        <div class="kigo-kana">ねこやなぎ</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">クロッカス</div>
+        <div class="kigo-kana">くろっかす</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">蕗の薹</div>
+        <div class="kigo-kana">ふきのとう</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">下萌</div>
+        <div class="kigo-kana">したもえ</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">草の芽</div>
+        <div class="kigo-kana">くさのめ</div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">牡丹の芽</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">薔薇の芽</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">山茱萸の花</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">黄梅</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">金縷梅</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">菠薐草</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">水菜</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">ものの芽</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">末黒の芒</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">古草</div>
+        <div class="kigo-kana"></div>
+      </div><div class="kigo-card">
+        <span class="kigo-season-dot" style="background:var(--spring)"></span>
+        <div class="kigo-word">州浜草</div>
+        <div class="kigo-kana"></div>
+      </div></div>
+    <div class="kigo-list" id="kigoList" style="display: none;">
+      <div class="list-header">
+        <span>季語</span><span class="lh-kana">読み</span><span class="lh-cat">部類</span><span>季節</span>
+      </div>
+      <div id="kigoListBody"></div>
+    </div>
+    <div class="pagination" id="pagination"><button class="page-btn" disabled="">‹</button><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">3</button><span class="page-ellipsis">…</span><button class="page-btn">13</button><button class="page-btn">›</button></div>
+  </main>
 </div>
 
 <div class="detail-panel" id="detailPanel">
-<div class="detail-close">
-<button class="close-btn" onclick="closeDetail()">✕</button>
-<button class="edit-btn" onclick="openEditModal()" style="margin-right:8px">編集</button>
-</div>
-<div class="detail-body" id="detailBody"></div>
+  <div class="detail-close">
+    <button class="close-btn" onclick="closeDetail()">✕</button>
+    <button class="edit-btn" onclick="openEditModal()" style="margin-right:8px">編集</button>
+  </div>
+  <div class="detail-body" id="detailBody">
+    <div class="detail-season-bar" style="background:var(--spring)"></div>
+    <div class="detail-word">桜</div>
+    <div class="detail-kana">さくら</div>
+    <div class="detail-tags">
+      <span class="dtag" style="color:var(--spring);border-color:var(--spring)">春</span>
+      <span class="dtag" style="color:var(--spring);border-color:var(--spring)">晩春</span>
+      <span class="dtag" style="color:var(--sumi-faint);border-color:#d4c8b8">植物</span>
+    </div>
+    
+      <hr class="detail-divider">
+      <div class="detail-section-label">傍　題</div>
+      <div class="boudai-list"><span class="boudai-tag">夕桜</span><span class="boudai-tag">夜桜</span><span class="boudai-tag">家桜</span><span class="boudai-tag">庭桜</span><span class="boudai-tag">朝桜</span><span class="boudai-tag">染井吉野</span><span class="boudai-tag">桜咲く</span><span class="boudai-tag">桜月夜</span><span class="boudai-tag">若桜</span></div>
+    
+  </div>
 </div>
 
 
 <!-- 編集・新規登録モーダル -->
 <div class="modal-overlay" id="editModal">
-<div class="modal-box">
-<div class="modal-title">
-<span id="modalTitle">季語を編集</span>
-<button class="modal-close" onclick="closeModal()">✕</button>
-</div>
-<div class="form-row-half">
-<div class="form-row" style="margin-bottom:0">
-<label>季語 *</label>
-<input type="text" id="fWord" placeholder="春" />
-</div>
-<div class="form-row" style="margin-bottom:0">
-<label>読み方</label>
-<input type="text" id="fKana" placeholder="はる" />
-</div>
-</div>
-<div class="form-row-half" style="margin-top:14px">
-<div class="form-row" style="margin-bottom:0">
-<label>季節 *</label>
-<select id="fSeason" onchange="updatePeriodOptions()">
-<option value="新年">新年</option>
-<option value="春">春</option>
-<option value="夏">夏</option>
-<option value="秋">秋</option>
-<option value="冬">冬</option>
-</select>
-</div>
-<div class="form-row" style="margin-bottom:0">
-<label>時期</label>
-<select id="fPeriod"></select>
-</div>
-</div>
-<div class="form-row" style="margin-top:14px">
-<label>分類 *</label>
-<select id="fCat">
-<option value="時候">時候</option>
-<option value="天文">天文</option>
-<option value="地理">地理</option>
-<option value="生活">生活</option>
-<option value="行事">行事</option>
-<option value="動物">動物</option>
-<option value="植物">植物</option>
-</select>
-</div>
-<div class="form-row">
-<label>傍題（語・読みの順で入力。行を追加できます）</label>
-<div id="boudaiInputArea"></div>
-<button class="btn-add-boudai" onclick="addBoudaiRow('','')">＋ 傍題を追加</button>
-</div>
-<div class="modal-actions">
-<button class="btn-delete" id="btnDelete" onclick="deleteKigo()" style="display:none">削除</button>
-<button class="btn-cancel" onclick="closeModal()">キャンセル</button>
-<button class="btn-save" onclick="saveKigo()">保存</button>
-</div>
-</div>
+  <div class="modal-box">
+    <div class="modal-title">
+      <span id="modalTitle">季語を編集：鳥雲に入る</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="form-row-half">
+      <div class="form-row" style="margin-bottom:0">
+        <label>季語 *</label>
+        <input type="text" id="fWord" placeholder="春">
+      </div>
+      <div class="form-row" style="margin-bottom:0">
+        <label>読み方</label>
+        <input type="text" id="fKana" placeholder="はる">
+      </div>
+    </div>
+    <div class="form-row-half" style="margin-top:14px">
+      <div class="form-row" style="margin-bottom:0">
+        <label>季節 *</label>
+        <select id="fSeason" onchange="updatePeriodOptions()">
+          <option value="新年">新年</option>
+          <option value="春">春</option>
+          <option value="夏">夏</option>
+          <option value="秋">秋</option>
+          <option value="冬">冬</option>
+        </select>
+      </div>
+      <div class="form-row" style="margin-bottom:0">
+        <label>時期</label>
+        <select id="fPeriod"><option value="三春">三春</option><option value="初春">初春</option><option value="仲春">仲春</option><option value="晩春">晩春</option></select>
+      </div>
+    </div>
+    <div class="form-row" style="margin-top:14px">
+      <label>分類 *</label>
+      <select id="fCat">
+        <option value="時候">時候</option>
+        <option value="天文">天文</option>
+        <option value="地理">地理</option>
+        <option value="生活">生活</option>
+        <option value="行事">行事</option>
+        <option value="動物">動物</option>
+        <option value="植物">植物</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>傍題（語・読みの順で入力。行を追加できます）</label>
+      <div id="boudaiInputArea"><div class="boudai-input-row">
+    <input type="text" placeholder="傍題" value="" class="boudai-word-input">
+    <input type="text" placeholder="読み" value="" class="kana-input boudai-kana-input">
+    <button class="boudai-row-remove" onclick="this.parentElement.remove()" title="削除">×</button>
+  </div><div class="boudai-input-row">
+    <input type="text" placeholder="傍題" value="" class="boudai-word-input">
+    <input type="text" placeholder="読み" value="" class="kana-input boudai-kana-input">
+    <button class="boudai-row-remove" onclick="this.parentElement.remove()" title="削除">×</button>
+  </div></div>
+      <button class="btn-add-boudai" onclick="addBoudaiRow('','')">＋ 傍題を追加</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-delete" id="btnDelete" onclick="deleteKigo()" style="">削除</button>
+      <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+      <button class="btn-save" onclick="saveKigo()">保存</button>
+    </div>
+  </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">「鳥雲に入る」を更新しました</div>
 
 <!-- エクスポートモーダル -->
-<div class="modal-overlay" id="exportModal">
-<div class="modal-box" style="max-width:460px">
-<div class="modal-title">
-<span>保存・読み込み</span>
-<button class="modal-close" onclick="closeExportModal()">✕</button>
-</div>
-
-<!-- 保存セクション -->
-<div style="font-size:12px;font-weight:bold;color:var(--sumi-faint);letter-spacing:.05em;margin-bottom:10px">▼ 保存する</div>
-<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-<button class="btn-save" style="background:var(--vermillion);border:none;color:#fff;border-radius:8px;padding:11px 18px;font-size:13px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px" onclick="exportHTML()">
-<span style="font-size:18px">🗂</span>
-<span><strong>HTMLとして保存</strong><span style="font-size:12px;opacity:.85;margin-left:8px">ブラウザで開くだけで使える完全版（推奨）</span></span>
-</button>
-<button class="btn-save" style="background:#2e7ea6;border:none;color:#fff;border-radius:8px;padding:11px 18px;font-size:13px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px" onclick="exportJSON()">
-<span style="font-size:18px">📋</span>
-<span><strong>JSONとして保存</strong><span style="font-size:12px;opacity:.85;margin-left:8px">後で読み込んで復元できるバックアップ</span></span>
-</button>
-<button class="btn-save" style="background:#4a6e4a;border:none;color:#fff;border-radius:8px;padding:11px 18px;font-size:13px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px" onclick="exportCSV()">
-<span style="font-size:18px">📊</span>
-<span><strong>CSVとして保存</strong><span style="font-size:12px;opacity:.85;margin-left:8px">Excelで開ける表形式</span></span>
-</button>
-</div>
-
-<!-- 読み込みセクション -->
-<div style="font-size:12px;font-weight:bold;color:var(--sumi-faint);letter-spacing:.05em;margin-bottom:10px;padding-top:16px;border-top:1px solid var(--washi-dark)">▼ JSONから読み込む</div>
-<p style="font-size:12px;color:var(--sumi-faint);margin:0 0 10px;line-height:1.7">
-以前に保存したJSONファイルを読み込むと、<strong>現在のデータに追加・上書き</strong>されます。
-</p>
-<div style="display:flex;gap:8px;align-items:center">
-<label style="flex:1;display:flex;align-items:center;gap:8px;border:1.5px dashed #b0a090;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:13px;color:var(--sumi-faint);transition:border-color .15s" id="importLabel">
-<span style="font-size:18px">📂</span>
-<span id="importFileName">ファイルを選択…</span>
-<input type="file" accept=".json" style="display:none" id="importFileInput" onchange="onImportFileSelected(this)">
-</label>
-<button class="btn-save" id="btnImport" style="background:#7b4f8e;border:none;color:#fff;border-radius:8px;padding:10px 18px;font-size:13px;cursor:pointer;font-family:inherit;opacity:.4;pointer-events:none" onclick="importJSON()">読み込む</button>
-</div>
-<div id="importPreview" style="display:none;margin-top:10px;font-size:12px;color:var(--sumi-faint);background:var(--washi-dark);border-radius:6px;padding:10px 12px;line-height:1.8"></div>
-
-<div class="modal-actions" style="margin-top:18px">
-<button class="btn-cancel" onclick="closeExportModal()">閉じる</button>
-</div>
-</div>
+<div class="modal-overlay open" id="exportModal">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-title">
+      <span>データを保存・エクスポート</span>
+      <button class="modal-close" onclick="closeExportModal()">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--sumi-faint);margin-bottom:18px;line-height:1.7">
+      現在の編集内容を含む完全な辞典データをダウンロードできます。<br>
+      次回はこのファイルを開けば変更が保持されます。
+    </p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn-save" style="background:var(--vermillion);border:none;color:#fff;border-radius:8px;padding:12px 20px;font-size:14px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px" onclick="exportHTML()">
+        <span style="font-size:20px">🗂</span>
+        <span><strong>HTMLファイルとして保存</strong><br><span style="font-size:12px;opacity:.85">ブラウザで開くだけで使える完全版</span></span>
+      </button>
+      <button class="btn-save" style="background:#2e7ea6;border:none;color:#fff;border-radius:8px;padding:12px 20px;font-size:14px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px" onclick="exportJSON()">
+        <span style="font-size:20px">📋</span>
+        <span><strong>JSONとして保存</strong><br><span style="font-size:12px;opacity:.85">季語データのみ（バックアップ・移行用）</span></span>
+      </button>
+      <button class="btn-save" style="background:#4a6e4a;border:none;color:#fff;border-radius:8px;padding:12px 20px;font-size:14px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px" onclick="exportCSV()">
+        <span style="font-size:20px">📊</span>
+        <span><strong>CSVとして保存</strong><br><span style="font-size:12px;opacity:.85">Excelで開ける表形式</span></span>
+      </button>
+    </div>
+    <div class="modal-actions" style="margin-top:18px">
+      <button class="btn-cancel" onclick="closeExportModal()">閉じる</button>
+    </div>
+  </div>
 </div>
 
 

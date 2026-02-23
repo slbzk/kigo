@@ -803,43 +803,11 @@
 
 <div class="toast" id="toast">「鳥雲に入る」を更新しました</div>
 
-<!-- エクスポートモーダル -->
-<div class="modal-overlay open" id="exportModal">
-  <div class="modal-box" style="max-width:420px">
-    <div class="modal-title">
-      <span>データを保存・エクスポート</span>
-      <button class="modal-close" onclick="closeExportModal()">✕</button>
-    </div>
-    <p style="font-size:13px;color:var(--sumi-faint);margin-bottom:18px;line-height:1.7">
-      現在の編集内容を含む完全な辞典データをダウンロードできます。<br>
-      次回はこのファイルを開けば変更が保持されます。
-    </p>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <button class="btn-save" style="background:var(--vermillion);border:none;color:#fff;border-radius:8px;padding:12px 20px;font-size:14px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px" onclick="exportHTML()">
-        <span style="font-size:20px">🗂</span>
-        <span><strong>HTMLファイルとして保存</strong><br><span style="font-size:12px;opacity:.85">ブラウザで開くだけで使える完全版</span></span>
-      </button>
-      <button class="btn-save" style="background:#2e7ea6;border:none;color:#fff;border-radius:8px;padding:12px 20px;font-size:14px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px" onclick="exportJSON()">
-        <span style="font-size:20px">📋</span>
-        <span><strong>JSONとして保存</strong><br><span style="font-size:12px;opacity:.85">季語データのみ（バックアップ・移行用）</span></span>
-      </button>
-      <button class="btn-save" style="background:#4a6e4a;border:none;color:#fff;border-radius:8px;padding:12px 20px;font-size:14px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px" onclick="exportCSV()">
-        <span style="font-size:20px">📊</span>
-        <span><strong>CSVとして保存</strong><br><span style="font-size:12px;opacity:.85">Excelで開ける表形式</span></span>
-      </button>
-    </div>
-    <div class="modal-actions" style="margin-top:18px">
-      <button class="btn-cancel" onclick="closeExportModal()">閉じる</button>
-    </div>
-  </div>
-</div>
-
-
 
 <script>
-// =====================================================
+//=====================================================
 // KIGO DATA — sourced from traditional saijiki
-// =====================================================
+//=====================================================
 let RAW = [
 // ============ 新年 ============
 // 全新年・時候

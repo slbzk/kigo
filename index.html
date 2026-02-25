@@ -147,6 +147,20 @@
   .cat-btn:hover { color: var(--sumi); border-color: #a09080; }
   .cat-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
 
+  .mora-btns { 
+    display: grid; grid-template-columns: 1fr 1fr 1fr; 
+    gap: 0.3rem; 
+  }
+  .mora-btn {
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #d8cfc4; background: transparent;
+    font-family: 'Noto Sans JP', sans-serif; font-size: 0.75rem;
+    cursor: pointer; color: var(--sumi-faint); transition: all 0.15s;
+    text-align: center;
+  }
+  .mora-btn:hover { color: var(--sumi); border-color: #a09080; }
+  .mora-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
+
   /* Content */
   .result-bar {
     display: flex; align-items: center; justify-content: space-between;
@@ -475,6 +489,21 @@
     <div class="cat-section">
       <div class="panel-label">部類</div>
       <div class="cat-btns" id="catBtns"></div>
+    </div>
+
+    <div class="mora-section">
+      <div class="panel-label">音数</div>
+      <div class="mora-btns" id="moraBtns">
+        <button class="mora-btn active" onclick="setFilter('mora','all')" id="mb-all">すべて</button>
+        <button class="mora-btn" onclick="setFilter('mora','1')" id="mb-1">１音</button>
+        <button class="mora-btn" onclick="setFilter('mora','2')" id="mb-2">２音</button>
+        <button class="mora-btn" onclick="setFilter('mora','3')" id="mb-3">３音</button>
+        <button class="mora-btn" onclick="setFilter('mora','4')" id="mb-4">４音</button>
+        <button class="mora-btn" onclick="setFilter('mora','5')" id="mb-5">５音</button>
+        <button class="mora-btn" onclick="setFilter('mora','6')" id="mb-6">６音</button>
+        <button class="mora-btn" onclick="setFilter('mora','7')" id="mb-7">７音</button>
+        <button class="mora-btn" onclick="setFilter('mora','8+')" id="mb-8+">８音以上</button>
+      </div>
     </div>
   </aside>
 
@@ -5341,18 +5370,168 @@ const PERIOD_ORDER = {
 const CAT_ORDER = ['時候','天文','地理','生活','行事','動物','植物'];
 
 let state = {
-  season: 'all', period: 'all', cat: 'all',
+  season: 'all', period: 'all', cat: 'all', mora: 'all',
   q: '', page: 1, view: 'grid', selected: null
 };
 const PER_PAGE = 60;
 
 function getColor(s) { return SEASON_COLOR[s] || '#888'; }
 
+// 音数（モーラ）計算関数
+function countMora(kana) {
+  if (!kana || kana.trim() === '') return 0;
+  
+  // 「／」で区切られている場合は、最初の読み方のみを使用
+  let targetKana = kana;
+  if (kana.includes('／')) {
+    targetKana = kana.split('／')[0].trim();
+  }
+  // 「・」で区切られている場合も同様に処理
+  if (targetKana.includes('・')) {
+    targetKana = targetKana.split('・')[0].trim();
+  }
+  
+  // ひらがなでない文字を除外してクリーンアップ（長音記号「ー」は残す）
+  let cleanKana = targetKana.replace(/[^あ-んー]/g, '');
+  if (cleanKana === '') return 0;
+  
+  let moraCount = 0;
+  let i = 0;
+  
+  while (i < cleanKana.length) {
+    const char = cleanKana[i];
+    
+    // 促音「っ」は1音
+    if (char === 'っ') {
+      moraCount++;
+      i++;
+      continue;
+    }
+    
+    // 撥音「ん」は1音
+    if (char === 'ん') {
+      moraCount++;
+      i++;
+      continue;
+    }
+    
+    // 長音記号「ー」は1音として数える
+    if (char === 'ー') {
+      moraCount++;
+      i++;
+      continue;
+    }
+    
+    // 小文字（ぁぃぅぇぉゃゅょ）は拗音・促音の一部
+    if ('ぁぃぅぇぉゃゅょ'.includes(char)) {
+      i++;
+      continue; // 前の文字でカウント済み
+    }
+    
+    // 拗音の判定：拗音可能な子音 + ゃゅょ
+    const isYouonBase = 'きしちにひみりぎじぢびぴくぐすずつづぬぶぷふきくしすちつにぬひふみむりる'.includes(char);
+    if (isYouonBase && i + 1 < cleanKana.length) {
+      const nextChar = cleanKana[i + 1];
+      if ('ゃゅょ'.includes(nextChar)) {
+        // 拗音として1音（きゃ、しゅ、ちょ、にゃ、ひゅ、みょ等）
+        moraCount++;
+        i += 2;
+        continue;
+      }
+    }
+    
+    // 通常の音（1文字1音）
+    moraCount++;
+    i++;
+  }
+  
+  return moraCount;
+}
+
+// 複数の読み方がある季語の音数リストを取得
+function getMoraList(kana) {
+  if (!kana || kana.trim() === '') return [];
+  
+  let readings = [];
+  
+  // 「／」で分割
+  if (kana.includes('／')) {
+    readings = kana.split('／').map(r => r.trim());
+  } 
+  // 「・」で分割
+  else if (kana.includes('・')) {
+    readings = kana.split('・').map(r => r.trim());
+  }
+  // 単一の読み方
+  else {
+    readings = [kana.trim()];
+  }
+  
+  // 各読み方の音数を計算
+  return readings.map(reading => {
+    const cleanKana = reading.replace(/[^あ-んー]/g, '');
+    if (cleanKana === '') return 0;
+    
+    let moraCount = 0;
+    let i = 0;
+    
+    while (i < cleanKana.length) {
+      const char = cleanKana[i];
+      
+      if (char === 'っ' || char === 'ん') {
+        moraCount++;
+        i++;
+        continue;
+      }
+      
+      if (char === 'ー') {
+        moraCount++;  // 長音記号を1音として計算
+        i++;
+        continue;
+      }
+      
+      if ('ぁぃぅぇぉゃゅょ'.includes(char)) {
+        i++;
+        continue;
+      }
+      
+      const isYouonBase = 'きしちにひみりぎじぢびぴくぐすずつづぬぶぷふきくしすちつにぬひふみむりる'.includes(char);
+      if (isYouonBase && i + 1 < cleanKana.length && 'ゃゅょ'.includes(cleanKana[i + 1])) {
+        moraCount++;
+        i += 2;
+        continue;
+      }
+      
+      moraCount++;
+      i++;
+    }
+    
+    return moraCount;
+  });
+}
+
 function filtered() {
   return RAW.filter(k => {
     if (state.season !== 'all' && k.s !== state.season) return false;
     if (state.period !== 'all' && k.p !== state.period) return false;
     if (state.cat !== 'all' && k.c !== state.cat) return false;
+    
+    // 音数フィルター（複数読みがある場合はいずれかがマッチすればOK）
+    if (state.mora !== 'all') {
+      if (state.mora === '8+') {
+        // 8音以上の場合
+        const moraList = getMoraList(k.k);
+        const hasEightOrMore = moraList.some(mora => mora >= 8);
+        if (!hasEightOrMore) return false;
+      } else {
+        // 具体的な音数の場合
+        const targetMora = parseInt(state.mora);
+        const moraList = getMoraList(k.k);
+        const hasMatchingMora = moraList.some(mora => mora === targetMora);
+        if (!hasMatchingMora) return false;
+      }
+    }
+    
     if (state.q) {
       const q = state.q;
       const bList = BOUDAI[k.w] || [];
@@ -5374,6 +5553,12 @@ function setFilter(type, val) {
   }
   if (type === 'period') state.period = val;
   if (type === 'cat') state.cat = val;
+  if (type === 'mora') {
+    state.mora = val;
+    // update mora buttons
+    document.querySelectorAll('.mora-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('mb-' + val).classList.add('active');
+  }
   state.page = 1;
   render();
 }
@@ -5428,6 +5613,16 @@ function render() {
         <span class="kigo-season-dot" style="background:${color}"></span>
         <div class="kigo-word">${k.w}</div>
         <div class="kigo-kana">${k.k}</div>
+        <div class="kigo-mora-count" style="position:absolute; bottom:0.5rem; right:0.5rem; font-size:0.5rem; color:#bbb;">${k.k ? (() => {
+          const moraList = getMoraList(k.k);
+          if (moraList.length > 1) {
+            const displayList = moraList.map(m => m >= 8 ? '8+' : m.toString());
+            return displayList.join('/') + '音';
+          } else {
+            const mora = moraList[0];
+            return (mora >= 8 ? '8+' : mora.toString()) + '音';
+          }
+        })() : ''}</div>
       `;
       d.onclick = () => openDetail(k);
       grid.appendChild(d);
@@ -5750,6 +5945,58 @@ document.getElementById('editModal').addEventListener('click', function(e) {
 
 // Init
 document.getElementById('totalCount').textContent = RAW.length.toLocaleString();
+
+// 複数読み音数計算テスト
+console.log("=== 複数読み音数計算テスト ===");
+const testCases = [
+  {word: "去年", kana: "こぞ・きょねん", expected: [2, 4]},
+  {word: "菖蒲", kana: "しょうぶ・あやめ", expected: [4, 3]},
+  {word: "桜", kana: "さくら", expected: [3]},
+  {word: "春雨", kana: "はるさめ", expected: [4]}
+];
+
+// 拗音テスト
+console.log("=== 音数計算テスト（長音記号含む） ===");
+const youonTests = [
+  // 1音の例
+  {word: "灯", kana: "ひ", expected: 1}, // ひ(1音)
+  {word: "実", kana: "み", expected: 1}, // み(1音)
+  {word: "絵", kana: "え", expected: 1}, // え(1音)
+  // 2音の例
+  {word: "蝶", kana: "ちょう", expected: 2}, // ちょ(1音) + う(1音)
+  {word: "梅", kana: "うめ", expected: 2}, // う(1音) + め(1音)
+  {word: "竹", kana: "たけ", expected: 2}, // た(1音) + け(1音)
+  // 長音記号「ー」を含むテストケース
+  {word: "コーヒー", kana: "こーひー", expected: 4}, // こ(1音) + ー(1音) + ひ(1音) + ー(1音)
+  {word: "ビール", kana: "びーる", expected: 3}, // び(1音) + ー(1音) + る(1音)
+  {word: "テーブル", kana: "てーぶる", expected: 4}, // て(1音) + ー(1音) + ぶ(1音) + る(1音)
+  {word: "ケーキ", kana: "けーき", expected: 3}, // け(1音) + ー(1音) + き(1音)
+  {word: "ソース", kana: "そーす", expected: 3}, // そ(1音) + ー(1音) + す(1音)
+  // 通常の音数
+  {word: "雀", kana: "すずめ", expected: 3}, // す(1音) + ず(1音) + め(1音)
+  {word: "蜻蛉", kana: "とんぼ", expected: 3}, // とん(2音) + ぼ(1音)
+  {word: "蝶々", kana: "ちょうちょう", expected: 4}, // ちょ(1音) + う(1音) + ちょ(1音) + う(1音)
+  {word: "人形", kana: "にんぎょう", expected: 4}, // に(1音) + ん(1音) + ぎょ(1音) + う(1音)
+  {word: "急須", kana: "きゅうす", expected: 3}, // きゅ(1音) + う(1音) + す(1音)
+  {word: "茶", kana: "ちゃ", expected: 1}, // ちゃ(1音)
+  {word: "笹", kana: "ささ", expected: 2}, // さ(1音) + さ(1音)
+  // 長い季語の例（8音以上になるもの）
+  {word: "長い季語", kana: "ながいきごのれいなのです", expected: 11}, // テスト用の長い例
+];
+
+youonTests.forEach(test => {
+  const calculated = countMora(test.kana);
+  const status = calculated === test.expected ? "✅" : "❌";
+  console.log(`${status} ${test.word}(${test.kana}): 計算=${calculated}音, 期待=${test.expected}音`);
+});
+
+testCases.forEach(test => {
+  const calculated = getMoraList(test.kana);
+  const match = JSON.stringify(calculated) === JSON.stringify(test.expected);
+  const status = match ? "✅" : "❌";
+  console.log(`${status} ${test.word}(${test.kana}): 計算=[${calculated.join(',')}]音, 期待=[${test.expected.join(',')}]音`);
+});
+
 render();
 </script>
 </body>

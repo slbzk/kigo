@@ -514,8 +514,7 @@
         <button class="view-btn active" id="vbGrid" onclick="setView('grid')" title="グリッド表示">⊞</button>
         <button class="view-btn" id="vbList" onclick="setView('list')" title="リスト表示">☰</button>
       </div>
-      <button class="add-btn" onclick="openAddModal()" style="margin-left:10px">＋ 新規登録</button>
-      <button class="edit-btn" onclick="openExportModal()" style="margin-left:8px" title="データをエクスポート">↓ 保存</button>
+      
                  
     </div>
     <div class="kigo-grid" id="kigoGrid"></div>
@@ -535,113 +534,6 @@
     <button class="edit-btn" onclick="openEditModal()" style="margin-right:8px">編集</button>
   </div>
   <div class="detail-body" id="detailBody"></div>
-</div>
-
-
-<!-- 編集・新規登録モーダル -->
-<div class="modal-overlay" id="editModal">
-  <div class="modal-box">
-    <div class="modal-title">
-      <span id="modalTitle">季語を編集</span>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="form-row-half">
-      <div class="form-row" style="margin-bottom:0">
-        <label>季語 *</label>
-        <input type="text" id="fWord" placeholder="春" />
-      </div>
-      <div class="form-row" style="margin-bottom:0">
-        <label>読み方</label>
-        <input type="text" id="fKana" placeholder="はる" />
-      </div>
-    </div>
-    <div class="form-row-half" style="margin-top:14px">
-      <div class="form-row" style="margin-bottom:0">
-        <label>季節 *</label>
-        <select id="fSeason" onchange="updatePeriodOptions()">
-          <option value="新年">新年</option>
-          <option value="春">春</option>
-          <option value="夏">夏</option>
-          <option value="秋">秋</option>
-          <option value="冬">冬</option>
-        </select>
-      </div>
-      <div class="form-row" style="margin-bottom:0">
-        <label>時期</label>
-        <select id="fPeriod"></select>
-      </div>
-    </div>
-    <div class="form-row" style="margin-top:14px">
-      <label>分類 *</label>
-      <select id="fCat">
-        <option value="時候">時候</option>
-        <option value="天文">天文</option>
-        <option value="地理">地理</option>
-        <option value="生活">生活</option>
-        <option value="行事">行事</option>
-        <option value="動物">動物</option>
-        <option value="植物">植物</option>
-      </select>
-    </div>
-    <div class="form-row">
-      <label>傍題（語・読みの順で入力。行を追加できます）</label>
-      <div id="boudaiInputArea"></div>
-      <button class="btn-add-boudai" onclick="addBoudaiRow('','')">＋ 傍題を追加</button>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-delete" id="btnDelete" onclick="deleteKigo()" style="display:none">削除</button>
-      <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
-      <button class="btn-save" onclick="saveKigo()">保存</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<!-- エクスポートモーダル -->
-<div class="modal-overlay" id="exportModal">
-  <div class="modal-box" style="max-width:460px">
-    <div class="modal-title">
-      <span>保存・読み込み</span>
-      <button class="modal-close" onclick="closeExportModal()">✕</button>
-    </div>
-
-    <!-- 保存セクション -->
-    <div style="font-size:12px;font-weight:bold;color:var(--sumi-faint);letter-spacing:.05em;margin-bottom:10px">▼ 保存する</div>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-      <button class="btn-save" style="background:var(--vermillion);border:none;color:#fff;border-radius:8px;padding:11px 18px;font-size:13px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px" onclick="exportHTML()">
-        <span style="font-size:18px">🗂</span>
-        <span><strong>HTMLとして保存</strong><span style="font-size:12px;opacity:.85;margin-left:8px">ブラウザで開くだけで使える完全版（推奨）</span></span>
-      </button>
-      <button class="btn-save" style="background:#2e7ea6;border:none;color:#fff;border-radius:8px;padding:11px 18px;font-size:13px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px" onclick="exportJSON()">
-        <span style="font-size:18px">📋</span>
-        <span><strong>JSONとして保存</strong><span style="font-size:12px;opacity:.85;margin-left:8px">後で読み込んで復元できるバックアップ</span></span>
-      </button>
-      <button class="btn-save" style="background:#4a6e4a;border:none;color:#fff;border-radius:8px;padding:11px 18px;font-size:13px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px" onclick="exportCSV()">
-        <span style="font-size:18px">📊</span>
-        <span><strong>CSVとして保存</strong><span style="font-size:12px;opacity:.85;margin-left:8px">Excelで開ける表形式</span></span>
-      </button>
-    </div>
-
-    <!-- 読み込みセクション -->
-    <div style="font-size:12px;font-weight:bold;color:var(--sumi-faint);letter-spacing:.05em;margin-bottom:10px;padding-top:16px;border-top:1px solid var(--washi-dark)">▼ JSONから読み込む</div>
-    <p style="font-size:12px;color:var(--sumi-faint);margin:0 0 10px;line-height:1.7">
-      以前に保存したJSONファイルを読み込むと","<strong>現在のデータに追加・上書き</strong>されます。
-    </p>
-    <div style="display:flex;gap:8px;align-items:center">
-      <label style="flex:1;display:flex;align-items:center;gap:8px;border:1.5px dashed #b0a090;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:13px;color:var(--sumi-faint);transition:border-color .15s" id="importLabel">
-        <span style="font-size:18px">📂</span>
-        <span id="importFileName">ファイルを選択…</span>
-        <input type="file" accept=".json" style="display:none" id="importFileInput" onchange="onImportFileSelected(this)">
-      </label>
-      <button class="btn-save" id="btnImport" style="background:#7b4f8e;border:none;color:#fff;border-radius:8px;padding:10px 18px;font-size:13px;cursor:pointer;font-family:inherit;opacity:.4;pointer-events:none" onclick="importJSON()">読み込む</button>
-    </div>
-    <div id="importPreview" style="display:none;margin-top:10px;font-size:12px;color:var(--sumi-faint);background:var(--washi-dark);border-radius:6px;padding:10px 12px;line-height:1.8"></div>
-
-    <div class="modal-actions" style="margin-top:18px">
-      <button class="btn-cancel" onclick="closeExportModal()">閉じる</button>
-    </div>
-  </div>
 </div>
 
 
@@ -3409,569 +3301,558 @@ let RAW = [
 // =====================================================
 let BOUDAI_NEW = [
   {w:'藍植う',k:'',s:'春',p:'全春',c:'時候',parent:'藍蒔く',type:'boudai'},
-  {w:'花青木',k:'',s:'春',p:'晩春',c:'植物',parent:'青木の花',type:'boudai'},
-  {w:'川菜',k:'',s:'春',p:'全春',c:'時候',parent:'石蓴',type:'boudai'},
-  {w:'麦青む',k:'',s:'春',p:'三春',c:'植物',parent:'青麦',type:'boudai'},
-  {w:'木通の花',k:'',s:'春',p:'晩春',c:'植物',parent:'通草の花',type:'boudai'},
-  {w:'花通草',k:'',s:'春',p:'晩春',c:'植物',parent:'通草の花',type:'boudai'},
-  {w:'糸葱',k:'',s:'春',p:'仲春',c:'植物',parent:'胡葱',type:'boudai'},
-  {w:'千本分葱',k:'',s:'春',p:'仲春',c:'植物',parent:'胡葱',type:'boudai'},
-  {w:'せんぶき',k:'',s:'春',p:'仲春',c:'植物',parent:'胡葱',type:'boudai'},
-  {w:'鬼浅蜊',k:'',s:'春',p:'三春',c:'動物',parent:'浅蜊',type:'boudai'},
-  {w:'姫浅蜊',k:'',s:'春',p:'三春',c:'動物',parent:'浅蜊',type:'boudai'},
-  {w:'浅蜊舟',k:'',s:'春',p:'三春',c:'動物',parent:'浅蜊',type:'boudai'},
-  {w:'浅蜊売',k:'',s:'春',p:'三春',c:'動物',parent:'浅蜊',type:'boudai'},
-  {w:'浅蜊汁',k:'',s:'春',p:'三春',c:'動物',parent:'浅蜊',type:'boudai'},
-  {w:'花薊',k:'',s:'春',p:'晩春',c:'植物',parent:'薊',type:'boudai'},
-  {w:'あしかび',k:'',s:'春',p:'仲春',c:'植物',parent:'蘆の角',type:'boudai'},
-  {w:'蘆の芽',k:'',s:'春',p:'仲春',c:'植物',parent:'蘆の角',type:'boudai'},
-  {w:'角組む蘆',k:'',s:'春',p:'仲春',c:'植物',parent:'蘆の角',type:'boudai'},
-  {w:'蘆の錐',k:'',s:'春',p:'仲春',c:'植物',parent:'蘆の角',type:'boudai'},
-  {w:'若蘆',k:'',s:'春',p:'晩春',c:'植物',parent:'蘆の若葉',type:'boudai'},
-  {w:'花馬酔木',k:'',s:'春',p:'晩春',c:'植物',parent:'馬酔木の花',type:'boudai'},
-  {w:'あせび',k:'',s:'春',p:'晩春',c:'植物',parent:'馬酔木の花',type:'boudai'},
+  {w:'花青木',k:'はなあおき',s:'春',p:'晩春',c:'植物',parent:'青木の花',type:'boudai'},
+  {w:'川菜',k:'かわな',s:'春',p:'全春',c:'時候',parent:'石蓴',type:'boudai'},
+  {w:'麦青む',k:'むぎあおむ',s:'春',p:'三春',c:'植物',parent:'青麦',type:'boudai'},
+  {w:'木通の花',k:'あけびのはな',s:'春',p:'晩春',c:'植物',parent:'通草の花',type:'boudai'},
+  {w:'花通草',k:'はなあけび',s:'春',p:'晩春',c:'植物',parent:'通草の花',type:'boudai'},
+  {w:'糸葱',k:'いとねぎ',s:'春',p:'仲春',c:'植物',parent:'胡葱',type:'boudai'},
+  {w:'千本分葱',k:'せんぼんわけぎ',s:'春',p:'仲春',c:'植物',parent:'胡葱',type:'boudai'},
+  {w:'せんぶき',k:'せんぶき',s:'春',p:'仲春',c:'植物',parent:'胡葱',type:'boudai'},
+  {w:'鬼浅蜊',k:'おにあさり',s:'春',p:'三春',c:'動物',parent:'浅蜊',type:'boudai'},
+  {w:'姫浅蜊',k:'ひめあさり',s:'春',p:'三春',c:'動物',parent:'浅蜊',type:'boudai'},
+  {w:'浅蜊舟',k:'あさりぶね',s:'春',p:'三春',c:'動物',parent:'浅蜊',type:'boudai'},
+  {w:'浅蜊売',k:'あさりうり',s:'春',p:'三春',c:'動物',parent:'浅蜊',type:'boudai'},
+  {w:'浅蜊汁',k:'あさりじる',s:'春',p:'三春',c:'動物',parent:'浅蜊',type:'boudai'},
+  {w:'花薊',k:'はなあざみ',s:'春',p:'晩春',c:'植物',parent:'薊',type:'boudai'},
+  {w:'あしかび',k:'あしかび',s:'春',p:'仲春',c:'植物',parent:'蘆の角',type:'boudai'},
+  {w:'蘆の芽',k:'あしのめ',s:'春',p:'仲春',c:'植物',parent:'蘆の角',type:'boudai'},
+  {w:'角組む蘆',k:'つのぐむあし',s:'春',p:'仲春',c:'植物',parent:'蘆の角',type:'boudai'},
+  {w:'蘆の錐',k:'あしのきり',s:'春',p:'仲春',c:'植物',parent:'蘆の角',type:'boudai'},
+  {w:'若蘆',k:'わかあし',s:'春',p:'晩春',c:'植物',parent:'蘆の若葉',type:'boudai'},
+  {w:'花馬酔木',k:'はなあしび',s:'春',p:'晩春',c:'植物',parent:'馬酔木の花',type:'boudai'},
+  {w:'あせび',k:'あせび',s:'春',p:'晩春',c:'植物',parent:'馬酔木の花',type:'boudai'},
   {w:'あせみ',k:'',s:'春',p:'晩春',c:'植物',parent:'馬酔木の花',type:'boudai'},
-  {w:'松葉独活（まつばうど）',k:'',s:'春',p:'晩春',c:'植物',parent:'アスパラガス',type:'boudai'},
-  {w:'オランダ雉隠し',k:'',s:'春',p:'晩春',c:'植物',parent:'アスパラガス',type:'boudai'},
+  {w:'松葉独活',k:'まつばうど',s:'春',p:'晩春',c:'植物',parent:'アスパラガス',type:'boudai'},
+  {w:'オランダ雉隠し',k:'おらんだきじかくし',s:'春',p:'晩春',c:'植物',parent:'アスパラガス',type:'boudai'},
   {w:'東一華',k:'',s:'春',p:'全春',c:'時候',parent:'アズマイチゲ',type:'boudai'},
   {w:'吾妻菊',k:'',s:'春',p:'晩春',c:'植物',parent:'東菊',type:'boudai'},
-  {w:'畔塗',k:'',s:'春',p:'晩春',c:'生活',parent:'畦塗',type:'boudai'},
-  {w:'塗畦',k:'',s:'春',p:'晩春',c:'生活',parent:'畦塗',type:'boudai'},
-  {w:'ぬくし',k:'',s:'春',p:'三春',c:'時候',parent:'暖か',type:'boudai'},
-  {w:'あたたかし',k:'',s:'春',p:'三春',c:'時候',parent:'暖か',type:'boudai'},
-  {w:'あたたけし',k:'',s:'春',p:'三春',c:'時候',parent:'暖か',type:'boudai'},
-  {w:'春暖',k:'',s:'春',p:'三春',c:'時候',parent:'暖か',type:'boudai'},
-  {w:'磯人',k:'',s:'春',p:'晩春',c:'生活',parent:'海女',type:'boudai'},
-  {w:'かつぎ',k:'',s:'春',p:'晩春',c:'生活',parent:'海女',type:'boudai'},
-  {w:'もぐり',k:'',s:'春',p:'晩春',c:'生活',parent:'海女',type:'boudai'},
-  {w:'海女の笛',k:'',s:'春',p:'晩春',c:'生活',parent:'海女',type:'boudai'},
-  {w:'仏の産湯',k:'',s:'春',p:'全春',c:'時候',parent:'甘茶',type:'boudai'},
-  {w:'五香水',k:'',s:'春',p:'全春',c:'時候',parent:'甘茶',type:'boudai'},
-  {w:'甘茶仏',k:'',s:'春',p:'全春',c:'時候',parent:'甘茶',type:'boudai'},
-  {w:'甘茶寺',k:'',s:'春',p:'全春',c:'時候',parent:'甘茶',type:'boudai'},
-  {w:'灌仏',k:'',s:'春',p:'全春',c:'時候',parent:'甘茶',type:'boudai'},
-  {w:'浴仏',k:'',s:'春',p:'全春',c:'時候',parent:'甘茶',type:'boudai'},
-  {w:'からももの花',k:'',s:'春',p:'晩春',c:'植物',parent:'杏の花',type:'boudai'},
-  {w:'花杏',k:'',s:'春',p:'晩春',c:'植物',parent:'杏の花',type:'boudai'},
-  {w:'杏花村',k:'',s:'春',p:'晩春',c:'植物',parent:'杏の花',type:'boudai'},
-  {w:'こうなご',k:'',s:'春',p:'晩春',c:'動物',parent:'鮊子',type:'boudai'},
-  {w:'かますご',k:'',s:'春',p:'晩春',c:'動物',parent:'鮊子',type:'boudai'},
-  {w:'いかな子舟',k:'',s:'春',p:'晩春',c:'動物',parent:'鮊子',type:'boudai'},
-  {w:'伊勢参宮',k:'',s:'春',p:'三春',c:'行事',parent:'伊勢参',type:'boudai'},
-  {w:'伊勢詣',k:'',s:'春',p:'三春',c:'行事',parent:'伊勢参',type:'boudai'},
-  {w:'伊勢講',k:'',s:'春',p:'三春',c:'行事',parent:'伊勢参',type:'boudai'},
-  {w:'参宮講',k:'',s:'春',p:'三春',c:'行事',parent:'伊勢参',type:'boudai'},
-  {w:'抜参',k:'',s:'春',p:'三春',c:'行事',parent:'伊勢参',type:'boudai'},
-  {w:'御蔭参',k:'',s:'春',p:'三春',c:'行事',parent:'伊勢参',type:'boudai'},
-  {w:'磯開き',k:'',s:'春',p:'晩春',c:'生活',parent:'磯遊び',type:'boudai'},
-  {w:'磯祭',k:'',s:'春',p:'晩春',c:'生活',parent:'磯遊び',type:'boudai'},
-  {w:'磯焚火',k:'',s:'春',p:'初春',c:'生活',parent:'磯竈',type:'boudai'},
-  {w:'いしぼたん',k:'',s:'春',p:'三春',c:'動物',parent:'磯巾着',type:'boudai'},
-  {w:'さいたづま',k:'',s:'春',p:'仲春',c:'植物',parent:'虎杖',type:'boudai'},
-  {w:'花苺',k:'',s:'春',p:'晩春',c:'植物',parent:'苺の花',type:'boudai'},
-  {w:'草苺の花',k:'',s:'春',p:'晩春',c:'植物',parent:'苺の花',type:'boudai'},
-  {w:'蛇苺の花',k:'',s:'春',p:'晩春',c:'植物',parent:'苺の花',type:'boudai'},
-  {w:'公孫樹の花',k:'',s:'春',p:'晩春',c:'植物',parent:'銀杏の花',type:'boudai'},
-  {w:'ぎんなんの花',k:'',s:'春',p:'晩春',c:'植物',parent:'銀杏の花',type:'boudai'},
-  {w:'一花草',k:'',s:'春',p:'晩春',c:'植物',parent:'一輪草',type:'boudai'},
-  {w:'裏紅一花',k:'',s:'春',p:'晩春',c:'植物',parent:'一輪草',type:'boudai'},
-  {w:'凍解く',k:'',s:'春',p:'仲春',c:'地理',parent:'凍解',type:'boudai'},
-  {w:'凍ゆるむ',k:'',s:'春',p:'仲春',c:'地理',parent:'凍解',type:'boudai'},
-  {w:'いぬのふぐり',k:'',s:'春',p:'初春',c:'植物',parent:'犬ふぐり',type:'boudai'},
+  {w:'畔塗',k:'あぜぬり',s:'春',p:'晩春',c:'生活',parent:'畦塗',type:'boudai'},
+  {w:'塗畦',k:'ぬりあぜ',s:'春',p:'晩春',c:'生活',parent:'畦塗',type:'boudai'},
+  {w:'ぬくし',k:'ぬくし',s:'春',p:'三春',c:'時候',parent:'暖か',type:'boudai'},
+  {w:'あたたかし',k:'あたたかし',s:'春',p:'三春',c:'時候',parent:'暖か',type:'boudai'},
+  {w:'あたたけし',k:'あたたけし',s:'春',p:'三春',c:'時候',parent:'暖か',type:'boudai'},
+  {w:'春暖',k:'しゅんだん',s:'春',p:'三春',c:'時候',parent:'暖か',type:'boudai'},
+  {w:'磯人',k:'いそど',s:'春',p:'晩春',c:'生活',parent:'海女',type:'boudai'},
+  {w:'かつぎ',k:'かつぎ',s:'春',p:'晩春',c:'生活',parent:'海女',type:'boudai'},
+  {w:'もぐり',k:'もぐり',s:'春',p:'晩春',c:'生活',parent:'海女',type:'boudai'},
+  {w:'海女の笛',k:'あまのふえ',s:'春',p:'晩春',c:'生活',parent:'海女',type:'boudai'},
+  {w:'仏の産湯',k:'ほとけのうぶゆ',s:'春',p:'全春',c:'時候',parent:'甘茶',type:'boudai'},
+  {w:'五香水',k:'ごこうすい',s:'春',p:'全春',c:'時候',parent:'甘茶',type:'boudai'},
+  {w:'甘茶仏',k:'あまちゃぶつ',s:'春',p:'全春',c:'時候',parent:'甘茶',type:'boudai'},
+  {w:'甘茶寺',k:'あまちゃでら',s:'春',p:'全春',c:'時候',parent:'甘茶',type:'boudai'},
+  {w:'灌仏',k:'かんぶつ',s:'春',p:'全春',c:'時候',parent:'甘茶',type:'boudai'},
+  {w:'浴仏',k:'よくぶつ',s:'春',p:'全春',c:'時候',parent:'甘茶',type:'boudai'},
+  {w:'からももの花',k:'からもものはな',s:'春',p:'晩春',c:'植物',parent:'杏の花',type:'boudai'},
+  {w:'花杏',k:'はなあんず',s:'春',p:'晩春',c:'植物',parent:'杏の花',type:'boudai'},
+  {w:'杏花村',k:'きょうかそん',s:'春',p:'晩春',c:'植物',parent:'杏の花',type:'boudai'},
+  {w:'こうなご',k:'こうなご',s:'春',p:'晩春',c:'動物',parent:'鮊子',type:'boudai'},
+  {w:'かますご',k:'かますご',s:'春',p:'晩春',c:'動物',parent:'鮊子',type:'boudai'},
+  {w:'いかな子舟',k:'いかなごぶね',s:'春',p:'晩春',c:'動物',parent:'鮊子',type:'boudai'},
+  {w:'伊勢参宮',k:'いせさんぐう',s:'春',p:'三春',c:'行事',parent:'伊勢参',type:'boudai'},
+  {w:'伊勢詣',k:'いせもうで',s:'春',p:'三春',c:'行事',parent:'伊勢参',type:'boudai'},
+  {w:'伊勢講',k:'いせこう',s:'春',p:'三春',c:'行事',parent:'伊勢参',type:'boudai'},
+  {w:'参宮講',k:'さんぐうこう',s:'春',p:'三春',c:'行事',parent:'伊勢参',type:'boudai'},
+  {w:'抜参',k:'ぬきまいり',s:'春',p:'三春',c:'行事',parent:'伊勢参',type:'boudai'},
+  {w:'御蔭参',k:'おかげまいり',s:'春',p:'三春',c:'行事',parent:'伊勢参',type:'boudai'},
+  {w:'磯開き',k:'いそびらき',s:'春',p:'晩春',c:'生活',parent:'磯遊び',type:'boudai'},
+  {w:'磯祭',k:'いそまつり',s:'春',p:'晩春',c:'生活',parent:'磯遊び',type:'boudai'},
+  {w:'磯焚火',k:'いそたきび',s:'春',p:'初春',c:'生活',parent:'磯竈',type:'boudai'},
+  {w:'いしぼたん',k:'いしぼたん',s:'春',p:'三春',c:'動物',parent:'磯巾着',type:'boudai'},
+  {w:'さいたづま',k:'さいたずま',s:'春',p:'仲春',c:'植物',parent:'虎杖',type:'boudai'},
+  {w:'花苺',k:'はないちご',s:'春',p:'晩春',c:'植物',parent:'苺の花',type:'boudai'},
+  {w:'草苺の花',k:'くさいちごのはな',s:'春',p:'晩春',c:'植物',parent:'苺の花',type:'boudai'},
+  {w:'蛇苺の花',k:'へびいちごのはな',s:'春',p:'晩春',c:'植物',parent:'苺の花',type:'boudai'},
+  {w:'公孫樹の花',k:'いちょうのはな',s:'春',p:'晩春',c:'植物',parent:'銀杏の花',type:'boudai'},
+  {w:'ぎんなんの花',k:'ぎんなんのはな',s:'春',p:'晩春',c:'植物',parent:'銀杏の花',type:'boudai'},
+  {w:'一花草',k:'いちげそう',s:'春',p:'晩春',c:'植物',parent:'一輪草',type:'boudai'},
+  {w:'裏紅一花',k:'うらべにいちげ',s:'春',p:'晩春',c:'植物',parent:'一輪草',type:'boudai'},
+  {w:'凍解く',k:'いてとく',s:'春',p:'仲春',c:'地理',parent:'凍解',type:'boudai'},
+  {w:'凍ゆるむ',k:'いてゆるむ',s:'春',p:'仲春',c:'地理',parent:'凍解',type:'boudai'},
+  {w:'いぬのふぐり',k:'いぬのふぐり',s:'春',p:'初春',c:'植物',parent:'犬ふぐり',type:'boudai'},
   {w:'萍生ふ',k:'',s:'春',p:'全春',c:'時候',parent:'萍生ひ初む',type:'boudai'},
-  {w:'黄鳥',k:'',s:'春',p:'三春',c:'動物',parent:'鶯',type:'boudai'},
-  {w:'匂鳥',k:'',s:'春',p:'三春',c:'動物',parent:'鶯',type:'boudai'},
-  {w:'春告鳥',k:'',s:'春',p:'三春',c:'動物',parent:'鶯',type:'boudai'},
-  {w:'初音',k:'',s:'春',p:'三春',c:'動物',parent:'鶯',type:'boudai'},
-  {w:'鶯の谷渡り',k:'',s:'春',p:'三春',c:'動物',parent:'鶯',type:'boudai'},
-  {w:'鶯笛',k:'',s:'春',p:'三春',c:'動物',parent:'鶯',type:'boudai'},
-  {w:'黄鳥菜',k:'',s:'春',p:'仲春',c:'植物',parent:'鶯菜',type:'boudai'},
-  {w:'小松菜',k:'',s:'春',p:'仲春',c:'植物',parent:'鶯菜',type:'boudai'},
-  {w:'むこぎ',k:'',s:'春',p:'仲春',c:'植物',parent:'五加木',type:'boudai'},
-  {w:'五加',k:'',s:'春',p:'仲春',c:'植物',parent:'五加木',type:'boudai'},
-  {w:'五加木垣',k:'',s:'春',p:'仲春',c:'植物',parent:'五加木',type:'boudai'},
-  {w:'五加木飯',k:'',s:'春',p:'仲春',c:'植物',parent:'五加木',type:'boudai'},
-  {w:'おご',k:'',s:'春',p:'三春',c:'植物',parent:'海髪',type:'boudai'},
-  {w:'おごのり',k:'',s:'春',p:'三春',c:'植物',parent:'海髪',type:'boudai'},
-  {w:'食用蛙',k:'',s:'春',p:'全春',c:'時候',parent:'牛蛙',type:'boudai'},
-  {w:'春の氷',k:'',s:'春',p:'初春',c:'地理',parent:'薄氷',type:'boudai'},
-  {w:'残る氷',k:'',s:'春',p:'初春',c:'地理',parent:'薄氷',type:'boudai'},
-  {w:'琴弾鳥',k:'',s:'春',p:'三春',c:'動物',parent:'鷽',type:'boudai'},
-  {w:'照鷽',k:'',s:'春',p:'三春',c:'動物',parent:'鷽',type:'boudai'},
-  {w:'雨鷽',k:'',s:'春',p:'三春',c:'動物',parent:'鷽',type:'boudai'},
-  {w:'鷽姫',k:'',s:'春',p:'三春',c:'動物',parent:'鷽',type:'boudai'},
-  {w:'芋独活',k:'',s:'春',p:'晩春',c:'植物',parent:'独活',type:'boudai'},
-  {w:'山独活',k:'',s:'春',p:'晩春',c:'植物',parent:'独活',type:'boudai'},
-  {w:'もやし独活',k:'',s:'春',p:'晩春',c:'植物',parent:'独活',type:'boudai'},
-  {w:'独活掘る',k:'',s:'春',p:'晩春',c:'植物',parent:'独活',type:'boudai'},
-  {w:'雲丹',k:'',s:'春',p:'晩春',c:'動物',parent:'海胆',type:'boudai'},
-  {w:'海栗',k:'',s:'春',p:'晩春',c:'動物',parent:'海胆',type:'boudai'},
-  {w:'クローバー',k:'',s:'春',p:'晩春',c:'植物',parent:'苜蓿',type:'boudai'},
-  {w:'白詰草',k:'',s:'春',p:'晩春',c:'植物',parent:'苜蓿',type:'boudai'},
-  {w:'梅の花',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'好文木',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'花の兄',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'春告草',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'野梅',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'白梅',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'臥竜梅',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'豊後梅',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'枝垂梅',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'盆梅',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'老梅',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'梅が香',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'梅林',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'梅園',k:'',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
-  {w:'観梅',k:'',s:'春',p:'初春',c:'生活',parent:'梅見',type:'boudai'},
-  {w:'梅見茶屋',k:'',s:'春',p:'初春',c:'生活',parent:'梅見',type:'boudai'},
-  {w:'梅若祭',k:'',s:'春',p:'晩春',c:'行事',parent:'梅若忌',type:'boudai'},
-  {w:'梅若参',k:'',s:'春',p:'晩春',c:'行事',parent:'梅若忌',type:'boudai'},
-  {w:'うらら',k:'',s:'春',p:'三春',c:'時候',parent:'麗か',type:'boudai'},
-  {w:'うららけし',k:'',s:'春',p:'三春',c:'時候',parent:'麗か',type:'boudai'},
-  {w:'うららに',k:'',s:'春',p:'三春',c:'時候',parent:'麗か',type:'boudai'},
-  {w:'日うらうら',k:'',s:'春',p:'三春',c:'時候',parent:'麗か',type:'boudai'},
-  {w:'うらうら',k:'',s:'春',p:'三春',c:'時候',parent:'麗か',type:'boudai'},
-  {w:'麗日',k:'',s:'春',p:'三春',c:'時候',parent:'麗か',type:'boudai'},
-  {w:'えびねらん',k:'',s:'春',p:'全春',c:'時候',parent:'海老根',type:'boudai'},
-  {w:'化偸草',k:'',s:'春',p:'全春',c:'時候',parent:'海老根',type:'boudai'},
-  {w:'蝦根',k:'',s:'春',p:'全春',c:'時候',parent:'海老根',type:'boudai'},
-  {w:'踏絵',k:'',s:'春',p:'仲春',c:'行事',parent:'絵踏',type:'boudai'},
-  {w:'寺請証文',k:'',s:'春',p:'仲春',c:'行事',parent:'絵踏',type:'boudai'},
-  {w:'西大寺参',k:'',s:'新年',p:'下新年',c:'行事',parent:'会陽',type:'boudai'},
-  {w:'神木',k:'',s:'新年',p:'下新年',c:'行事',parent:'会陽',type:'boudai'},
-  {w:'裸押し',k:'',s:'新年',p:'下新年',c:'行事',parent:'会陽',type:'boudai'},
-  {w:'修正会',k:'',s:'新年',p:'下新年',c:'行事',parent:'会陽',type:'boudai'},
-  {w:'魞場',k:'',s:'春',p:'初春',c:'生活',parent:'魞挿す',type:'boudai'},
-  {w:'魞簀',k:'',s:'春',p:'初春',c:'生活',parent:'魞挿す',type:'boudai'},
-  {w:'グリンピース',k:'',s:'春',p:'全春',c:'時候',parent:'豌豆の花',type:'boudai'},
-  {w:'スイートピー',k:'',s:'春',p:'全春',c:'時候',parent:'豌豆の花',type:'boudai'},
-  {w:'さくらんぼの花',k:'',s:'春',p:'晩春',c:'植物',parent:'桜桃の花',type:'boudai'},
-  {w:'西洋実桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜桃の花',type:'boudai'},
-  {w:'迎春花',k:'',s:'春',p:'初春',c:'植物',parent:'黄梅',type:'boudai'},
-  {w:'小賀玉',k:'',s:'春',p:'全春',c:'時候',parent:'小賀玉の花',type:'boudai'},
-  {w:'招霊',k:'',s:'春',p:'全春',c:'時候',parent:'小賀玉の花',type:'boudai'},
-  {w:'はなかたばみ',k:'',s:'春',p:'晩春',c:'植物',parent:'オキザリス',type:'boudai'},
-  {w:'苧環',k:'',s:'春',p:'晩春',c:'植物',parent:'苧環の花',type:'boudai'},
-  {w:'いとくり',k:'',s:'春',p:'晩春',c:'植物',parent:'苧環の花',type:'boudai'},
-  {w:'糸繰草',k:'',s:'春',p:'晩春',c:'植物',parent:'苧環の花',type:'boudai'},
-  {w:'告知祭',k:'',s:'春',p:'仲春',c:'行事',parent:'御告祭',type:'boudai'},
-  {w:'受胎告知日',k:'',s:'春',p:'仲春',c:'行事',parent:'御告祭',type:'boudai'},
-  {w:'聖母祭',k:'',s:'春',p:'仲春',c:'行事',parent:'御告祭',type:'boudai'},
-  {w:'鹿の角落つ',k:'',s:'春',p:'晩春',c:'動物',parent:'落し角',type:'boudai'},
-  {w:'忘れ角',k:'',s:'春',p:'晩春',c:'動物',parent:'落し角',type:'boudai'},
-  {w:'草朧',k:'',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
-  {w:'岩朧',k:'',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
-  {w:'谷朧',k:'',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
-  {w:'灯朧',k:'',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
-  {w:'鐘朧',k:'',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
-  {w:'朧影',k:'',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
-  {w:'朧めく',k:'',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
-  {w:'月朧',k:'',s:'春',p:'三春',c:'天文',parent:'朧月',type:'boudai'},
-  {w:'朧夜',k:'',s:'春',p:'三春',c:'天文',parent:'朧月',type:'boudai'},
-  {w:'朧月夜',k:'',s:'春',p:'三春',c:'天文',parent:'朧月',type:'boudai'},
-  {w:'水取',k:'',s:'春',p:'仲春',c:'行事',parent:'お水取',type:'boudai'},
-  {w:'若狭の井',k:'',s:'春',p:'仲春',c:'行事',parent:'お水取',type:'boudai'},
-  {w:'蚕',k:'',s:'春',p:'晩春',c:'動物',parent:'蚕',type:'boudai'},
-  {w:'春蚕',k:'',s:'春',p:'晩春',c:'動物',parent:'蚕',type:'boudai'},
-  {w:'捨蚕',k:'',s:'春',p:'晩春',c:'動物',parent:'蚕',type:'boudai'},
-  {w:'桑子',k:'',s:'春',p:'晩春',c:'動物',parent:'蚕',type:'boudai'},
-  {w:'毛蚕',k:'',s:'春',p:'晩春',c:'動物',parent:'蚕',type:'boudai'},
-  {w:'蚕時雨',k:'',s:'春',p:'晩春',c:'動物',parent:'蚕',type:'boudai'},
-  {w:'開龕',k:'',s:'春',p:'三春',c:'行事',parent:'開帳',type:'boudai'},
-  {w:'出開帳',k:'',s:'春',p:'三春',c:'行事',parent:'開帳',type:'boudai'},
-  {w:'開帳寺',k:'',s:'春',p:'三春',c:'行事',parent:'開帳',type:'boudai'},
-  {w:'花海棠',k:'',s:'春',p:'晩春',c:'植物',parent:'海棠',type:'boudai'},
-  {w:'眠花',k:'',s:'春',p:'晩春',c:'植物',parent:'海棠',type:'boudai'},
-  {w:'ねむれる花',k:'',s:'春',p:'晩春',c:'植物',parent:'海棠',type:'boudai'},
-  {w:'貝寄',k:'',s:'春',p:'仲春',c:'天文',parent:'貝寄風',type:'boudai'},
-  {w:'花楓',k:'',s:'春',p:'晩春',c:'植物',parent:'楓の花',type:'boudai'},
-  {w:'殿様蛙',k:'',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
-  {w:'赤蛙',k:'',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
-  {w:'土蛙',k:'',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
-  {w:'初蛙',k:'',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
-  {w:'遠蛙',k:'',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
-  {w:'昼蛙',k:'',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
-  {w:'夕蛙',k:'',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
-  {w:'蛙合戦',k:'',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
-  {w:'帰雁',k:'',s:'春',p:'仲春',c:'動物',parent:'帰る雁',type:'boudai'},
-  {w:'雁帰る',k:'',s:'春',p:'仲春',c:'動物',parent:'帰る雁',type:'boudai'},
-  {w:'行く雁',k:'',s:'春',p:'仲春',c:'動物',parent:'帰る雁',type:'boudai'},
-  {w:'去る雁',k:'',s:'春',p:'仲春',c:'動物',parent:'帰る雁',type:'boudai'},
-  {w:'雁の別れ',k:'',s:'春',p:'仲春',c:'動物',parent:'帰る雁',type:'boudai'},
-  {w:'垣手入れ',k:'',s:'春',p:'仲春',c:'生活',parent:'垣繕ふ',type:'boudai'},
-  {w:'糸遊',k:'',s:'春',p:'三春',c:'天文',parent:'陽炎',type:'boudai'},
-  {w:'糸子',k:'',s:'春',p:'三春',c:'天文',parent:'陽炎',type:'boudai'},
-  {w:'遊糸',k:'',s:'春',p:'三春',c:'天文',parent:'陽炎',type:'boudai'},
-  {w:'野馬',k:'',s:'春',p:'三春',c:'天文',parent:'陽炎',type:'boudai'},
-  {w:'かぎろひ',k:'',s:'春',p:'三春',c:'天文',parent:'陽炎',type:'boudai'},
-  {w:'風車売',k:'',s:'春',p:'全春',c:'時候',parent:'風車',type:'boudai'},
-  {w:'花樫',k:'',s:'春',p:'晩春',c:'植物',parent:'樫の花',type:'boudai'},
-  {w:'申祭',k:'',s:'春',p:'仲春',c:'行事',parent:'春日祭',type:'boudai'},
-  {w:'春霞',k:'',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
-  {w:'朝霞',k:'',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
-  {w:'夕霞',k:'',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
-  {w:'遠霞',k:'',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
-  {w:'薄霞',k:'',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
-  {w:'棚霞',k:'',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
-  {w:'霞む',k:'',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
-  {w:'数の子干す',k:'',s:'春',p:'全春',c:'時候',parent:'数の子製す',type:'boudai'},
-  {w:'新数の子',k:'',s:'春',p:'全春',c:'時候',parent:'数の子製す',type:'boudai'},
-  {w:'光る風',k:'',s:'春',p:'三春',c:'天文',parent:'風光る',type:'boudai'},
-  {w:'かたかごの花',k:'',s:'春',p:'初春',c:'植物',parent:'片栗の花',type:'boudai'},
-  {w:'蛙子',k:'',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
-  {w:'蛙の子',k:'',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
-  {w:'お玉杓子',k:'',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
-  {w:'蛙生る',k:'',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
-  {w:'蝌蚪生る',k:'',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
-  {w:'蝌蚪の紐',k:'',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
-  {w:'蝌蚪の国',k:'',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
-  {w:'雛草',k:'',s:'春',p:'晩春',c:'植物',parent:'髢草',type:'boudai'},
-  {w:'鬘草',k:'',s:'春',p:'晩春',c:'植物',parent:'髢草',type:'boudai'},
-  {w:'芥子菜',k:'',s:'春',p:'三春',c:'植物',parent:'芥菜',type:'boudai'},
-  {w:'鳥の巣',k:'',s:'春',p:'三春',c:'動物',parent:'鴉の巣',type:'boudai'},
-  {w:'からたちの花',k:'',s:'春',p:'晩春',c:'植物',parent:'枸橘の花',type:'boudai'},
-  {w:'枳殻',k:'',s:'春',p:'晩春',c:'植物',parent:'枸橘の花',type:'boudai'},
-  {w:'獺の祭',k:'',s:'春',p:'初春',c:'時候',parent:'獺魚を祭る',type:'boudai'},
-  {w:'獺祭',k:'',s:'春',p:'初春',c:'時候',parent:'獺魚を祭る',type:'boudai'},
-  {w:'目借時',k:'',s:'春',p:'晩春',c:'時候',parent:'蛙の目借時',type:'boudai'},
-  {w:'寒明ける',k:'',s:'春',p:'初春',c:'時候',parent:'寒明',type:'boudai'},
-  {w:'寒の明け',k:'',s:'春',p:'初春',c:'時候',parent:'寒明',type:'boudai'},
-  {w:'渦見',k:'',s:'春',p:'仲春',c:'生活',parent:'観潮',type:'boudai'},
-  {w:'渦潮見',k:'',s:'春',p:'仲春',c:'生活',parent:'観潮',type:'boudai'},
-  {w:'渦見船',k:'',s:'春',p:'仲春',c:'生活',parent:'観潮',type:'boudai'},
-  {w:'観潮船',k:'',s:'春',p:'仲春',c:'生活',parent:'観潮',type:'boudai'},
-  {w:'雁供養',k:'',s:'春',p:'仲春',c:'行事',parent:'雁風呂',type:'boudai'},
-  {w:'もみぢ苺の花',k:'',s:'春',p:'晩春',c:'植物',parent:'木苺の花',type:'boudai'},
-  {w:'粟苺の花',k:'',s:'春',p:'晩春',c:'植物',parent:'木苺の花',type:'boudai'},
-  {w:'下り苺の花',k:'',s:'春',p:'晩春',c:'植物',parent:'木苺の花',type:'boudai'},
-  {w:'晋子忌',k:'',s:'春',p:'全春',c:'時候',parent:'其角忌',type:'boudai'},
-  {w:'晋翁忌',k:'',s:'春',p:'全春',c:'時候',parent:'其角忌',type:'boudai'},
-  {w:'菊分つ',k:'',s:'春',p:'全春',c:'時候',parent:'菊根分',type:'boudai'},
-  {w:'菊植う',k:'',s:'春',p:'全春',c:'時候',parent:'菊根分',type:'boudai'},
-  {w:'菊の芽',k:'',s:'春',p:'仲春',c:'植物',parent:'菊の苗',type:'boudai'},
-  {w:'きしゃご',k:'',s:'春',p:'全春',c:'時候',parent:'細螺',type:'boudai'},
-  {w:'衣更着（きさらぎ）',k:'',s:'春',p:'仲春',c:'時候',parent:'如月',type:'boudai'},
-  {w:'雉子',k:'',s:'春',p:'三春',c:'動物',parent:'雉',type:'boudai'},
-  {w:'きぎし',k:'',s:'春',p:'三春',c:'動物',parent:'雉',type:'boudai'},
-  {w:'雉のほろろ',k:'',s:'春',p:'三春',c:'動物',parent:'雉',type:'boudai'},
-  {w:'糸水仙',k:'',s:'春',p:'仲春',c:'植物',parent:'黄水仙',type:'boudai'},
-  {w:'北野御忌日',k:'',s:'春',p:'全春',c:'時候',parent:'北野菜種御供',type:'boudai'},
-  {w:'天神御忌',k:'',s:'春',p:'全春',c:'時候',parent:'北野菜種御供',type:'boudai'},
-  {w:'梅花祭',k:'',s:'春',p:'全春',c:'時候',parent:'北野菜種御供',type:'boudai'},
-  {w:'梅花御供',k:'',s:'春',p:'全春',c:'時候',parent:'北野菜種御供',type:'boudai'},
-  {w:'道真忌',k:'',s:'春',p:'全春',c:'時候',parent:'北野菜種御供',type:'boudai'},
-  {w:'菜種の神事',k:'',s:'春',p:'全春',c:'時候',parent:'北野菜種御供',type:'boudai'},
-  {w:'修羅落し',k:'',s:'春',p:'仲春',c:'生活',parent:'木流し',type:'boudai'},
-  {w:'初筏',k:'',s:'春',p:'仲春',c:'生活',parent:'木流し',type:'boudai'},
-  {w:'根開き',k:'',s:'春',p:'仲春',c:'地理',parent:'木の根明く',type:'boudai'},
-  {w:'山椒和',k:'',s:'春',p:'全春',c:'時候',parent:'木の芽和',type:'boudai'},
-  {w:'通条花（きぶし）',k:'',s:'春',p:'仲春',c:'植物',parent:'木五倍子の花',type:'boudai'},
-  {w:'木五倍子（きぶし）咲く',k:'',s:'春',p:'仲春',c:'植物',parent:'木五倍子の花',type:'boudai'},
-  {w:'ダリア植う',k:'',s:'春',p:'晩春',c:'生活',parent:'球根植う',type:'boudai'},
-  {w:'百合植う',k:'',s:'春',p:'晩春',c:'生活',parent:'球根植う',type:'boudai'},
-  {w:'旧正',k:'',s:'春',p:'初春',c:'時候',parent:'旧正月',type:'boudai'},
-  {w:'春節',k:'',s:'春',p:'初春',c:'時候',parent:'旧正月',type:'boudai'},
-  {w:'レガッタ',k:'',s:'春',p:'全春',c:'時候',parent:'競漕',type:'boudai'},
-  {w:'曲水の宴',k:'',s:'春',p:'晩春',c:'行事',parent:'曲水',type:'boudai'},
-  {w:'流觴',k:'',s:'春',p:'晩春',c:'行事',parent:'曲水',type:'boudai'},
-  {w:'盃流し',k:'',s:'春',p:'晩春',c:'行事',parent:'曲水',type:'boudai'},
-  {w:'椿寿忌',k:'',s:'春',p:'晩春',c:'行事',parent:'虚子忌',type:'boudai'},
-  {w:'常春花',k:'',s:'春',p:'晩春',c:'植物',parent:'金盞花',type:'boudai'},
-  {w:'長春花',k:'',s:'春',p:'晩春',c:'植物',parent:'金盞花',type:'boudai'},
-  {w:'さんぽうげ',k:'',s:'春',p:'晩春',c:'植物',parent:'金鳳花',type:'boudai'},
-  {w:'馬の脚形',k:'',s:'春',p:'晩春',c:'植物',parent:'金鳳花',type:'boudai'},
-  {w:'駒の脚形',k:'',s:'春',p:'晩春',c:'植物',parent:'金鳳花',type:'boudai'},
-  {w:'法然忌',k:'',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
-  {w:'円光忌',k:'',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
-  {w:'御忌詣',k:'',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
-  {w:'御忌参',k:'',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
-  {w:'御忌の寺',k:'',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
-  {w:'御忌の鐘',k:'',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
-  {w:'御忌小袖',k:'',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
-  {w:'弁当始',k:'',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
-  {w:'くくたち',k:'',s:'春',p:'三春',c:'植物',parent:'茎立',type:'boudai'},
-  {w:'枸杞芽',k:'',s:'春',p:'全春',c:'時候',parent:'枸杞の芽',type:'boudai'},
-  {w:'枸杞飯',k:'',s:'春',p:'全春',c:'時候',parent:'枸杞の芽',type:'boudai'},
-  {w:'名草の芽',k:'',s:'春',p:'初春',c:'植物',parent:'草の芽',type:'boudai'},
-  {w:'草の餅',k:'',s:'春',p:'晩春',c:'生活',parent:'草餅',type:'boudai'},
-  {w:'蓬餅',k:'',s:'春',p:'晩春',c:'生活',parent:'草餅',type:'boudai'},
-  {w:'母子餅',k:'',s:'春',p:'晩春',c:'生活',parent:'草餅',type:'boudai'},
-  {w:'草団子',k:'',s:'春',p:'晩春',c:'生活',parent:'草餅',type:'boudai'},
-  {w:'菊若葉',k:'',s:'春',p:'晩春',c:'植物',parent:'草若葉',type:'boudai'},
-  {w:'萩若葉',k:'',s:'春',p:'晩春',c:'植物',parent:'草若葉',type:'boudai'},
-  {w:'芭蕉の若葉',k:'',s:'春',p:'晩春',c:'植物',parent:'草若葉',type:'boudai'},
-  {w:'罌粟の若葉',k:'',s:'春',p:'晩春',c:'植物',parent:'草若葉',type:'boudai'},
-  {w:'鞍馬花会式',k:'',s:'春',p:'晩春',c:'行事',parent:'鞍馬の花供養',type:'boudai'},
-  {w:'花供懺法',k:'',s:'春',p:'晩春',c:'行事',parent:'鞍馬の花供養',type:'boudai'},
-  {w:'暮春',k:'',s:'春',p:'晩春',c:'時候',parent:'暮の春',type:'boudai'},
-  {w:'春暮るる',k:'',s:'春',p:'晩春',c:'時候',parent:'暮の春',type:'boudai'},
-  {w:'春の果',k:'',s:'春',p:'晩春',c:'時候',parent:'暮の春',type:'boudai'},
-  {w:'桑の芽',k:'',s:'春',p:'晩春',c:'植物',parent:'桑',type:'boudai'},
-  {w:'芽桑',k:'',s:'春',p:'晩春',c:'植物',parent:'桑',type:'boudai'},
-  {w:'桑の花',k:'',s:'春',p:'晩春',c:'植物',parent:'桑',type:'boudai'},
-  {w:'桑摘女',k:'',s:'春',p:'全春',c:'時候',parent:'桑摘',type:'boudai'},
-  {w:'桑摘唄',k:'',s:'春',p:'全春',c:'時候',parent:'桑摘',type:'boudai'},
-  {w:'桑籠',k:'',s:'春',p:'全春',c:'時候',parent:'桑摘',type:'boudai'},
-  {w:'桑車',k:'',s:'春',p:'全春',c:'時候',parent:'桑摘',type:'boudai'},
-  {w:'桑ほどく',k:'',s:'春',p:'仲春',c:'生活',parent:'桑解く',type:'boudai'},
-  {w:'獣交る',k:'',s:'春',p:'三春',c:'動物',parent:'獣交る',type:'boudai'},
-  {w:'種つけ',k:'',s:'春',p:'三春',c:'動物',parent:'獣交る',type:'boudai'},
-  {w:'種かけ',k:'',s:'春',p:'三春',c:'動物',parent:'獣交る',type:'boudai'},
-  {w:'種馬',k:'',s:'春',p:'三春',c:'動物',parent:'獣交る',type:'boudai'},
-  {w:'種牛',k:'',s:'春',p:'三春',c:'動物',parent:'獣交る',type:'boudai'},
-  {w:'種豚',k:'',s:'春',p:'三春',c:'動物',parent:'獣交る',type:'boudai'},
-  {w:'華鬘牡丹',k:'',s:'春',p:'晩春',c:'植物',parent:'華鬘草',type:'boudai'},
-  {w:'けまん',k:'',s:'春',p:'晩春',c:'植物',parent:'華鬘草',type:'boudai'},
-  {w:'瓔珞牡丹',k:'',s:'春',p:'晩春',c:'植物',parent:'華鬘草',type:'boudai'},
-  {w:'藤牡丹',k:'',s:'春',p:'晩春',c:'植物',parent:'華鬘草',type:'boudai'},
-  {w:'鯛釣草',k:'',s:'春',p:'晩春',c:'植物',parent:'華鬘草',type:'boudai'},
-  {w:'建国の日',k:'',s:'春',p:'初春',c:'行事',parent:'建国記念の日',type:'boudai'},
-  {w:'建国祭',k:'',s:'春',p:'初春',c:'行事',parent:'建国記念の日',type:'boudai'},
-  {w:'紀元節',k:'',s:'春',p:'初春',c:'行事',parent:'建国記念の日',type:'boudai'},
-  {w:'蓮華草',k:'',s:'春',p:'仲春',c:'植物',parent:'紫雲英',type:'boudai'},
-  {w:'げんげん',k:'',s:'春',p:'仲春',c:'植物',parent:'紫雲英',type:'boudai'},
-  {w:'五形花',k:'',s:'春',p:'仲春',c:'植物',parent:'紫雲英',type:'boudai'},
-  {w:'黄砂',k:'',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
-  {w:'霾ぐもり',k:'',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
-  {w:'蒙古風',k:'',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
-  {w:'霾風',k:'',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
-  {w:'霾天',k:'',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
-  {w:'黄塵万丈',k:'',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
-  {w:'黄砂降る',k:'',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
-  {w:'薄紅梅',k:'',s:'春',p:'初春',c:'植物',parent:'紅梅',type:'boudai'},
-  {w:'氷解く',k:'',s:'春',p:'全春',c:'時候',parent:'氷解',type:'boudai'},
-  {w:'氷消ゆ',k:'',s:'春',p:'全春',c:'時候',parent:'氷解',type:'boudai'},
-  {w:'解氷',k:'',s:'春',p:'全春',c:'時候',parent:'氷解',type:'boudai'},
-  {w:'浮氷',k:'',s:'春',p:'全春',c:'時候',parent:'氷解',type:'boudai'},
-  {w:'養蚕',k:'',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
-  {w:'種紙',k:'',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
-  {w:'毛蚕',k:'',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
-  {w:'掃立',k:'',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
-  {w:'蚕の眠り',k:'',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
-  {w:'飼屋',k:'',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
-  {w:'蚕棚',k:'',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
-  {w:'蚕室',k:'',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
-  {w:'蚕籠',k:'',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
-  {w:'捨蚕',k:'',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
-  {w:'蚕飼時',k:'',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
-  {w:'炬燵の名残',k:'',s:'春',p:'晩春',c:'生活',parent:'炬燵塞ぐ',type:'boudai'},
-  {w:'朝東風',k:'',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
-  {w:'夕東風',k:'',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
-  {w:'強東風',k:'',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
-  {w:'雲雀東風',k:'',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
-  {w:'鰆東風',k:'',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
-  {w:'梅東風',k:'',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
-  {w:'桜東風',k:'',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
-  {w:'こでまり',k:'',s:'春',p:'晩春',c:'植物',parent:'小粉団の花',type:'boudai'},
-  {w:'小手毬の花',k:'',s:'春',p:'晩春',c:'植物',parent:'小粉団の花',type:'boudai'},
-  {w:'団子花',k:'',s:'春',p:'晩春',c:'植物',parent:'小粉団の花',type:'boudai'},
-  {w:'すずかけの花',k:'',s:'春',p:'晩春',c:'植物',parent:'小粉団の花',type:'boudai'},
-  {w:'芽立ち',k:'',s:'春',p:'三春',c:'植物',parent:'木の芽',type:'boudai'},
-  {w:'芽吹く',k:'',s:'春',p:'三春',c:'植物',parent:'木の芽',type:'boudai'},
-  {w:'芽組む',k:'',s:'春',p:'三春',c:'植物',parent:'木の芽',type:'boudai'},
-  {w:'木の芽時',k:'',s:'春',p:'三春',c:'植物',parent:'木の芽',type:'boudai'},
-  {w:'木の芽雨',k:'',s:'春',p:'三春',c:'植物',parent:'木の芽',type:'boudai'},
-  {w:'木の芽風',k:'',s:'春',p:'三春',c:'植物',parent:'木の芽',type:'boudai'},
-  {w:'木筆',k:'',s:'春',p:'仲春',c:'植物',parent:'辛夷',type:'boudai'},
-  {w:'山木蘭',k:'',s:'春',p:'仲春',c:'植物',parent:'辛夷',type:'boudai'},
-  {w:'幣辛夷',k:'',s:'春',p:'仲春',c:'植物',parent:'辛夷',type:'boudai'},
-  {w:'やまあららぎ',k:'',s:'春',p:'仲春',c:'植物',parent:'辛夷',type:'boudai'},
-  {w:'黄金週間',k:'',s:'春',p:'晩春',c:'行事',parent:'ゴールデンウィーク',type:'boudai'},
-  {w:'円位忌',k:'',s:'春',p:'仲春',c:'行事',parent:'西行忌',type:'boudai'},
-  {w:'山家忌',k:'',s:'春',p:'仲春',c:'行事',parent:'西行忌',type:'boudai'},
-  {w:'サイネリア',k:'',s:'春',p:'晩春',c:'植物',parent:'シネラリア',type:'boudai'},
-  {w:'蕗菊',k:'',s:'春',p:'晩春',c:'植物',parent:'シネラリア',type:'boudai'},
-  {w:'富貴菊',k:'',s:'春',p:'晩春',c:'植物',parent:'シネラリア',type:'boudai'},
-  {w:'蕗桜',k:'',s:'春',p:'晩春',c:'植物',parent:'シネラリア',type:'boudai'},
-  {w:'凍返る',k:'',s:'春',p:'初春',c:'時候',parent:'冴返る',type:'boudai'},
-  {w:'寒戻る',k:'',s:'春',p:'初春',c:'時候',parent:'冴返る',type:'boudai'},
-  {w:'嵯峨念仏',k:'',s:'春',p:'晩春',c:'行事',parent:'嵯峨大念仏',type:'boudai'},
-  {w:'融通念仏',k:'',s:'春',p:'晩春',c:'行事',parent:'嵯峨大念仏',type:'boudai'},
-  {w:'花念仏',k:'',s:'春',p:'晩春',c:'行事',parent:'嵯峨大念仏',type:'boudai'},
-  {w:'嵯峨大念仏狂言',k:'',s:'春',p:'晩春',c:'行事',parent:'嵯峨大念仏',type:'boudai'},
-  {w:'嵯峨御松明',k:'',s:'春',p:'仲春',c:'行事',parent:'嵯峨の柱炬',type:'boudai'},
-  {w:'柱松明',k:'',s:'春',p:'仲春',c:'行事',parent:'嵯峨の柱炬',type:'boudai'},
-  {w:'彼岸桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'枝垂桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'糸桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'大山桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'大島桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'富士桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'豆桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'霞桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'嶺桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'深山桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'丁子桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'牡丹桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'里桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'染井吉野',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'朝桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'夕桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'夜桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'若桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'老桜',k:'',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
-  {w:'右斑魚',k:'',s:'春',p:'晩春',c:'動物',parent:'桜鯎',type:'boudai'},
-  {w:'花うぐひ',k:'',s:'春',p:'晩春',c:'動物',parent:'桜鯎',type:'boudai'},
-  {w:'花貝',k:'',s:'春',p:'三春',c:'動物',parent:'桜貝',type:'boudai'},
-  {w:'紅貝',k:'',s:'春',p:'三春',c:'動物',parent:'桜貝',type:'boudai'},
-  {w:'プリムラ',k:'',s:'春',p:'晩春',c:'植物',parent:'桜草',type:'boudai'},
-  {w:'花見鯛',k:'',s:'春',p:'晩春',c:'動物',parent:'桜鯛',type:'boudai'},
-  {w:'乗込鯛',k:'',s:'春',p:'晩春',c:'動物',parent:'桜鯛',type:'boudai'},
-  {w:'鯛網',k:'',s:'春',p:'晩春',c:'動物',parent:'桜鯛',type:'boudai'},
-  {w:'花漬',k:'',s:'春',p:'晩春',c:'生活',parent:'桜漬',type:'boudai'},
-  {w:'桜湯',k:'',s:'春',p:'晩春',c:'生活',parent:'桜漬',type:'boudai'},
-  {w:'拳螺',k:'',s:'春',p:'三春',c:'動物',parent:'栄螺',type:'boudai'},
-  {w:'壺焼',k:'',s:'春',p:'三春',c:'動物',parent:'栄螺',type:'boudai'},
-  {w:'焼栄螺',k:'',s:'春',p:'三春',c:'動物',parent:'栄螺',type:'boudai'},
-  {w:'挿葉',k:'',s:'春',p:'仲春',c:'生活',parent:'挿木',type:'boudai'},
-  {w:'挿芽',k:'',s:'春',p:'仲春',c:'生活',parent:'挿木',type:'boudai'},
-  {w:'挿穂',k:'',s:'春',p:'仲春',c:'生活',parent:'挿木',type:'boudai'},
-  {w:'挿床',k:'',s:'春',p:'仲春',c:'生活',parent:'挿木',type:'boudai'},
-  {w:'竹魚',k:'',s:'春',p:'三春',c:'動物',parent:'鱵',type:'boudai'},
-  {w:'針魚',k:'',s:'春',p:'三春',c:'動物',parent:'鱵',type:'boudai'},
-  {w:'西東忌',k:'',s:'春',p:'晩春',c:'行事',parent:'三鬼忌',type:'boudai'},
-  {w:'さるとりいばらの花',k:'',s:'春',p:'晩春',c:'植物',parent:'山帰来の花',type:'boudai'},
-  {w:'春黄金花',k:'',s:'春',p:'初春',c:'植物',parent:'山茱萸の花',type:'boudai'},
-  {w:'さんしゅう',k:'',s:'春',p:'初春',c:'植物',parent:'山茱萸の花',type:'boudai'},
-  {w:'さんしゅうの花',k:'',s:'春',p:'初春',c:'植物',parent:'山茱萸の花',type:'boudai'},
-  {w:'芽山椒',k:'',s:'春',p:'仲春',c:'植物',parent:'山椒の芽',type:'boudai'},
-  {w:'きのめ',k:'',s:'春',p:'仲春',c:'植物',parent:'山椒の芽',type:'boudai'},
-  {w:'達磨草',k:'',s:'春',p:'晩春',c:'植物',parent:'座禅草',type:'boudai'},
-  {w:'残る花',k:'',s:'春',p:'晩春',c:'植物',parent:'残花',type:'boudai'},
-  {w:'名残の花',k:'',s:'春',p:'晩春',c:'植物',parent:'残花',type:'boudai'},
-  {w:'雪残る',k:'',s:'春',p:'仲春',c:'地理',parent:'残雪',type:'boudai'},
-  {w:'残る雪',k:'',s:'春',p:'仲春',c:'地理',parent:'残雪',type:'boudai'},
-  {w:'日影雪',k:'',s:'春',p:'仲春',c:'地理',parent:'残雪',type:'boudai'},
-  {w:'汐干',k:'',s:'春',p:'晩春',c:'生活',parent:'汐干狩',type:'boudai'},
-  {w:'汐干潟',k:'',s:'春',p:'晩春',c:'生活',parent:'汐干狩',type:'boudai'},
-  {w:'汐干貝',k:'',s:'春',p:'晩春',c:'生活',parent:'汐干狩',type:'boudai'},
-  {w:'汐干籠',k:'',s:'春',p:'晩春',c:'生活',parent:'汐干狩',type:'boudai'},
-  {w:'汐干船',k:'',s:'春',p:'晩春',c:'生活',parent:'汐干狩',type:'boudai'},
-  {w:'潮招',k:'',s:'春',p:'三春',c:'動物',parent:'望潮',type:'boudai'},
-  {w:'エイプリルフール',k:'',s:'春',p:'仲春',c:'行事',parent:'四月馬鹿',type:'boudai'},
-  {w:'万愚節',k:'',s:'春',p:'仲春',c:'行事',parent:'四月馬鹿',type:'boudai'},
-  {w:'花樒',k:'',s:'春',p:'晩春',c:'植物',parent:'樒の花',type:'boudai'},
-  {w:'かうしばの花',k:'',s:'春',p:'晩春',c:'植物',parent:'樒の花',type:'boudai'},
-  {w:'樒売',k:'',s:'春',p:'晩春',c:'植物',parent:'樒の花',type:'boudai'},
-  {w:'篝火花',k:'',s:'春',p:'三春',c:'植物',parent:'シクラメン',type:'boudai'},
-  {w:'蜆貝',k:'',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
-  {w:'真蜆',k:'',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
-  {w:'紫蜆',k:'',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
-  {w:'蜆取',k:'',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
-  {w:'蜆舟',k:'',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
-  {w:'蜆掻',k:'',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
-  {w:'蜆売',k:'',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
-  {w:'草萌',k:'',s:'春',p:'初春',c:'植物',parent:'下萌',type:'boudai'},
-  {w:'草青む',k:'',s:'春',p:'初春',c:'植物',parent:'下萌',type:'boudai'},
-  {w:'畦青む',k:'',s:'春',p:'初春',c:'植物',parent:'下萌',type:'boudai'},
-  {w:'土手青む',k:'',s:'春',p:'初春',c:'植物',parent:'下萌',type:'boudai'},
-  {w:'若返る草',k:'',s:'春',p:'初春',c:'植物',parent:'下萌',type:'boudai'},
-  {w:'駒返る草',k:'',s:'春',p:'初春',c:'植物',parent:'下萌',type:'boudai'},
-  {w:'糸桜',k:'',s:'春',p:'仲春',c:'植物',parent:'枝垂桜',type:'boudai'},
-  {w:'草木瓜',k:'',s:'春',p:'全春',c:'時候',parent:'しどみの花',type:'boudai'},
-  {w:'花詰草',k:'',s:'春',p:'晩春',c:'植物',parent:'芝桜',type:'boudai'},
-  {w:'芝焼',k:'',s:'春',p:'全春',c:'時候',parent:'芝焼く',type:'boudai'},
-  {w:'芝火',k:'',s:'春',p:'全春',c:'時候',parent:'芝焼く',type:'boudai'},
-  {w:'カーニバル',k:'',s:'春',p:'全春',c:'時候',parent:'謝肉祭',type:'boudai'},
-  {w:'カルナバル',k:'',s:'春',p:'全春',c:'時候',parent:'謝肉祭',type:'boudai'},
-  {w:'二月堂の行',k:'',s:'春',p:'仲春',c:'行事',parent:'修二会',type:'boudai'},
-  {w:'お松明',k:'',s:'春',p:'仲春',c:'行事',parent:'修二会',type:'boudai'},
-  {w:'春蒿',k:'',s:'春',p:'三春',c:'植物',parent:'春菊',type:'boudai'},
-  {w:'高麗菊',k:'',s:'春',p:'三春',c:'植物',parent:'春菊',type:'boudai'},
-  {w:'菊菜',k:'',s:'春',p:'三春',c:'植物',parent:'春菊',type:'boudai'},
-  {w:'春の暁',k:'',s:'春',p:'三春',c:'時候',parent:'春暁',type:'boudai'},
-  {w:'春の曙',k:'',s:'春',p:'三春',c:'時候',parent:'春暁',type:'boudai'},
-  {w:'春の朝',k:'',s:'春',p:'三春',c:'時候',parent:'春暁',type:'boudai'},
-  {w:'春の光',k:'',s:'春',p:'三春',c:'天文',parent:'春光',type:'boudai'},
-  {w:'春色',k:'',s:'春',p:'三春',c:'天文',parent:'春光',type:'boudai'},
-  {w:'春の色',k:'',s:'春',p:'三春',c:'天文',parent:'春光',type:'boudai'},
-  {w:'春望',k:'',s:'春',p:'三春',c:'天文',parent:'春光',type:'boudai'},
-  {w:'社日',k:'',s:'春',p:'仲春',c:'時候',parent:'春社',type:'boudai'},
-  {w:'社日様',k:'',s:'春',p:'仲春',c:'時候',parent:'春社',type:'boudai'},
-  {w:'社日参',k:'',s:'春',p:'仲春',c:'時候',parent:'春社',type:'boudai'},
-  {w:'社翁の雨',k:'',s:'春',p:'仲春',c:'時候',parent:'春社',type:'boudai'},
-  {w:'春愁ふ',k:'',s:'春',p:'三春',c:'生活',parent:'春愁',type:'boudai'},
-  {w:'春かなし',k:'',s:'春',p:'三春',c:'生活',parent:'春愁',type:'boudai'},
-  {w:'春思',k:'',s:'春',p:'三春',c:'生活',parent:'春愁',type:'boudai'},
-  {w:'春の塵',k:'',s:'春',p:'三春',c:'天文',parent:'春塵',type:'boudai'},
-  {w:'春埃',k:'',s:'春',p:'三春',c:'天文',parent:'春塵',type:'boudai'},
-  {w:'春の昼',k:'',s:'春',p:'三春',c:'時候',parent:'春昼',type:'boudai'},
-  {w:'春の潮',k:'',s:'春',p:'三春',c:'地理',parent:'春潮',type:'boudai'},
-  {w:'春の泥',k:'',s:'春',p:'三春',c:'地理',parent:'春泥',type:'boudai'},
-  {w:'春季闘争',k:'',s:'春',p:'三春',c:'生活',parent:'春闘',type:'boudai'},
-  {w:'中日',k:'',s:'春',p:'仲春',c:'時候',parent:'春分',type:'boudai'},
-  {w:'春疾風',k:'',s:'春',p:'三春',c:'天文',parent:'春風',type:'boudai'},
-  {w:'春嵐',k:'',s:'春',p:'三春',c:'天文',parent:'春風',type:'boudai'},
-  {w:'春荒れ',k:'',s:'春',p:'三春',c:'天文',parent:'春風',type:'boudai'},
-  {w:'春北風',k:'',s:'春',p:'三春',c:'天文',parent:'春風',type:'boudai'},
-  {w:'春の服',k:'',s:'春',p:'全春',c:'時候',parent:'春服',type:'boudai'},
-  {w:'春装',k:'',s:'春',p:'全春',c:'時候',parent:'春服',type:'boudai'},
-  {w:'春睡',k:'',s:'春',p:'三春',c:'生活',parent:'春眠',type:'boudai'},
-  {w:'春の眠り',k:'',s:'春',p:'三春',c:'生活',parent:'春眠',type:'boudai'},
-  {w:'春眠し',k:'',s:'春',p:'三春',c:'生活',parent:'春眠',type:'boudai'},
-  {w:'春の雷',k:'',s:'春',p:'三春',c:'天文',parent:'春雷',type:'boudai'},
-  {w:'初雷',k:'',s:'春',p:'三春',c:'天文',parent:'春雷',type:'boudai'},
-  {w:'虫出しの雷',k:'',s:'春',p:'三春',c:'天文',parent:'春雷',type:'boudai'},
-  {w:'虫出し',k:'',s:'春',p:'三春',c:'天文',parent:'春雷',type:'boudai'},
-  {w:'ほくろ',k:'',s:'春',p:'仲春',c:'植物',parent:'春蘭',type:'boudai'},
-  {w:'貝の華',k:'',s:'春',p:'晩春',c:'行事',parent:'聖霊会',type:'boudai'},
-  {w:'しらを',k:'',s:'春',p:'初春',c:'動物',parent:'白魚',type:'boudai'},
-  {w:'白魚網',k:'',s:'春',p:'初春',c:'動物',parent:'白魚',type:'boudai'},
-  {w:'白魚舟',k:'',s:'春',p:'初春',c:'動物',parent:'白魚',type:'boudai'},
-  {w:'白魚漁',k:'',s:'春',p:'初春',c:'動物',parent:'白魚',type:'boudai'},
-  {w:'白魚汲む',k:'',s:'春',p:'初春',c:'動物',parent:'白魚',type:'boudai'},
-  {w:'白魚火',k:'',s:'春',p:'初春',c:'動物',parent:'白魚',type:'boudai'},
-  {w:'樺の花',k:'',s:'春',p:'晩春',c:'植物',parent:'白樺の花',type:'boudai'},
-  {w:'花かんば',k:'',s:'春',p:'晩春',c:'植物',parent:'白樺の花',type:'boudai'},
-  {w:'白子',k:'',s:'春',p:'三春',c:'生活',parent:'白子干',type:'boudai'},
-  {w:'ちりめんじゃこ',k:'',s:'春',p:'三春',c:'生活',parent:'白子干',type:'boudai'},
-  {w:'ちりめん',k:'',s:'春',p:'三春',c:'生活',parent:'白子干',type:'boudai'},
-  {w:'海市',k:'',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
-  {w:'山市',k:'',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
-  {w:'蜃楼',k:'',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
-  {w:'蜃市',k:'',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
-  {w:'喜見城',k:'',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
-  {w:'かいやぐら',k:'',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
-  {w:'きつねだな',k:'',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
-  {w:'地虫出づ',k:'',s:'春',p:'仲春',c:'動物',parent:'地虫穴を出づ',type:'boudai'},
-  {w:'蟻穴を出づ',k:'',s:'春',p:'仲春',c:'動物',parent:'地虫穴を出づ',type:'boudai'},
-  {w:'蜥蜴出づ',k:'',s:'春',p:'仲春',c:'動物',parent:'地虫穴を出づ',type:'boudai'},
-  {w:'知恵詣',k:'',s:'春',p:'晩春',c:'行事',parent:'十三詣',type:'boudai'},
-  {w:'知恵貰ひ',k:'',s:'春',p:'晩春',c:'行事',parent:'十三詣',type:'boudai'},
-  {w:'受験',k:'',s:'春',p:'仲春',c:'生活',parent:'入学試験',type:'boudai'},
-  {w:'受験生',k:'',s:'春',p:'仲春',c:'生活',parent:'入学試験',type:'boudai'},
-  {w:'受験期',k:'',s:'春',p:'仲春',c:'生活',parent:'入学試験',type:'boudai'},
-  {w:'合格',k:'',s:'春',p:'仲春',c:'生活',parent:'入学試験',type:'boudai'},
-  {w:'及第',k:'',s:'春',p:'仲春',c:'生活',parent:'入学試験',type:'boudai'},
-  {w:'受苦節',k:'',s:'春',p:'晩春',c:'行事',parent:'受難節',type:'boudai'},
-  {w:'受難週',k:'',s:'春',p:'晩春',c:'行事',parent:'受難節',type:'boudai'},
-  {w:'沈丁',k:'',s:'春',p:'仲春',c:'植物',parent:'沈丁花',type:'boudai'},
-  {w:'丁字',k:'',s:'春',p:'仲春',c:'植物',parent:'沈丁花',type:'boudai'},
-  {w:'瑞香',k:'',s:'春',p:'仲春',c:'植物',parent:'沈丁花',type:'boudai'},
-  {w:'芸香',k:'',s:'春',p:'仲春',c:'植物',parent:'沈丁花',type:'boudai'},
-  {w:'すかんぽ',k:'',s:'春',p:'仲春',c:'植物',parent:'酸葉',type:'boudai'},
-  {w:'酸模',k:'',s:'春',p:'仲春',c:'植物',parent:'酸葉',type:'boudai'},
-  {w:'すいすい',k:'',s:'春',p:'仲春',c:'植物',parent:'酸葉',type:'boudai'},
-  {w:'接ぎ松',k:'',s:'春',p:'晩春',c:'植物',parent:'杉菜',type:'boudai'},
-  {w:'杉花粉',k:'',s:'春',p:'晩春',c:'植物',parent:'杉の花',type:'boudai'},
-  {w:'花粉症',k:'',s:'春',p:'晩春',c:'植物',parent:'杉の花',type:'boudai'},
-  {w:'焼野の芒',k:'',s:'春',p:'初春',c:'植物',parent:'末黒の芒',type:'boudai'},
-  {w:'黒生の芒',k:'',s:'春',p:'初春',c:'植物',parent:'末黒の芒',type:'boudai'},
-  {w:'プラタナスの花',k:'',s:'春',p:'晩春',c:'植物',parent:'鈴懸の花',type:'boudai'},
-  {w:'子雀',k:'',s:'春',p:'晩春',c:'動物',parent:'雀の子',type:'boudai'},
-  {w:'親雀',k:'',s:'春',p:'晩春',c:'動物',parent:'雀の子',type:'boudai'},
-  {w:'黄雀',k:'',s:'春',p:'晩春',c:'動物',parent:'雀の子',type:'boudai'},
-  {w:'巣立',k:'',s:'春',p:'晩春',c:'動物',parent:'巣立鳥',type:'boudai'},
-  {w:'菫草',k:'',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
-  {w:'花菫',k:'',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
-  {w:'香菫',k:'',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
-  {w:'相撲取草',k:'',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
-  {w:'相撲花',k:'',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
-  {w:'一夜草',k:'',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
-  {w:'一葉草',k:'',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
-  {w:'壺菫',k:'',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
-  {w:'三色菫',k:'',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
-  {w:'パンジー',k:'',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
+  {w:'黄鳥',k:'きちょう／うぐいす',s:'春',p:'三春',c:'動物',parent:'鶯',type:'boudai'},
+  {w:'匂鳥',k:'においどり',s:'春',p:'三春',c:'動物',parent:'鶯',type:'boudai'},
+  {w:'春告鳥',k:'はるつげどり',s:'春',p:'三春',c:'動物',parent:'鶯',type:'boudai'},
+  {w:'初音',k:'はつね',s:'春',p:'三春',c:'動物',parent:'鶯',type:'boudai'},
+  {w:'鶯の谷渡り',k:'うぐいすのたにわたり',s:'春',p:'三春',c:'動物',parent:'鶯',type:'boudai'},
+  {w:'鶯笛',k:'うぐいすぶえ',s:'春',p:'三春',c:'動物',parent:'鶯',type:'boudai'},
+  {w:'黄鳥菜',k:'うぐいすな',s:'春',p:'仲春',c:'植物',parent:'鶯菜',type:'boudai'},
+  {w:'小松菜',k:'こまつな',s:'春',p:'仲春',c:'植物',parent:'鶯菜',type:'boudai'},
+  {w:'むこぎ',k:'むこぎ',s:'春',p:'仲春',c:'植物',parent:'五加木',type:'boudai'},
+  {w:'五加',k:'うこぎ',s:'春',p:'仲春',c:'植物',parent:'五加木',type:'boudai'},
+  {w:'五加木垣',k:'うこぎがき',s:'春',p:'仲春',c:'植物',parent:'五加木',type:'boudai'},
+  {w:'五加木飯',k:'うこぎめし',s:'春',p:'仲春',c:'植物',parent:'五加木',type:'boudai'},
+  {w:'おご',k:'おご',s:'春',p:'三春',c:'植物',parent:'海髪',type:'boudai'},
+  {w:'おごのり',k:'おごのり',s:'春',p:'三春',c:'植物',parent:'海髪',type:'boudai'},
+   {w:'春の氷',k:'はるのこおり',s:'春',p:'初春',c:'地理',parent:'薄氷',type:'boudai'},
+  {w:'残る氷',k:'のこるこおり',s:'春',p:'初春',c:'地理',parent:'薄氷',type:'boudai'},
+  {w:'琴弾鳥',k:'ことひきどり',s:'春',p:'三春',c:'動物',parent:'鷽',type:'boudai'},
+  {w:'照鷽',k:'てりうそ',s:'春',p:'三春',c:'動物',parent:'鷽',type:'boudai'},
+  {w:'雨鷽',k:'あまうそ',s:'春',p:'三春',c:'動物',parent:'鷽',type:'boudai'},
+  {w:'鷽姫',k:'うそひめ',s:'春',p:'三春',c:'動物',parent:'鷽',type:'boudai'},
+  {w:'芋独活',k:'いもうど',s:'春',p:'晩春',c:'植物',parent:'独活',type:'boudai'},
+  {w:'山独活',k:'やまうど',s:'春',p:'晩春',c:'植物',parent:'独活',type:'boudai'},
+  {w:'もやし独活',k:'もやしうど',s:'春',p:'晩春',c:'植物',parent:'独活',type:'boudai'},
+  {w:'独活掘る',k:'うどほる',s:'春',p:'晩春',c:'植物',parent:'独活',type:'boudai'},
+  {w:'雲丹',k:'うに',s:'春',p:'晩春',c:'動物',parent:'海胆',type:'boudai'},
+  {w:'海栗',k:'うに',s:'春',p:'晩春',c:'動物',parent:'海胆',type:'boudai'},
+  {w:'クローバー',k:'くろーばー',s:'春',p:'晩春',c:'植物',parent:'苜蓿',type:'boudai'},
+  {w:'白詰草',k:'しろつめくさ',s:'春',p:'晩春',c:'植物',parent:'苜蓿',type:'boudai'},
+  {w:'梅の花',k:'うめのはな',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'好文木',k:'こうぶんぼく',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'花の兄',k:'はなのあに',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'春告草',k:'はるつげくさ',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'野梅',k:'やばい',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'白梅',k:'はくばい',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'臥竜梅',k:'がりょうばい',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'豊後梅',k:'ぶんごうめ',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'枝垂梅',k:'しだれうめ',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'盆梅',k:'ぼんばい',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'老梅',k:'ろうばい',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'梅が香',k:'うめがか',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'梅林',k:'ばいりん',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'梅園',k:'ばいえん',s:'春',p:'初春',c:'植物',parent:'梅',type:'boudai'},
+  {w:'観梅',k:'かんばい',s:'春',p:'初春',c:'生活',parent:'梅見',type:'boudai'},
+  {w:'梅見茶屋',k:'うめみちゃや',s:'春',p:'初春',c:'生活',parent:'梅見',type:'boudai'},
+  {w:'梅若祭',k:'うめわかまつり',s:'春',p:'晩春',c:'行事',parent:'梅若忌',type:'boudai'},
+  {w:'梅若参',k:'うめわかまいり',s:'春',p:'晩春',c:'行事',parent:'梅若忌',type:'boudai'},
+  {w:'うらら',k:'うらら',s:'春',p:'三春',c:'時候',parent:'麗か',type:'boudai'},
+  {w:'うららけし',k:'うららけし',s:'春',p:'三春',c:'時候',parent:'麗か',type:'boudai'},
+  {w:'うららに',k:'うららに',s:'春',p:'三春',c:'時候',parent:'麗か',type:'boudai'},
+  {w:'日うらうら',k:'ひうらうら',s:'春',p:'三春',c:'時候',parent:'麗か',type:'boudai'},
+  {w:'うらうら',k:'うらうら',s:'春',p:'三春',c:'時候',parent:'麗か',type:'boudai'},
+  {w:'麗日',k:'れいじつ',s:'春',p:'三春',c:'時候',parent:'麗か',type:'boudai'},
+  {w:'えびねらん',k:'えびねらん',s:'春',p:'全春',c:'時候',parent:'海老根',type:'boudai'},
+  {w:'蝦根',k:'えびね',s:'春',p:'全春',c:'時候',parent:'海老根',type:'boudai'},
+  {w:'踏絵',k:'ふみえ',s:'春',p:'仲春',c:'行事',parent:'絵踏',type:'boudai'},
+  {w:'寺請証文',k:'てらうけしょうもん',s:'春',p:'仲春',c:'行事',parent:'絵踏',type:'boudai'},
+  {w:'西大寺参',k:'さいだいじまいり',s:'新年',p:'下新年',c:'行事',parent:'会陽',type:'boudai'},
+  {w:'神木',k:'しんぎ',s:'新年',p:'下新年',c:'行事',parent:'会陽',type:'boudai'},
+  {w:'裸押し',k:はだかおし'',s:'新年',p:'下新年',c:'行事',parent:'会陽',type:'boudai'},
+  {w:'修正会',k:'しゅしょうえ',s:'新年',p:'下新年',c:'行事',parent:'会陽',type:'boudai'},
+  {w:'魞場',k:'えりば',s:'春',p:'初春',c:'生活',parent:'魞挿す',type:'boudai'},
+  {w:'魞簀',k:'えりす',s:'春',p:'初春',c:'生活',parent:'魞挿す',type:'boudai'},
+  {w:'さくらんぼの花',k:'さくらんぼのはな',s:'春',p:'晩春',c:'植物',parent:'桜桃の花',type:'boudai'},
+  {w:'西洋実桜',k:'せいようみざくら',s:'春',p:'晩春',c:'植物',parent:'桜桃の花',type:'boudai'},
+  {w:'迎春花',k:'げいしゅんか',s:'春',p:'初春',c:'植物',parent:'黄梅',type:'boudai'},
+  {w:'小賀玉',k:'おがたま',s:'春',p:'全春',c:'時候',parent:'小賀玉の花',type:'boudai'},
+  {w:'はなかたばみ',k:'はなかたばみ',s:'春',p:'晩春',c:'植物',parent:'オキザリス',type:'boudai'},
+  {w:'苧環',k:'おだまき',s:'春',p:'晩春',c:'植物',parent:'苧環の花',type:'boudai'},
+  {w:'いとくり',k:'いとくり',s:'春',p:'晩春',c:'植物',parent:'苧環の花',type:'boudai'},
+  {w:'糸繰草',k:'いとくりそう',s:'春',p:'晩春',c:'植物',parent:'苧環の花',type:'boudai'},
+  {w:'告知祭',k:'こくちさい',s:'春',p:'仲春',c:'行事',parent:'御告祭',type:'boudai'},
+  {w:'受胎告知日',k:'じゅたいこくちび',s:'春',p:'仲春',c:'行事',parent:'御告祭',type:'boudai'},
+  {w:'聖母祭',k:'せいぼさい',s:'春',p:'仲春',c:'行事',parent:'御告祭',type:'boudai'},
+  {w:'鹿の角落つ',k:'しかのつのおつ',s:'春',p:'晩春',c:'動物',parent:'落し角',type:'boudai'},
+  {w:'忘れ角',k:'わすれつの',s:'春',p:'晩春',c:'動物',parent:'落し角',type:'boudai'},
+  {w:'草朧',k:'くさおぼろ',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
+  {w:'岩朧',k:'いわおぼろ',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
+  {w:'谷朧',k:'たにおぼろ',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
+  {w:'灯朧',k:'ひおぼろ',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
+  {w:'鐘朧',k:'かねおぼろ',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
+  {w:'朧影',k:'おぼろかげ',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
+  {w:'朧めく',k:'おぼろめく',s:'春',p:'三春',c:'天文',parent:'朧',type:'boudai'},
+  {w:'月朧',k:'つきおぼろ',s:'春',p:'三春',c:'天文',parent:'朧月',type:'boudai'},
+  {w:'朧夜',k:'おぼろよ',s:'春',p:'三春',c:'天文',parent:'朧月',type:'boudai'},
+  {w:'朧月夜',k:'おぼろづきよ',s:'春',p:'三春',c:'天文',parent:'朧月',type:'boudai'},
+  {w:'水取',k:'みずとり',s:'春',p:'仲春',c:'行事',parent:'お水取',type:'boudai'},
+  {w:'若狭の井',k:'わかさのい',s:'春',p:'仲春',c:'行事',parent:'お水取',type:'boudai'},
+  {w:'蚕',k:'こ',s:'春',p:'晩春',c:'動物',parent:'蚕',type:'boudai'},
+  {w:'春蚕',k:'はるご',s:'春',p:'晩春',c:'動物',parent:'蚕',type:'boudai'},
+  {w:'捨蚕',k:'すてご',s:'春',p:'晩春',c:'動物',parent:'蚕',type:'boudai'},
+  {w:'桑子',k:'くわこ',s:'春',p:'晩春',c:'動物',parent:'蚕',type:'boudai'},
+  {w:'毛蚕',k:'けご',s:'春',p:'晩春',c:'動物',parent:'蚕',type:'boudai'},
+  {w:'蚕時雨',k:'こしぐれ',s:'春',p:'晩春',c:'動物',parent:'蚕',type:'boudai'},
+  {w:'開龕',k:'かいがん',s:'春',p:'三春',c:'行事',parent:'開帳',type:'boudai'},
+  {w:'出開帳',k:'でかいちょう',s:'春',p:'三春',c:'行事',parent:'開帳',type:'boudai'},
+  {w:'開帳寺',k:'かいちょうでら',s:'春',p:'三春',c:'行事',parent:'開帳',type:'boudai'},
+  {w:'花海棠',k:'はなかいどう',s:'春',p:'晩春',c:'植物',parent:'海棠',type:'boudai'},
+  {w:'睡花',k:'すいか／ねむりばな',s:'春',p:'晩春',c:'植物',parent:'海棠',type:'boudai'},
+  {w:'ねむれる花',k:'ねむれるはな',s:'春',p:'晩春',c:'植物',parent:'海棠',type:'boudai'},
+  {w:'貝寄',k:'かいよせ',s:'春',p:'仲春',c:'天文',parent:'貝寄風',type:'boudai'},
+  {w:'花楓',k:'はなかえで',s:'春',p:'晩春',c:'植物',parent:'楓の花',type:'boudai'},
+  {w:'殿様蛙',k:'とのさまがえる',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
+  {w:'赤蛙',k:'あかがえる',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
+  {w:'土蛙',k:'つちかわず',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
+  {w:'初蛙',k:'はつかわず',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
+  {w:'遠蛙',k:'とおかわず',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
+  {w:'昼蛙',k:'ひるかわず',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
+  {w:'夕蛙',k:'ゆうかわず',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
+  {w:'蛙合戦',k:'かわずかっせん',s:'春',p:'三春',c:'動物',parent:'蛙',type:'boudai'},
+  {w:'帰雁',k:'きがん',s:'春',p:'仲春',c:'動物',parent:'帰る雁',type:'boudai'},
+  {w:'雁帰る',k:'かりかえる',s:'春',p:'仲春',c:'動物',parent:'帰る雁',type:'boudai'},
+  {w:'行く雁',k:'いくかり',s:'春',p:'仲春',c:'動物',parent:'帰る雁',type:'boudai'},
+  {w:'去る雁',k:'さるかり',s:'春',p:'仲春',c:'動物',parent:'帰る雁',type:'boudai'},
+  {w:'雁の別れ',k:'かりのわかれ',s:'春',p:'仲春',c:'動物',parent:'帰る雁',type:'boudai'},
+  {w:'垣手入',k:'かきていれ',s:'春',p:'仲春',c:'生活',parent:'垣繕ふ',type:'boudai'},
+  {w:'糸遊',k:'いとゆう',s:'春',p:'三春',c:'天文',parent:'陽炎',type:'boudai'},
+  {w:'遊糸',k:'ゆうし',s:'春',p:'三春',c:'天文',parent:'陽炎',type:'boudai'},
+  {w:'野馬',k:'やば',s:'春',p:'三春',c:'天文',parent:'陽炎',type:'boudai'},
+  {w:'かぎろひ',k:'かぎろい',s:'春',p:'三春',c:'天文',parent:'陽炎',type:'boudai'},
+  {w:'風車売',k:'かざぐるまうり',s:'春',p:'全春',c:'時候',parent:'風車',type:'boudai'},
+  {w:'花樫',k:'はながつお',s:'春',p:'晩春',c:'植物',parent:'樫の花',type:'boudai'},
+  {w:'申祭',k:'さるまつり',s:'春',p:'仲春',c:'行事',parent:'春日祭',type:'boudai'},
+  {w:'春霞',k:'はるがすみ',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
+  {w:'朝霞',k:'あさがすみ',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
+  {w:'夕霞',k:'ゆうかすみ',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
+  {w:'遠霞',k:'とおかすみ',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
+  {w:'薄霞',k:'うすがすみ',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
+  {w:'棚霞',k:'たながすみ',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
+  {w:'霞む',k:'かすむ',s:'春',p:'三春',c:'天文',parent:'霞',type:'boudai'},
+  {w:'光る風',k:'ひかるかぜ',s:'春',p:'三春',c:'天文',parent:'風光る',type:'boudai'},
+  {w:'かたかごの花',k:'かたかごのはな',s:'春',p:'初春',c:'植物',parent:'片栗の花',type:'boudai'},
+  {w:'蛙子',k:'かえるご',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
+  {w:'蛙の子',k:'かえるのこ／かわずのこ',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
+  {w:'お玉杓子',k:'おたまじゃくし',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
+  {w:'蛙生る',k:'かわずうまる',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
+  {w:'蝌蚪生る',k:'かとうまる',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
+  {w:'蝌蚪の紐',k:'かとのひも',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
+  {w:'蝌蚪の国',k:'かとのくに',s:'春',p:'晩春',c:'動物',parent:'蝌蚪',type:'boudai'},
+  {w:'雛草',k:'ひなくさ',s:'春',p:'晩春',c:'植物',parent:'髢草',type:'boudai'},
+  {w:'鬘草',k:'かつらぐさ',s:'春',p:'晩春',c:'植物',parent:'髢草',type:'boudai'},
+  {w:'芥子菜',k:'からしな',s:'春',p:'三春',c:'植物',parent:'芥菜',type:'boudai'},
+  {w:'からたちの花',k:'からたちのはな',s:'春',p:'晩春',c:'植物',parent:'枸橘の花',type:'boudai'},
+  {w:'枳殻',k:'からたち',s:'春',p:'晩春',c:'植物',parent:'枸橘の花',type:'boudai'},
+  {w:'獺の祭',k:'おそのまつり',s:'春',p:'初春',c:'時候',parent:'獺魚を祭る',type:'boudai'},
+  {w:'獺祭',k:'だっさい／おそまつり',s:'春',p:'初春',c:'時候',parent:'獺魚を祭る',type:'boudai'},
+  {w:'目借時',k:'めかりどき',s:'春',p:'晩春',c:'時候',parent:'蛙の目借時',type:'boudai'},
+  {w:'寒明ける',k:'かんあける',s:'春',p:'初春',c:'時候',parent:'寒明',type:'boudai'},
+  {w:'寒の明け',k:'かんのあけ',s:'春',p:'初春',c:'時候',parent:'寒明',type:'boudai'},
+  {w:'渦見',k:'うずみ',s:'春',p:'仲春',c:'生活',parent:'観潮',type:'boudai'},
+  {w:'渦潮見',k:'うずしおみ',s:'春',p:'仲春',c:'生活',parent:'観潮',type:'boudai'},
+  {w:'渦見船',k:'うずみぶね',s:'春',p:'仲春',c:'生活',parent:'観潮',type:'boudai'},
+  {w:'観潮船',k:'かんちょうせん',s:'春',p:'仲春',c:'生活',parent:'観潮',type:'boudai'},
+  {w:'雁供養',k:'がんくよう',s:'春',p:'仲春',c:'行事',parent:'雁風呂',type:'boudai'},
+  {w:'もみぢ苺の花',k:'もみじいちごのはな',s:'春',p:'晩春',c:'植物',parent:'木苺の花',type:'boudai'},
+  {w:'粟苺の花',k:'あわいちごのはな',s:'春',p:'晩春',c:'植物',parent:'木苺の花',type:'boudai'},
+  {w:'下り苺の花',k:'くだりいちごのはな',s:'春',p:'晩春',c:'植物',parent:'木苺の花',type:'boudai'},
+  {w:'晋子忌',k:'しんしき',s:'春',p:'全春',c:'時候',parent:'其角忌',type:'boudai'},
+  {w:'晋翁忌',k:'しんおうき',s:'春',p:'全春',c:'時候',parent:'其角忌',type:'boudai'},
+  {w:'菊分つ',k:'きくわかつ',s:'春',p:'全春',c:'時候',parent:'菊根分',type:'boudai'},
+  {w:'菊植う',k:'きくうう',s:'春',p:'全春',c:'時候',parent:'菊根分',type:'boudai'},
+  {w:'菊の芽',k:'きくのめ',s:'春',p:'仲春',c:'植物',parent:'菊の苗',type:'boudai'},
+  {w:'きしゃご',k:'きしゃご',s:'春',p:'全春',c:'時候',parent:'細螺',type:'boudai'},
+  {w:'衣更着',k:'きさらぎ',s:'春',p:'仲春',c:'時候',parent:'如月',type:'boudai'},
+  {w:'雉子',k:'きぎす',s:'春',p:'三春',c:'動物',parent:'雉',type:'boudai'},
+  {w:'きぎし',k:'きぎし',s:'春',p:'三春',c:'動物',parent:'雉',type:'boudai'},
+  {w:'雉のほろろ',k:'きじのほろろ',s:'春',p:'三春',c:'動物',parent:'雉',type:'boudai'},
+  {w:'糸水仙',k:'いとずいせん',s:'春',p:'仲春',c:'植物',parent:'黄水仙',type:'boudai'},
+  {w:'北野御忌日',k:'きたのおんきび',s:'春',p:'全春',c:'時候',parent:'北野菜種御供',type:'boudai'},
+  {w:'天神御忌',k:'てんじんおんき',s:'春',p:'全春',c:'時候',parent:'北野菜種御供',type:'boudai'},
+  {w:'梅花祭',k:'ばいかさい',s:'春',p:'全春',c:'時候',parent:'北野菜種御供',type:'boudai'},
+  {w:'梅花御供',k:'ばいかごく',s:'春',p:'全春',c:'時候',parent:'北野菜種御供',type:'boudai'},
+  {w:'道真忌',k:'みちざねき',s:'春',p:'全春',c:'時候',parent:'北野菜種御供',type:'boudai'},
+  {w:'菜種の神事',k:'なたねのしんじ',s:'春',p:'全春',c:'時候',parent:'北野菜種御供',type:'boudai'},
+  {w:'修羅落し',k:'しゅらおとし',s:'春',p:'仲春',c:'生活',parent:'木流し',type:'boudai'},
+  {w:'初筏',k:'はついかだ',s:'春',p:'仲春',c:'生活',parent:'木流し',type:'boudai'},
+  {w:'根開き',k:'ねびらき',s:'春',p:'仲春',c:'地理',parent:'木の根明く',type:'boudai'},
+  {w:'山椒和',k:'さんしょうあえ',s:'春',p:'全春',c:'時候',parent:'木の芽和',type:'boudai'},
+  {w:'通条花',k:'きぶし',s:'春',p:'仲春',c:'植物',parent:'木五倍子の花',type:'boudai'},
+  {w:'木五倍子咲く',k:'きぶしさく',s:'春',p:'仲春',c:'植物',parent:'木五倍子の花',type:'boudai'},
+  {w:'ダリア植う',k:'だりあうう',s:'春',p:'晩春',c:'生活',parent:'球根植う',type:'boudai'},
+  {w:'百合植う',k:'ゆりうう',s:'春',p:'晩春',c:'生活',parent:'球根植う',type:'boudai'},
+  {w:'旧正',k:'きゅうしょう',s:'春',p:'初春',c:'時候',parent:'旧正月',type:'boudai'},
+  {w:'春節',k:'しゅんせつ',s:'春',p:'初春',c:'時候',parent:'旧正月',type:'boudai'},
+  {w:'レガッタ',k:'れがった',s:'春',p:'全春',c:'時候',parent:'競漕',type:'boudai'},
+  {w:'曲水の宴',k:'きょくすいのえん',s:'春',p:'晩春',c:'行事',parent:'曲水',type:'boudai'},
+  {w:'流觴',k:'りゅうしょう',s:'春',p:'晩春',c:'行事',parent:'曲水',type:'boudai'},
+  {w:'盃流し',k:'さかずきながし',s:'春',p:'晩春',c:'行事',parent:'曲水',type:'boudai'},
+  {w:'椿寿忌',k:'ちんじゅき',s:'春',p:'晩春',c:'行事',parent:'虚子忌',type:'boudai'},
+  {w:'常春花',k:'じょうしゅんか',s:'春',p:'晩春',c:'植物',parent:'金盞花',type:'boudai'},
+  {w:'長春花',k:'ちょうしゅんか',s:'春',p:'晩春',c:'植物',parent:'金盞花',type:'boudai'},
+  {w:'さんぽうげ',k:'さんぽうげ',s:'春',p:'晩春',c:'植物',parent:'金鳳花',type:'boudai'},
+  {w:'馬の脚形',k:'うまのあしがた',s:'春',p:'晩春',c:'植物',parent:'金鳳花',type:'boudai'},
+  {w:'駒の脚形',k:'こまのあしがた',s:'春',p:'晩春',c:'植物',parent:'金鳳花',type:'boudai'},
+  {w:'法然忌',k:'ほうねんき',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
+  {w:'円光忌',k:'えんこうき',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
+  {w:'御忌詣',k:'ぎょきもうで',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
+  {w:'御忌参',k:'ぎょきまいり',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
+  {w:'御忌の寺',k:'ぎょきのてら',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
+  {w:'御忌の鐘',k:'ぎょきのかね',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
+  {w:'御忌小袖',k:'ぎょきこそで',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
+  {w:'弁当始',k:'べんとうはじめ',s:'春',p:'晩春',c:'行事',parent:'御忌',type:'boudai'},
+  {w:'くくたち',k:'くくたち',s:'春',p:'三春',c:'植物',parent:'茎立',type:'boudai'},
+  {w:'枸杞芽',k:'くこめ',s:'春',p:'全春',c:'時候',parent:'枸杞の芽',type:'boudai'},
+  {w:'枸杞飯',k:'くこめし',s:'春',p:'全春',c:'時候',parent:'枸杞の芽',type:'boudai'},
+  {w:'名草の芽',k:'なぐさのめ',s:'春',p:'初春',c:'植物',parent:'草の芽',type:'boudai'},
+  {w:'草の餅',k:'くさのもち',s:'春',p:'晩春',c:'生活',parent:'草餅',type:'boudai'},
+  {w:'蓬餅',k:'よもぎもち',s:'春',p:'晩春',c:'生活',parent:'草餅',type:'boudai'},
+  {w:'母子餅',k:'ははこもち',s:'春',p:'晩春',c:'生活',parent:'草餅',type:'boudai'},
+  {w:'草団子',k:'くさだんご',s:'春',p:'晩春',c:'生活',parent:'草餅',type:'boudai'},
+  {w:'菊若葉',k:'きくわかば',s:'春',p:'晩春',c:'植物',parent:'草若葉',type:'boudai'},
+  {w:'萩若葉',k:'はぎわかば',s:'春',p:'晩春',c:'植物',parent:'草若葉',type:'boudai'},
+  {w:'芭蕉の若葉',k:'ばしょうのわかば',s:'春',p:'晩春',c:'植物',parent:'草若葉',type:'boudai'},
+  {w:'罌粟の若葉',k:'けしのわかば',s:'春',p:'晩春',c:'植物',parent:'草若葉',type:'boudai'},
+  {w:'鞍馬花会式',k:'くらまはなえしき',s:'春',p:'晩春',c:'行事',parent:'鞍馬の花供養',type:'boudai'},
+  {w:'花供懺法',k:'はなぐせんぽう',s:'春',p:'晩春',c:'行事',parent:'鞍馬の花供養',type:'boudai'},
+  {w:'暮春',k:'ぼしゅん',s:'春',p:'晩春',c:'時候',parent:'暮の春',type:'boudai'},
+  {w:'春暮るる',k:'はるくるる',s:'春',p:'晩春',c:'時候',parent:'暮の春',type:'boudai'},
+  {w:'春の果',k:'はるのはて',s:'春',p:'晩春',c:'時候',parent:'暮の春',type:'boudai'},
+  {w:'桑の芽',k:'くわのめ',s:'春',p:'晩春',c:'植物',parent:'桑',type:'boudai'},
+  {w:'芽桑',k:'めくわ',s:'春',p:'晩春',c:'植物',parent:'桑',type:'boudai'},
+  {w:'桑の花',k:'くわのはな',s:'春',p:'晩春',c:'植物',parent:'桑',type:'boudai'},
+  {w:'桑摘女',k:'くわつみめ',s:'春',p:'全春',c:'時候',parent:'桑摘',type:'boudai'},
+  {w:'桑摘唄',k:'くわつみうた',s:'春',p:'全春',c:'時候',parent:'桑摘',type:'boudai'},
+  {w:'桑籠',k:'くわかご',s:'春',p:'全春',c:'時候',parent:'桑摘',type:'boudai'},
+  {w:'桑車',k:'くわぐるま',s:'春',p:'全春',c:'時候',parent:'桑摘',type:'boudai'},
+  {w:'桑ほどく',k:'くわほどく',s:'春',p:'仲春',c:'生活',parent:'桑解く',type:'boudai'},
+  {w:'獣交む',k:'けものつるむ',s:'春',p:'三春',c:'動物',parent:'獣交る',type:'boudai'},
+  {w:'種つけ',k:'たねつけ',s:'春',p:'三春',c:'動物',parent:'獣交る',type:'boudai'},
+  {w:'種かけ',k:'たねかけ',s:'春',p:'三春',c:'動物',parent:'獣交る',type:'boudai'},
+  {w:'種馬',k:'たねうま',s:'春',p:'三春',c:'動物',parent:'獣交る',type:'boudai'},
+  {w:'種牛',k:'たねうし',s:'春',p:'三春',c:'動物',parent:'獣交る',type:'boudai'},
+  {w:'種豚',k:'たねぶた',s:'春',p:'三春',c:'動物',parent:'獣交る',type:'boudai'},
+  {w:'華鬘牡丹',k:'けまんぼたん',s:'春',p:'晩春',c:'植物',parent:'華鬘草',type:'boudai'},
+  {w:'けまん',k:'けまん',s:'春',p:'晩春',c:'植物',parent:'華鬘草',type:'boudai'},
+  {w:'瓔珞牡丹',k:'ようらくぼたん',s:'春',p:'晩春',c:'植物',parent:'華鬘草',type:'boudai'},
+  {w:'藤牡丹',k:'ふじぼたん',s:'春',p:'晩春',c:'植物',parent:'華鬘草',type:'boudai'},
+  {w:'鯛釣草',k:'たいつりそう',s:'春',p:'晩春',c:'植物',parent:'華鬘草',type:'boudai'},
+  {w:'建国の日',k:'けんこくのひ',s:'春',p:'初春',c:'行事',parent:'建国記念の日',type:'boudai'},
+  {w:'建国祭',k:'けんこくさい',s:'春',p:'初春',c:'行事',parent:'建国記念の日',type:'boudai'},
+  {w:'紀元節',k:'きげんせつ',s:'春',p:'初春',c:'行事',parent:'建国記念の日',type:'boudai'},
+  {w:'蓮華草',k:'れんげそう',s:'春',p:'仲春',c:'植物',parent:'紫雲英',type:'boudai'},
+  {w:'げんげん',k:'げんげん',s:'春',p:'仲春',c:'植物',parent:'紫雲英',type:'boudai'},
+  {w:'五形花',k:'げげばな',s:'春',p:'仲春',c:'植物',parent:'紫雲英',type:'boudai'},
+  {w:'黄砂',k:'こうさ',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
+  {w:'霾晦',k:'よなぐもり',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
+  {w:'蒙古風',k:'もうこかぜ',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
+  {w:'霾風',k:'ばいふう',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
+  {w:'霾天',k:'ばいてん',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
+  {w:'黄塵万丈',k:'こうじんばんじょう',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
+  {w:'黄砂降る',k:'こうさふる',s:'春',p:'三春',c:'天文',parent:'霾',type:'boudai'},
+  {w:'薄紅梅',k:'うすこうばい',s:'春',p:'初春',c:'植物',parent:'紅梅',type:'boudai'},
+  {w:'氷解く',k:'こおりとく',s:'春',p:'全春',c:'時候',parent:'氷解',type:'boudai'},
+  {w:'氷消ゆ',k:'こおりきゆ',s:'春',p:'全春',c:'時候',parent:'氷解',type:'boudai'},
+  {w:'解氷',k:'かいひょう',s:'春',p:'全春',c:'時候',parent:'氷解',type:'boudai'},
+  {w:'解氷期',k:'かいひょうき',s:'春',p:'全春',c:'時候',parent:'氷解',type:'boudai'},
+  {w:'解氷湖',k:'かいひょうこ',s:'春',p:'全春',c:'時候',parent:'氷解',type:'boudai'},
+  {w:'浮氷',k:'うきごおり',s:'春',p:'全春',c:'時候',parent:'氷解',type:'boudai'},
+  {w:'養蚕',k:'ようさん',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
+  {w:'種紙',k:'たねがみ',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
+  {w:'掃立',k:'はきたて',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
+  {w:'蚕の眠り',k:'かいこのねむり',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
+  {w:'飼屋',k:'かいや',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
+  {w:'蚕棚',k:'こだな／かいこだな',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
+  {w:'蚕室',k:'さんしつ',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
+  {w:'蚕籠',k:'こかご',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
+  {w:'蚕飼時',k:'こがいどき',s:'春',p:'晩春',c:'生活',parent:'蚕飼',type:'boudai'},
+  {w:'炬燵の名残',k:'こたつのなごり',s:'春',p:'晩春',c:'生活',parent:'炬燵塞ぐ',type:'boudai'},
+  {w:'朝東風',k:'あさこち',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
+  {w:'夕東風',k:'ゆうこち',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
+  {w:'強東風',k:'つよこち',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
+  {w:'雲雀東風',k:'ひばりこち',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
+  {w:'鰆東風',k:'さわらこち',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
+  {w:'梅東風',k:'うめこち',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
+  {w:'桜東風',k:'さくらこち',s:'春',p:'三春',c:'天文',parent:'東風',type:'boudai'},
+  {w:'こでまり',k:'こでまり',s:'春',p:'晩春',c:'植物',parent:'小粉団の花',type:'boudai'},
+  {w:'小手毬の花',k:'こでまりのはな',s:'春',p:'晩春',c:'植物',parent:'小粉団の花',type:'boudai'},
+  {w:'団子花',k:'だんごばな',s:'春',p:'晩春',c:'植物',parent:'小粉団の花',type:'boudai'},
+  {w:'すずかけの花',k:'すずかけのはな',s:'春',p:'晩春',c:'植物',parent:'小粉団の花',type:'boudai'},
+  {w:'芽立ち',k:'めだち',s:'春',p:'三春',c:'植物',parent:'木の芽',type:'boudai'},
+  {w:'芽吹く',k:'めぶく',s:'春',p:'三春',c:'植物',parent:'木の芽',type:'boudai'},
+  {w:'芽組む',k:'めくむ',s:'春',p:'三春',c:'植物',parent:'木の芽',type:'boudai'},
+  {w:'木の芽時',k:'このめどき',s:'春',p:'三春',c:'植物',parent:'木の芽',type:'boudai'},
+  {w:'木の芽雨',k:'このめあめ',s:'春',p:'三春',c:'植物',parent:'木の芽',type:'boudai'},
+  {w:'木の芽風',k:'このめかぜ',s:'春',p:'三春',c:'植物',parent:'木の芽',type:'boudai'},
+  {w:'木筆',k:'こぶし',s:'春',p:'仲春',c:'植物',parent:'辛夷',type:'boudai'},
+  {w:'山木蘭',k:'やまもくれん',s:'春',p:'仲春',c:'植物',parent:'辛夷',type:'boudai'},
+  {w:'幣辛夷',k:'しでこぶし',s:'春',p:'仲春',c:'植物',parent:'辛夷',type:'boudai'},
+  {w:'やまあららぎ',k:'やまあららぎ',s:'春',p:'仲春',c:'植物',parent:'辛夷',type:'boudai'},
+  {w:'黄金週間',k:'おうごんしゅうかん',s:'春',p:'晩春',c:'行事',parent:'ゴールデンウィーク',type:'boudai'},
+  {w:'円位忌',k:'えんいき',s:'春',p:'仲春',c:'行事',parent:'西行忌',type:'boudai'},
+  {w:'山家忌',k:'さんかき',s:'春',p:'仲春',c:'行事',parent:'西行忌',type:'boudai'},
+  {w:'サイネリア',k:'さいねりあ',s:'春',p:'晩春',c:'植物',parent:'シネラリア',type:'boudai'},
+  {w:'蕗菊',k:'ろぎく',s:'春',p:'晩春',c:'植物',parent:'シネラリア',type:'boudai'},
+  {w:'富貴菊',k:'ふうきぎく',s:'春',p:'晩春',c:'植物',parent:'シネラリア',type:'boudai'},
+  {w:'蕗桜',k:'ふきざくら',s:'春',p:'晩春',c:'植物',parent:'シネラリア',type:'boudai'},
+  {w:'凍返る',k:'いてかえる',s:'春',p:'初春',c:'時候',parent:'冴返る',type:'boudai'},
+  {w:'寒戻る',k:'かんもどる',s:'春',p:'初春',c:'時候',parent:'冴返る',type:'boudai'},
+  {w:'嵯峨念仏',k:'さがねんぶつ',s:'春',p:'晩春',c:'行事',parent:'嵯峨大念仏',type:'boudai'},
+  {w:'融通念仏',k:'ゆうずうねんぶつ',s:'春',p:'晩春',c:'行事',parent:'嵯峨大念仏',type:'boudai'},
+  {w:'花念仏',k:'はなねんぶつ',s:'春',p:'晩春',c:'行事',parent:'嵯峨大念仏',type:'boudai'},
+  {w:'嵯峨大念仏狂言',k:'さがだいねんぶつきょうげん',s:'春',p:'晩春',c:'行事',parent:'嵯峨大念仏',type:'boudai'},
+  {w:'嵯峨御松明',k:'さがおたいまつ',s:'春',p:'仲春',c:'行事',parent:'嵯峨の柱炬',type:'boudai'},
+  {w:'柱松明',k:'はしらたいまつ',s:'春',p:'仲春',c:'行事',parent:'嵯峨の柱炬',type:'boudai'},
+  {w:'彼岸桜',k:'ひがんざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'枝垂桜',k:'しでざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'糸桜',k:'いとざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'大山桜',k:'おおやまざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'大島桜',k:'おおしまざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'富士桜',k:'ふしざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'豆桜',k:'まめざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'霞桜',k:'かすみざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'嶺桜',k:'みねざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'深山桜',k:'みやまざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'丁子桜',k:'ちょうじざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'牡丹桜',k:'ぼたんざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'里桜',k:'さとざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'染井吉野',k:'そめいよしの',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'朝桜',k:'あさざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'夕桜',k:'ゆうざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'夜桜',k:'よざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'若桜',k:'わかざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'老桜',k:'おいざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'右斑魚',k:'うぐい',s:'春',p:'晩春',c:'動物',parent:'桜鯎',type:'boudai'},
+  {w:'花うぐひ',k:'はなうぐい',s:'春',p:'晩春',c:'動物',parent:'桜鯎',type:'boudai'},
+  {w:'花貝',k:'はながい',s:'春',p:'三春',c:'動物',parent:'桜貝',type:'boudai'},
+  {w:'紅貝',k:'べにがい',s:'春',p:'三春',c:'動物',parent:'桜貝',type:'boudai'},
+  {w:'プリムラ',k:'ぷりむら',s:'春',p:'晩春',c:'植物',parent:'桜草',type:'boudai'},
+  {w:'花見鯛',k:'はなみだい',s:'春',p:'晩春',c:'動物',parent:'桜鯛',type:'boudai'},
+  {w:'乗込鯛',k:'のっこみだい',s:'春',p:'晩春',c:'動物',parent:'桜鯛',type:'boudai'},
+  {w:'鯛網',k:'たいあみ',s:'春',p:'晩春',c:'動物',parent:'桜鯛',type:'boudai'},
+  {w:'花漬',k:'はなづけ',s:'春',p:'晩春',c:'生活',parent:'桜漬',type:'boudai'},
+  {w:'桜湯',k:'さくらゆ',s:'春',p:'晩春',c:'生活',parent:'桜漬',type:'boudai'},
+  {w:'拳螺',k:'さざえ',s:'春',p:'三春',c:'動物',parent:'栄螺',type:'boudai'},
+  {w:'壺焼',k:'つぼやき',s:'春',p:'三春',c:'動物',parent:'栄螺',type:'boudai'},
+  {w:'焼栄螺',k:'やきさざえ',s:'春',p:'三春',c:'動物',parent:'栄螺',type:'boudai'},
+  {w:'挿葉',k:'さしば',s:'春',p:'仲春',c:'生活',parent:'挿木',type:'boudai'},
+  {w:'挿芽',k:'さしめ',s:'春',p:'仲春',c:'生活',parent:'挿木',type:'boudai'},
+  {w:'挿穂',k:'さしほ',s:'春',p:'仲春',c:'生活',parent:'挿木',type:'boudai'},
+  {w:'挿床',k:'さしどこ',s:'春',p:'仲春',c:'生活',parent:'挿木',type:'boudai'},
+  {w:'竹魚',k:'さより',s:'春',p:'三春',c:'動物',parent:'鱵',type:'boudai'},
+  {w:'針魚',k:'さより',s:'春',p:'三春',c:'動物',parent:'鱵',type:'boudai'},
+  {w:'西東忌',k:'さいとうき',s:'春',p:'晩春',c:'行事',parent:'三鬼忌',type:'boudai'},
+  {w:'さるとりいばらの花',k:'さるとりいばらのはな',s:'春',p:'晩春',c:'植物',parent:'山帰来の花',type:'boudai'},
+  {w:'春黄金花',k:'はるこがねばな',s:'春',p:'初春',c:'植物',parent:'山茱萸の花',type:'boudai'},
+  {w:'さんしゅう',k:'さんしゅう',s:'春',p:'初春',c:'植物',parent:'山茱萸の花',type:'boudai'},
+  {w:'さんしゅうの花',k:'さんしゅうのはな',s:'春',p:'初春',c:'植物',parent:'山茱萸の花',type:'boudai'},
+  {w:'芽山椒',k:'めさんしょう',s:'春',p:'仲春',c:'植物',parent:'山椒の芽',type:'boudai'},
+  {w:'木の芽',k:'きのめ',s:'春',p:'仲春',c:'植物',parent:'山椒の芽',type:'boudai'},
+  {w:'達磨草',k:'だるまそう',s:'春',p:'晩春',c:'植物',parent:'座禅草',type:'boudai'},
+  {w:'残る花',k:'のこるはな',s:'春',p:'晩春',c:'植物',parent:'残花',type:'boudai'},
+  {w:'名残の花',k:'なごりのはな',s:'春',p:'晩春',c:'植物',parent:'残花',type:'boudai'},
+  {w:'雪残る',k:'ゆきのこる',s:'春',p:'仲春',c:'地理',parent:'残雪',type:'boudai'},
+  {w:'残る雪',k:'のこるゆき',s:'春',p:'仲春',c:'地理',parent:'残雪',type:'boudai'},
+  {w:'日影雪',k:'ひかげゆき',s:'春',p:'仲春',c:'地理',parent:'残雪',type:'boudai'},
+  {w:'汐干',k:'しおひ',s:'春',p:'晩春',c:'生活',parent:'汐干狩',type:'boudai'},
+  {w:'汐干潟',k:'しおひがた',s:'春',p:'晩春',c:'生活',parent:'汐干狩',type:'boudai'},
+  {w:'汐干貝',k:'しおひがい',s:'春',p:'晩春',c:'生活',parent:'汐干狩',type:'boudai'},
+  {w:'汐干籠',k:'しおひかご',s:'春',p:'晩春',c:'生活',parent:'汐干狩',type:'boudai'},
+  {w:'汐干船',k:'しおひぶね',s:'春',p:'晩春',c:'生活',parent:'汐干狩',type:'boudai'},
+  {w:'潮招',k:'しおまねき',s:'春',p:'三春',c:'動物',parent:'望潮',type:'boudai'},
+  {w:'エイプリルフール',k:'えいぷりるふーる',s:'春',p:'仲春',c:'行事',parent:'四月馬鹿',type:'boudai'},
+  {w:'万愚節',k:'ばんぐせつ',s:'春',p:'仲春',c:'行事',parent:'四月馬鹿',type:'boudai'},
+  {w:'花樒',k:'はなしきみ',s:'春',p:'晩春',c:'植物',parent:'樒の花',type:'boudai'},
+  {w:'かうしばの花',k:'こうしばのはな',s:'春',p:'晩春',c:'植物',parent:'樒の花',type:'boudai'},
+  {w:'樒売',k:'しきみうり',s:'春',p:'晩春',c:'植物',parent:'樒の花',type:'boudai'},
+  {w:'篝火花',k:'かがりびばな',s:'春',p:'三春',c:'植物',parent:'シクラメン',type:'boudai'},
+  {w:'蜆貝',k:'しじみがい',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
+  {w:'真蜆',k:'ましじみ',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
+  {w:'紫蜆',k:'むらさきしじみ',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
+  {w:'蜆取',k:'しじみとり',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
+  {w:'蜆舟',k:'しじみぶね',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
+  {w:'蜆掻',k:'しじみかき',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
+  {w:'蜆売',k:'しじみうり',s:'春',p:'三春',c:'動物',parent:'蜆',type:'boudai'},
+  {w:'草萌',k:'くさもえ',s:'春',p:'初春',c:'植物',parent:'下萌',type:'boudai'},
+  {w:'草青む',k:'くさあおむ',s:'春',p:'初春',c:'植物',parent:'下萌',type:'boudai'},
+  {w:'畦青む',k:'あぜあおむ',s:'春',p:'初春',c:'植物',parent:'下萌',type:'boudai'},
+  {w:'土手青む',k:'どてあおむ',s:'春',p:'初春',c:'植物',parent:'下萌',type:'boudai'},
+  {w:'若返る草',k:'わかがえるくさ',s:'春',p:'初春',c:'植物',parent:'下萌',type:'boudai'},
+  {w:'駒返る草',k:'こまかえるくさ',s:'春',p:'初春',c:'植物',parent:'下萌',type:'boudai'},
+  {w:'草木瓜',k:'くさぼけ',s:'春',p:'全春',c:'時候',parent:'しどみの花',type:'boudai'},
+  {w:'花詰草',k:'はなつめくさ',s:'春',p:'晩春',c:'植物',parent:'芝桜',type:'boudai'},
+  {w:'芝焼',k:'しばやき',s:'春',p:'全春',c:'時候',parent:'芝焼く',type:'boudai'},
+  {w:'芝火',k:'しばひ',s:'春',p:'全春',c:'時候',parent:'芝焼く',type:'boudai'},
+  {w:'カーニバル',k:'かーにばる',s:'春',p:'全春',c:'時候',parent:'謝肉祭',type:'boudai'},
+  {w:'カルナバル',k:'かるなばる',s:'春',p:'全春',c:'時候',parent:'謝肉祭',type:'boudai'},
+  {w:'二月堂の行',k:'にがつどうのおこない',s:'春',p:'仲春',c:'行事',parent:'修二会',type:'boudai'},
+  {w:'お松明',k:'おたいまつ',s:'春',p:'仲春',c:'行事',parent:'修二会',type:'boudai'},
+  {w:'高麗菊',k:'こうらいきく',s:'春',p:'三春',c:'植物',parent:'春菊',type:'boudai'},
+  {w:'菊菜',k:'きくな',s:'春',p:'三春',c:'植物',parent:'春菊',type:'boudai'},
+  {w:'春の暁',k:'はるのあかつき／はるのあけ',s:'春',p:'三春',c:'時候',parent:'春暁',type:'boudai'},
+  {w:'春の曙',k:'はるのあけぼの',s:'春',p:'三春',c:'時候',parent:'春暁',type:'boudai'},
+  {w:'春の朝',k:'はるのあさ',s:'春',p:'三春',c:'時候',parent:'春暁',type:'boudai'},
+  {w:'春の光',k:'はるのひかり',s:'春',p:'三春',c:'天文',parent:'春光',type:'boudai'},
+  {w:'春色',k:'しゅんしょく',s:'春',p:'三春',c:'天文',parent:'春光',type:'boudai'},
+  {w:'春の色',k:'はるのいろ',s:'春',p:'三春',c:'天文',parent:'春光',type:'boudai'},
+  {w:'春望',k:'しゅんぼう',s:'春',p:'三春',c:'天文',parent:'春光',type:'boudai'},
+  {w:'社日',k:'しゃにち',s:'春',p:'仲春',c:'時候',parent:'春社',type:'boudai'},
+  {w:'社日様',k:'しゃにちさま',s:'春',p:'仲春',c:'時候',parent:'春社',type:'boudai'},
+  {w:'社日参',k:'しゃにちまいり',s:'春',p:'仲春',c:'時候',parent:'春社',type:'boudai'},
+  {w:'社翁の雨',k:'しゃおうのあめ',s:'春',p:'仲春',c:'時候',parent:'春社',type:'boudai'},
+  {w:'春愁ふ',k:'はるうれう',s:'春',p:'三春',c:'生活',parent:'春愁',type:'boudai'},
+  {w:'春かなし',k:'はるかなし',s:'春',p:'三春',c:'生活',parent:'春愁',type:'boudai'},
+  {w:'春思',k:'しゅんし',s:'春',p:'三春',c:'生活',parent:'春愁',type:'boudai'},
+  {w:'春の塵',k:'はるのちり',s:'春',p:'三春',c:'天文',parent:'春塵',type:'boudai'},
+  {w:'春埃',k:'はるぼこり',s:'春',p:'三春',c:'天文',parent:'春塵',type:'boudai'},
+  {w:'春の昼',k:'はるのひる',s:'春',p:'三春',c:'時候',parent:'春昼',type:'boudai'},
+  {w:'春の潮',k:'はるのしお',s:'春',p:'三春',c:'地理',parent:'春潮',type:'boudai'},
+  {w:'春の泥',k:'はるのどろ',s:'春',p:'三春',c:'地理',parent:'春泥',type:'boudai'},
+  {w:'春季闘争',k:'しゅんきとうそう',s:'春',p:'三春',c:'生活',parent:'春闘',type:'boudai'},
+  {w:'中日',k:'ちゅうじつ',s:'春',p:'仲春',c:'時候',parent:'春分',type:'boudai'},
+  {w:'春疾風',k:'はるはやて',s:'春',p:'三春',c:'天文',parent:'春風',type:'boudai'},
+  {w:'春嵐',k:'はるあらし',s:'春',p:'三春',c:'天文',parent:'春風',type:'boudai'},
+  {w:'春荒れ',k:'はるあれ',s:'春',p:'三春',c:'天文',parent:'春風',type:'boudai'},
+  {w:'春北風',k:'はるきた／はるならい',s:'春',p:'三春',c:'天文',parent:'春風',type:'boudai'},
+  {w:'春の服',k:'はるのふく',s:'春',p:'全春',c:'時候',parent:'春服',type:'boudai'},
+  {w:'春装',k:'しゅんそう',s:'春',p:'全春',c:'時候',parent:'春服',type:'boudai'},
+  {w:'春睡',k:'しゅんすい',s:'春',p:'三春',c:'生活',parent:'春眠',type:'boudai'},
+  {w:'春の眠り',k:'はるのねむり',s:'春',p:'三春',c:'生活',parent:'春眠',type:'boudai'},
+  {w:'春眠し',k:'はるねむし',s:'春',p:'三春',c:'生活',parent:'春眠',type:'boudai'},
+  {w:'春の雷',k:'はるのらい',s:'春',p:'三春',c:'天文',parent:'春雷',type:'boudai'},
+  {w:'初雷',k:'はつらい',s:'春',p:'三春',c:'天文',parent:'春雷',type:'boudai'},
+  {w:'虫出しの雷',k:'むしだしのらい',s:'春',p:'三春',c:'天文',parent:'春雷',type:'boudai'},
+  {w:'虫出し',k:'むしだし',s:'春',p:'三春',c:'天文',parent:'春雷',type:'boudai'},
+  {w:'ほくろ',k:'ほくろ',s:'春',p:'仲春',c:'植物',parent:'春蘭',type:'boudai'},
+  {w:'貝の華',k:'かいのはな',s:'春',p:'晩春',c:'行事',parent:'聖霊会',type:'boudai'},
+  {w:'しらを',k:'しらお',s:'春',p:'初春',c:'動物',parent:'白魚',type:'boudai'},
+  {w:'白魚網',k:'しらおあみ',s:'春',p:'初春',c:'動物',parent:'白魚',type:'boudai'},
+  {w:'白魚舟',k:'しらおぶね',s:'春',p:'初春',c:'動物',parent:'白魚',type:'boudai'},
+  {w:'白魚漁',k:'しらおりょう',s:'春',p:'初春',c:'動物',parent:'白魚',type:'boudai'},
+  {w:'白魚汲む',k:'しらおくむ',s:'春',p:'初春',c:'動物',parent:'白魚',type:'boudai'},
+  {w:'白魚火',k:'しらおび',s:'春',p:'初春',c:'動物',parent:'白魚',type:'boudai'},
+  {w:'樺の花',k:'かばのはな',s:'春',p:'晩春',c:'植物',parent:'白樺の花',type:'boudai'},
+  {w:'花かんば',k:'はなかんば',s:'春',p:'晩春',c:'植物',parent:'白樺の花',type:'boudai'},
+  {w:'白子',k:'しらす',s:'春',p:'三春',c:'生活',parent:'白子干',type:'boudai'},
+  {w:'ちりめんじゃこ',k:'ちりめんじゃこ',s:'春',p:'三春',c:'生活',parent:'白子干',type:'boudai'},
+  {w:'ちりめん',k:'ちりめん',s:'春',p:'三春',c:'生活',parent:'白子干',type:'boudai'},
+  {w:'海市',k:'かいし',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
+  {w:'山市',k:'さんし',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
+  {w:'蜃楼',k:'しんろう',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
+  {w:'蜃市',k:'しんし',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
+  {w:'喜見城',k:'きけんじょう',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
+  {w:'かいやぐら',k:'かいやぐら',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
+  {w:'きつねだな',k:'きつねだな',s:'春',p:'晩春',c:'天文',parent:'蜃気楼',type:'boudai'},
+  {w:'地虫出づ',k:'じむしいず',s:'春',p:'仲春',c:'動物',parent:'地虫穴を出づ',type:'boudai'},
+  {w:'蟻穴を出づ',k:'ありあなをいず',s:'春',p:'仲春',c:'動物',parent:'地虫穴を出づ',type:'boudai'},
+  {w:'蜥蜴出づ',k:'とかげいず',s:'春',p:'仲春',c:'動物',parent:'地虫穴を出づ',type:'boudai'},
+  {w:'知恵詣',k:'ちえもうで',s:'春',p:'晩春',c:'行事',parent:'十三詣',type:'boudai'},
+  {w:'知恵貰ひ',k:'ちえもらい',s:'春',p:'晩春',c:'行事',parent:'十三詣',type:'boudai'},
+  {w:'受験',k:'じゅけん',s:'春',p:'仲春',c:'生活',parent:'入学試験',type:'boudai'},
+  {w:'受験生',k:'じゅけんせい',s:'春',p:'仲春',c:'生活',parent:'入学試験',type:'boudai'},
+  {w:'受験期',k:'じゅけんき',s:'春',p:'仲春',c:'生活',parent:'入学試験',type:'boudai'},
+  {w:'合格',k:'ごうかく',s:'春',p:'仲春',c:'生活',parent:'入学試験',type:'boudai'},
+  {w:'及第',k:'きゅうだい',s:'春',p:'仲春',c:'生活',parent:'入学試験',type:'boudai'},
+  {w:'受苦節',k:'じゅくせつ',s:'春',p:'晩春',c:'行事',parent:'受難節',type:'boudai'},
+  {w:'受難週',k:'じゅなんしゅう',s:'春',p:'晩春',c:'行事',parent:'受難節',type:'boudai'},
+  {w:'沈丁',k:'じんちょう',s:'春',p:'仲春',c:'植物',parent:'沈丁花',type:'boudai'},
+  {w:'丁字',k:'ちょうじ',s:'春',p:'仲春',c:'植物',parent:'沈丁花',type:'boudai'},
+  {w:'瑞香',k:'ずいこう',s:'春',p:'仲春',c:'植物',parent:'沈丁花',type:'boudai'},
+  {w:'芸香',k:'うんこう',s:'春',p:'仲春',c:'植物',parent:'沈丁花',type:'boudai'},
+  {w:'すかんぽ',k:'すかんぽ',s:'春',p:'仲春',c:'植物',parent:'酸葉',type:'boudai'},
+  {w:'酸模',k:'すいば',s:'春',p:'仲春',c:'植物',parent:'酸葉',type:'boudai'},
+  {w:'すいすい',k:'すいすい',s:'春',p:'仲春',c:'植物',parent:'酸葉',type:'boudai'},
+  {w:'接ぎ松',k:'つぎまつ',s:'春',p:'晩春',c:'植物',parent:'杉菜',type:'boudai'},
+  {w:'杉花粉',k:'すぎかふん',s:'春',p:'晩春',c:'植物',parent:'杉の花',type:'boudai'},
+  {w:'花粉症',k:'かふんしょう',s:'春',p:'晩春',c:'植物',parent:'杉の花',type:'boudai'},
+  {w:'焼野の芒',k:'やけののすすき',s:'春',p:'初春',c:'植物',parent:'末黒の芒',type:'boudai'},
+  {w:'黒生の芒',k:'くろうのすすみ',s:'春',p:'初春',c:'植物',parent:'末黒の芒',type:'boudai'},
+  {w:'プラタナスの花',k:'ぷらたなすのはな',s:'春',p:'晩春',c:'植物',parent:'鈴懸の花',type:'boudai'},
+  {w:'子雀',k:'こすずめ',s:'春',p:'晩春',c:'動物',parent:'雀の子',type:'boudai'},
+  {w:'親雀',k:'おやすずめ',s:'春',p:'晩春',c:'動物',parent:'雀の子',type:'boudai'},
+  {w:'黄雀',k:'きすずめ',s:'春',p:'晩春',c:'動物',parent:'雀の子',type:'boudai'},
+  {w:'巣立',k:'すだち',s:'春',p:'晩春',c:'動物',parent:'巣立鳥',type:'boudai'},
+  {w:'菫草',k:'すみれそう／すみれぐさ',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
+  {w:'花菫',k:'はなすみれ',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
+  {w:'香菫',k:'においすみれ',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
+  {w:'相撲取草',k:'すもうとりぐさ',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
+  {w:'相撲花',k:'すもうばな',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
+  {w:'一夜草',k:'ひとよぐさ',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
+  {w:'一葉草',k:'ひとはぐさ',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
+  {w:'壺菫',k:'つぼすみれ',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
+  {w:'三色菫',k:'さんしきすみれ',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
+  {w:'パンジー',k:'ぱんじー',s:'春',p:'三春',c:'植物',parent:'菫',type:'boudai'},
   {w:'花李',k:'',s:'春',p:'晩春',c:'植物',parent:'李の花',type:'boudai'},
   {w:'聖金曜',k:'',s:'春',p:'晩春',c:'行事',parent:'聖金曜日',type:'boudai'},
   {w:'受難日',k:'',s:'春',p:'晩春',c:'行事',parent:'聖金曜日',type:'boudai'},
@@ -8926,184 +8807,7 @@ function closeDetail() {
   render();
 }
 
-// ===================== 編集機能 =====================
 
-const PERIOD_MAP = {
-  '新年': ['全新年','上新年','中新年','下新年'],
-  '春':  ['三春','初春','仲春','晩春'],
-  '夏':  ['三夏','初夏','仲夏','晩夏'],
-  '秋':  ['三秋','初秋','仲秋','晩秋'],
-  '冬':  ['三冬','初冬','仲冬','晩冬'],
-};
-
-// BOUDAI の読み仮名を別途管理（語→読みのmap）
-// 既存データに読みがない場合は空文字
-
-
-function updatePeriodOptions() {
-  const s = document.getElementById('fSeason').value;
-  const sel = document.getElementById('fPeriod');
-  sel.innerHTML = PERIOD_MAP[s].map(p => `<option value="${p}">${p}</option>`).join('');
-}
-
-function addBoudaiRow(word, kana) {
-  const area = document.getElementById('boudaiInputArea');
-  const row = document.createElement('div');
-  row.className = 'boudai-input-row';
-  row.innerHTML = `
-    <input type="text" placeholder="傍題" value="${escHtml(word)}" class="boudai-word-input" />
-    <input type="text" placeholder="読み" value="${escHtml(kana)}" class="kana-input boudai-kana-input" />
-    <button class="boudai-row-remove" onclick="this.parentElement.remove()" title="削除">×</button>
-  `;
-  area.appendChild(row);
-}
-
-function getBoudaiFromForm() {
-  const words = [], kanas = [];
-  document.querySelectorAll('.boudai-input-row').forEach(row => {
-    const w = row.querySelector('.boudai-word-input').value.trim();
-    const k = row.querySelector('.boudai-kana-input').value.trim();
-    if (w) { words.push(w); kanas.push(k); }
-  });
-  return { words, kanas };
-}
-
-function escHtml(s) {
-  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-let _editingOrigWord = null; // 編集中の元の語（変更検知用）
-
-function openAddModal() {
-  _editingOrigWord = null;
-  document.getElementById('modalTitle').textContent = '新規登録';
-  document.getElementById('fWord').value = '';
-  document.getElementById('fKana').value = '';
-  document.getElementById('fSeason').value = '春';
-  updatePeriodOptions();
-  document.getElementById('fCat').value = '時候';
-  document.getElementById('boudaiInputArea').innerHTML = '';
-  document.getElementById('btnDelete').style.display = 'none';
-  document.getElementById('editModal').classList.add('open');
-}
-
-function openEditModal() {
-  const w = state.selected;
-  if (!w) return;
-  const entry = RAW.find(k => k.w === w);
-  if (!entry) return;
-
-  _editingOrigWord = w;
-  document.getElementById('modalTitle').textContent = '季語を編集：' + w;
-  document.getElementById('fWord').value = w;
-  document.getElementById('fKana').value = entry.k || '';
-  document.getElementById('fSeason').value = entry.s;
-  updatePeriodOptions();
-  document.getElementById('fPeriod').value = entry.p;
-  document.getElementById('fCat').value = entry.c;
-
-  // 傍題
-  document.getElementById('boudaiInputArea').innerHTML = '';
-  const bList = BOUDAI[w] || [];
-  const kMap = BOUDAI_KANA[w] || {};
-  bList.forEach(b => addBoudaiRow(b, kMap[b] || ''));
-
-  document.getElementById('btnDelete').style.display = '';
-  document.getElementById('editModal').classList.add('open');
-}
-
-function closeModal() {
-  document.getElementById('editModal').classList.remove('open');
-}
-
-function saveKigo() {
-  const word  = document.getElementById('fWord').value.trim();
-  const kana  = document.getElementById('fKana').value.trim();
-  const season= document.getElementById('fSeason').value;
-  const period= document.getElementById('fPeriod').value;
-  const cat   = document.getElementById('fCat').value;
-
-  if (!word) { alert('季語を入力してください'); return; }
-
-  const { words: bWords, kanas: bKanas } = getBoudaiFromForm();
-
-  if (_editingOrigWord !== null) {
-    // 既存エントリの更新
-    const idx = RAW.findIndex(k => k.w === _editingOrigWord);
-    if (idx >= 0) {
-      RAW[idx] = { w: word, k: kana, s: season, p: period, c: cat };
-    }
-    // BOUDAI更新
-    if (bWords.length > 0) {
-      BOUDAI[word] = bWords;
-      const kMap = {};
-      bWords.forEach((b, i) => { if (bKanas[i]) kMap[b] = bKanas[i]; });
-      BOUDAI_KANA[word] = kMap;
-    } else {
-      delete BOUDAI[word];
-    }
-    // 語が変わった場合は古いキーを削除
-    if (word !== _editingOrigWord) {
-      delete BOUDAI[_editingOrigWord];
-      delete BOUDAI_KANA[_editingOrigWord];
-    }
-    state.selected = word;
-    showToast('「' + word + '」を更新しました');
-  } else {
-    // 新規追加
-    if (RAW.find(k => k.w === word)) {
-      if (!confirm('「' + word + '」はすでに登録されています。上書きしますか？')) return;
-      const idx = RAW.findIndex(k => k.w === word);
-      RAW[idx] = { w: word, k: kana, s: season, p: period, c: cat };
-    } else {
-      RAW.push({ w: word, k: kana, s: season, p: period, c: cat });
-    }
-    if (bWords.length > 0) {
-      BOUDAI[word] = bWords;
-      const kMap = {};
-      bWords.forEach((b, i) => { if (bKanas[i]) kMap[b] = bKanas[i]; });
-      BOUDAI_KANA[word] = kMap;
-    }
-    state.selected = word;
-    showToast('「' + word + '」を登録しました');
-  }
-
-  document.getElementById('totalCount').textContent = RAW.length.toLocaleString();
-  closeModal();
-  render();
-  // 詳細パネルを開き直す
-  const newEntry = RAW.find(k => k.w === word);
-  if (newEntry) openDetail(newEntry);
-}
-
-function deleteKigo() {
-  const w = _editingOrigWord;
-  if (!w) return;
-  if (!confirm('「' + w + '」を削除しますか？')) return;
-  const idx = RAW.findIndex(k => k.w === w);
-  if (idx >= 0) RAW.splice(idx, 1);
-  delete BOUDAI[w];
-  delete BOUDAI_KANA[w];
-  state.selected = null;
-  document.getElementById('totalCount').textContent = RAW.length.toLocaleString();
-  closeModal();
-  closeDetail();
-  showToast('「' + w + '」を削除しました');
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
-}
-
-// モーダル外クリックで閉じる
-document.getElementById('editModal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-
-// ===================== 編集機能 ここまで =====================
 
 // Init
 document.getElementById('totalCount').textContent = RAW.length.toLocaleString();

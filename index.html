@@ -330,6 +330,158 @@
     border-color: var(--midori);
   }
 
+  /* このサイトについてボタン */
+  .about-btn {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--card-border);
+    background: linear-gradient(135deg, var(--kinpaku), rgba(255, 215, 0, 0.1));
+    color: var(--sumi);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    font-family: 'Zen Maru Gothic', sans-serif;
+    margin-top: 1rem;
+  }
+
+  .about-btn:hover {
+    background: linear-gradient(135deg, var(--kinpaku), var(--sakura));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  }
+
+  /* スクロールバーのカスタマイズ */
+  .slide-menu::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .slide-menu::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+
+  .slide-menu::-webkit-scrollbar-thumb {
+    background: var(--kinpaku);
+    border-radius: 4px;
+    opacity: 0.7;
+  }
+
+  .slide-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--vermillion);
+    opacity: 1;
+  }
+
+  /* このサイトについてモーダル */
+  .about-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 3000;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+
+  .about-modal.show {
+    display: flex;
+  }
+
+  .about-content {
+    background: var(--card-bg);
+    backdrop-filter: blur(15px);
+    border: 3px solid var(--kinpaku);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px var(--deep-shadow);
+    position: relative;
+    animation: modalSlideIn 0.3s ease-out;
+  }
+
+  .about-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--card-border);
+  }
+
+  .about-title {
+    font-family: 'Zen Kurenaido', cursive;
+    font-size: 1.8rem;
+    color: var(--sumi);
+    margin-bottom: 0.5rem;
+  }
+
+  .about-subtitle {
+    font-size: 0.9rem;
+    color: var(--sumi);
+    opacity: 0.7;
+  }
+
+  .about-body {
+    line-height: 1.6;
+    color: var(--sumi);
+  }
+
+  .about-body h3 {
+    font-size: 1.1rem;
+    color: var(--vermillion);
+    margin: 1rem 0 0.5rem 0;
+    font-weight: 600;
+  }
+
+  .about-body p {
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .about-body ul {
+    margin-left: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .about-body li {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+  }
+
+  .about-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--vermillion);
+    color: var(--yuki);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: bold;
+  }
+
+  .about-close:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 4px 15px rgba(255, 69, 0, 0.5);
+  }
+
   main {
     background: var(--card-bg);
     backdrop-filter: blur(10px);
@@ -987,10 +1139,56 @@
       <button class="filter-btn mora-btn" data-value="8+">８音以上</button>
     </div>
   </div>
+
+  <!-- このサイトについて -->
+  <div class="about-section">
+    <button class="about-btn" onclick="showAboutModal()">
+      ℹ️ このサイトについて
+    </button>
+  </div>
 </div>
 
 <!-- オーバーレイ -->
 <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+
+<!-- このサイトについてモーダル -->
+<div class="about-modal" id="aboutModal">
+  <div class="about-content">
+    <button class="about-close" onclick="closeAboutModal()">×</button>
+    
+    <div class="about-header">
+      <div class="about-title">季語辞典</div>
+      <div class="about-subtitle">俳句の季語を美しく検索</div>
+    </div>
+
+    <div class="about-body">
+      <h3>📚 このサイトについて</h3>
+      <p>俳句を詠む方のための、季語検索サイトです。膨大な季語データを美しいデザインで検索できます。</p>
+
+      <h3>🔍 主な機能</h3>
+      <ul>
+        <li><strong>季語検索</strong>：季語名や読み方での検索</li>
+        <li><strong>季節フィルター</strong>：春・夏・秋・冬・新年での絞り込み</li>
+        <li><strong>時期フィルター</strong>：初春・仲春・晩春など詳細な時期指定</li>
+        <li><strong>部類フィルター</strong>：時候・天文・地理・行事・生活・植物・動物</li>
+        <li><strong>音数フィルター</strong>：1音から8音以上まで</li>
+        <li><strong>傍題表示</strong>：本季語と傍題の関係を表示</li>
+      </ul>
+
+      <h3>📱 使い方</h3>
+      <p>上部の検索ボックスで季語を検索し、左上の「≡」ボタンからフィルターメニューを開いて詳細な条件を指定できます。</p>
+      
+      <p>季語カードをタップすると、詳細情報や関連する傍題・本季語が表示されます。</p>
+
+      <h3>📖 データについて</h3>
+      <p>約7,400個の季語データ（見出し季語約2,700個 + 傍題約4,700個）を収録しています。</p>
+
+      <h3>✉ その他</h3>
+      <p>情報は正確を期していますが、誤り等がありましたら、<a href="mailto:twitter_quiz@yahoo.co.jp">メール</a>または<a href="https://x.com/slbzk">Ｘ（旧Twitter）</a>までご連絡ください。</p>
+
+    </div>
+  </div>
+</div>
 
 <script>
 // 季語辞典の完全なデータ
@@ -1428,7 +1626,7 @@ const RAW = [
   // 初春／行事
   {w:'建国記念の日',k:'けんこくきねんのひ',s:'春',p:'初春',c:'行事'},
   {w:'初午',k:'はつうま',s:'春',p:'初春',c:'行事'},
-  {w:'絵踏',k:'えぶみ',s:'春',p:'初春',c:'行事'},
+  {w:'絵踏',k:'えふみ',s:'春',p:'初春',c:'行事'},
   {w:'二月礼者',k:'にがつれいじゃ',s:'春',p:'初春',c:'行事'},
   {w:'北野菜種御供',k:'きたのなたねごく',s:'春',p:'初春',c:'行事'},
   {w:'涅槃会',k:'ねはんえ',s:'春',p:'初春',c:'行事'},
@@ -3278,7 +3476,7 @@ const RAW = [
   {w:'冬野',k:'ふゆの',s:'冬',p:'三冬',c:'地理'},
   {w:'枯野',k:'かれの',s:'冬',p:'三冬',c:'地理'},
   {w:'冬田',k:'ふゆた',s:'冬',p:'三冬',c:'地理'},
-  {w:'冬景色',k:'ふゆげしき',s:'冬',p:'三冬',c:'地理'},
+  {w:'冬景色',k:'ふゆけしき',s:'冬',p:'三冬',c:'地理'},
   {w:'水涸る',k:'みずかる',s:'冬',p:'三冬',c:'地理'},
   {w:'冬の水',k:'ふゆのみず',s:'冬',p:'三冬',c:'地理'},
   {w:'冬の川',k:'ふゆのかわ',s:'冬',p:'三冬',c:'地理'},
@@ -8785,12 +8983,28 @@ function closeMenu() {
   document.body.style.overflow = 'auto';
 }
 
-// ESCキーでメニューを閉じる
+// このサイトについてモーダル
+function showAboutModal() {
+  const aboutModal = document.getElementById('aboutModal');
+  aboutModal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAboutModal() {
+  const aboutModal = document.getElementById('aboutModal');
+  aboutModal.classList.remove('show');
+  document.body.style.overflow = 'auto';
+}
+
+// ESCキーでメニューとモーダルを閉じる
 document.addEventListener('keydown', (e) => {
   const slideMenu = document.getElementById('slideMenu');
+  const aboutModal = document.getElementById('aboutModal');
   
   if (e.key === 'Escape') {
-    if (slideMenu.classList.contains('open')) {
+    if (aboutModal.classList.contains('show')) {
+      closeAboutModal();
+    } else if (slideMenu.classList.contains('open')) {
       closeMenu();
     } else {
       closeKigoModal();
@@ -8801,10 +9015,15 @@ document.addEventListener('keydown', (e) => {
 // 外部クリック処理（モーダル用）
 document.addEventListener('click', (e) => {
   const kigoModal = document.getElementById('kigoModal');
+  const aboutModal = document.getElementById('aboutModal');
   
-  // モーダル外クリック
+  // 各モーダル外クリック
   if (e.target === kigoModal) {
     closeKigoModal();
+  }
+  
+  if (e.target === aboutModal) {
+    closeAboutModal();
   }
 });
 

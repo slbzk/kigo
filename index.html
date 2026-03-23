@@ -3,545 +3,782 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>季語辞典</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<title>季語辞典 - コンパクト版</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --washi: #f5f0e8;
-    --washi-dark: #ede5d8;
-    --sumi: #1a1612;
-    --sumi-light: #3d3530;
-    --sumi-faint: #6b5f56;
-    --vermillion: #c0392b;
-    --spring: #c0607a;
-    --summer: #2e7ea6;
-    --autumn: #b8672b;
-    --winter: #4a6e9e;
-    --newyear: #7b4f8e;
+    --sakura: #f4c2c2;
+    --momiji: #d2691e;
+    --yuki: #f8f9fa;
+    --sumi: #2c2c2c;
+    --kinpaku: #ffd700;
+    --midori: #228b22;
+    --murasaki: #9370db;
+    --vermillion: #ff4500;
+    --shadow: rgba(44, 44, 44, 0.1);
+    --deep-shadow: rgba(44, 44, 44, 0.3);
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --card-border: var(--kinpaku);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
   body {
-    font-family: 'Noto Serif JP', serif;
-    background: var(--washi);
+    font-family: 'Zen Maru Gothic', sans-serif;
+    background: linear-gradient(135deg, var(--sakura) 0%, var(--yuki) 50%, #e6f3ff 100%);
     color: var(--sumi);
     min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
   }
+  
   body::before {
     content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(147, 112, 219, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(255, 69, 0, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
   }
+
   header {
-    background: var(--sumi);
-    color: var(--washi);
-    padding: 1.8rem 2rem 1.4rem;
+    background: linear-gradient(135deg, var(--murasaki) 0%, var(--vermillion) 100%);
+    color: var(--yuki);
+    padding: 1rem 2rem;
     position: relative;
-  }
-  header::after {
-    content: '';
-    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, transparent 0%, var(--vermillion) 30%, #e8a020 60%, transparent 100%);
-  }
-  .header-inner {
-    max-width: 1200px; margin: 0 auto;
-    display: flex; align-items: center; gap: 1.5rem;
-  }
-  .title-block { display: flex; align-items: baseline; gap: 0.8rem; }
-  .site-title {
-    font-size: 2.4rem; font-weight: 300;
-    letter-spacing: 0.35em; line-height: 1;
-  }
-  .site-en {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 0.65rem; color: #8a7a70;
-    letter-spacing: 0.3em; font-weight: 300;
-  }
-  .header-stats {
-    margin-left: auto;
-    text-align: right;
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 0.7rem; color: #8a7a70;
-    letter-spacing: 0.1em;
-  }
-  .header-stats .num { font-size: 1.6rem; color: var(--vermillion); font-weight: 700; line-height: 1; }
-
-  .main-container {
-    max-width: 1200px; margin: 0 auto;
-    padding: 1.5rem 2rem;
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    gap: 2rem;
-    align-items: start;
-  }
-
-  /* Sidebar */
-  .sidebar { position: sticky; top: 1rem; }
-  .search-wrap { position: relative; margin-bottom: 1.2rem; }
-  .search-box {
-    width: 100%; padding: 0.65rem 2.2rem 0.65rem 0.9rem;
-    border: 1px solid #c4b8a8; background: white;
-    font-family: 'Noto Serif JP', serif; font-size: 0.95rem; color: var(--sumi);
-    outline: none; transition: border-color 0.2s; border-radius: 0;
-  }
-  .search-box:focus { border-color: var(--vermillion); }
-  .search-box::placeholder { color: #b0a090; }
-  .search-clear {
-    position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%);
-    background: none; border: none; cursor: pointer;
-    color: #b0a090; font-size: 1rem; display: none;
-  }
-  .search-clear.visible { display: block; }
-
-  .panel-label {
-    font-size: 0.62rem; font-family: 'Noto Sans JP', sans-serif;
-    font-weight: 400; letter-spacing: 0.3em; color: var(--sumi-faint);
-    margin-bottom: 0.5rem; padding-bottom: 0.35rem;
-    border-bottom: 1px solid #d4c8b8;
-  }
-
-  .season-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 0.35rem; margin-bottom: 1.2rem;
-  }
-  .season-btn {
-    padding: 0.45rem 0.5rem;
-    border: 1px solid transparent;
-    background: transparent;
-    font-family: 'Noto Serif JP', serif; font-size: 0.85rem;
-    cursor: pointer; text-align: center;
-    transition: all 0.15s;
-    display: flex; align-items: center; justify-content: center; gap: 0.4rem;
-    color: var(--sumi);
-  }
-  .season-btn:hover { background: var(--washi-dark); }
-  .season-btn.active { background: var(--sumi); color: var(--washi); }
-  .season-btn.all { grid-column: 1 / -1; }
-  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-
-  .period-section { margin-bottom: 1.2rem; }
-  .period-group { margin-bottom: 0.5rem; }
-  .period-header {
-    font-size: 0.62rem; font-family: 'Noto Sans JP', sans-serif;
-    color: #b0a090; letter-spacing: 0.15em; padding: 0.2rem 0.5rem;
-    display: flex; align-items: center; gap: 0.3rem;
-  }
-  .period-btns { display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 0 0.2rem; }
-  .period-btn {
-    padding: 0.25rem 0.55rem;
-    border: 1px solid #d8cfc4; background: transparent;
-    font-family: 'Noto Sans JP', sans-serif; font-size: 0.72rem;
-    cursor: pointer; color: var(--sumi-faint); transition: all 0.15s;
-  }
-  .period-btn:hover { border-color: var(--sumi-faint); color: var(--sumi); }
-  .period-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
-
-  .cat-section { margin-bottom: 1.2rem; }
-  .cat-btns { display: flex; flex-wrap: wrap; gap: 0.3rem; }
-  .cat-btn {
-    padding: 0.3rem 0.7rem;
-    border: 1px solid #d8cfc4; background: transparent;
-    font-family: 'Noto Sans JP', sans-serif; font-size: 0.75rem;
-    cursor: pointer; color: var(--sumi-faint); transition: all 0.15s;
-  }
-  .cat-btn:hover { color: var(--sumi); border-color: #a09080; }
-  .cat-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
-
-  .mora-btns { 
-    display: grid; grid-template-columns: 1fr 1fr 1fr; 
-    gap: 0.3rem; 
-  }
-  .mora-btn {
-    padding: 0.3rem 0.5rem;
-    border: 1px solid #d8cfc4; background: transparent;
-    font-family: 'Noto Sans JP', sans-serif; font-size: 0.75rem;
-    cursor: pointer; color: var(--sumi-faint); transition: all 0.15s;
+    z-index: 10;
+    box-shadow: 0 4px 20px var(--deep-shadow);
     text-align: center;
   }
-  .mora-btn:hover { color: var(--sumi); border-color: #a09080; }
-  .mora-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
 
-  /* Content */
-  .result-bar {
-    display: flex; align-items: center; justify-content: space-between;
+  .site-title {
+    font-family: 'Zen Kurenaido', cursive;
+    font-size: 1.8rem;
+    background: linear-gradient(45deg, var(--kinpaku), var(--yuki), var(--sakura));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 4px var(--deep-shadow);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(20deg); }
+  }
+
+  .sakura-petal {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--sakura);
+    border-radius: 50% 0 50% 0;
+    opacity: 0.6;
+    animation: fall linear infinite;
+    z-index: 1;
+  }
+
+  @keyframes fall {
+    0% {
+      transform: translateY(-100vh) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .main-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    position: relative;
+    z-index: 2;
+    height: calc(100vh - 120px);
+  }
+
+  .sidebar {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 1.5rem;
+    border: 2px solid var(--card-border);
+    box-shadow: 0 10px 30px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filter-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sumi);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--card-border);
+    border-radius: 12px;
+    background: var(--card-bg);
+    color: var(--sumi);
+    font-size: 0.9rem;
+    font-family: 'Zen Maru Gothic', sans-serif;
+    transition: all 0.3s ease;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--kinpaku);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+  }
+
+  .filter-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .filter-buttons.single-column {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-btn {
+    padding: 0.6rem 0.8rem;
+    border: 2px solid var(--card-border);
+    background: var(--card-bg);
+    backdrop-filter: blur(5px);
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: var(--sumi);
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .filter-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--shadow);
+  }
+
+  .filter-btn.active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px var(--shadow);
+  }
+
+  /* 季節ボタン用の色 */
+  .season-btn.active {
+    background: var(--vermillion);
+    color: var(--yuki);
+    border-color: var(--vermillion);
+  }
+
+  /* 時期ボタン用の色 */
+  .period-btn.active {
+    background: var(--murasaki);
+    color: var(--yuki);
+    border-color: var(--murasaki);
+  }
+
+  /* 部類ボタン用の色 */
+  .category-btn.active {
+    background: var(--momiji);
+    color: var(--yuki);
+    border-color: var(--momiji);
+  }
+
+  /* 音数ボタン用の色 */
+  .mora-btn.active {
+    background: var(--midori);
+    color: var(--yuki);
+    border-color: var(--midori);
+  }
+
+  .result-counter {
+    text-align: center;
+    background: linear-gradient(135deg, var(--kinpaku), var(--sakura));
+    padding: 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    color: var(--sumi);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    margin-top: auto;
+  }
+
+  main {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 1.5rem;
+    border: 2px solid var(--card-border);
+    box-shadow: 0 10px 30px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1rem;
+    flex-shrink: 0;
   }
-  .result-info {
-    font-family: 'Noto Sans JP', sans-serif; font-size: 0.72rem;
-    color: var(--sumi-faint); letter-spacing: 0.1em;
-  }
-  .view-toggle { display: flex; gap: 0.3rem; }
-  .view-btn {
-    padding: 0.25rem 0.6rem; border: 1px solid #d4c8b8;
-    background: transparent; cursor: pointer; font-size: 0.9rem;
-    color: var(--sumi-faint); transition: all 0.15s;
-  }
-  .view-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
 
-  /* Grid view */
+  .result-info {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sumi);
+  }
+
+  .view-toggle {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .view-btn {
+    padding: 0.5rem 0.8rem;
+    border: 2px solid var(--card-border);
+    background: var(--card-bg);
+    backdrop-filter: blur(5px);
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--sumi);
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .view-btn.active {
+    background: var(--kinpaku);
+    color: var(--sumi);
+    border-color: var(--kinpaku);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  }
+
+  .content-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+  }
+
   .kigo-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 1px; background: #d4c8b8;
-    border: 1px solid #d4c8b8;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    padding: 0.5rem;
   }
+
   .kigo-card {
-    background: var(--washi); padding: 1rem 1.1rem;
-    cursor: pointer; transition: background 0.12s;
-    position: relative; min-height: 80px;
-    display: flex; flex-direction: column; justify-content: center;
-  }
-  .kigo-card:hover { background: #fdfaf5; }
-  .kigo-card.selected { background: var(--sumi) !important; color: var(--washi); }
-  .kigo-word { font-size: 1.2rem; font-weight: 300; letter-spacing: 0.08em; line-height: 1.2; }
-  .kigo-kana {
-    font-family: 'Noto Sans JP', sans-serif; font-size: 0.6rem;
-    color: var(--sumi-faint); letter-spacing: 0.15em; margin-top: 0.3rem;
-  }
-  .kigo-card.selected .kigo-kana { color: #a09080; }
-  .kigo-season-dot {
-    position: absolute; top: 0.5rem; right: 0.5rem;
-    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--card-border);
+    border-radius: 15px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 140px;
   }
 
-  /* List view */
-  .kigo-list { display: none; border: 1px solid #d4c8b8; }
-  .kigo-list.visible { display: block; }
-  .kigo-grid.list-mode { display: none; }
-  .kigo-row {
-    display: grid; grid-template-columns: 140px 1fr 80px 80px;
-    gap: 1rem; align-items: center;
-    padding: 0.6rem 1rem; border-bottom: 1px solid #e8e0d8;
-    cursor: pointer; transition: background 0.12s; background: var(--washi);
-  }
-  .kigo-row:last-child { border-bottom: none; }
-  .kigo-row:hover { background: #fdfaf5; }
-  .kigo-row.selected { background: var(--sumi); color: var(--washi); }
-  .row-word { font-size: 1.05rem; font-weight: 300; letter-spacing: 0.06em; }
-  .row-kana { font-family: 'Noto Sans JP', sans-serif; font-size: 0.7rem; color: var(--sumi-faint); }
-  .kigo-row.selected .row-kana { color: #a09080; }
-  .row-badge {
-    font-family: 'Noto Sans JP', sans-serif; font-size: 0.65rem;
-    padding: 0.15rem 0.5rem; text-align: center;
-    border: 1px solid currentColor; white-space: nowrap;
-  }
-  .list-header {
-    display: grid; grid-template-columns: 140px 1fr 80px 80px;
-    gap: 1rem; padding: 0.45rem 1rem;
-    background: #ede5d8; border-bottom: 2px solid #d4c8b8;
-    font-family: 'Noto Sans JP', sans-serif; font-size: 0.65rem;
-    color: var(--sumi-faint); letter-spacing: 0.15em;
+  .kigo-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+    transform: rotate(-45deg);
+    transition: transform 0.6s ease;
+    opacity: 0;
   }
 
-  /* Pagination */
-  .pagination {
-    display: flex; gap: 0.4rem; margin-top: 1.2rem;
-    align-items: center; flex-wrap: wrap;
+  .kigo-card:hover::before {
+    opacity: 1;
+    transform: rotate(-45deg) translate(100%, 100%);
   }
-  .page-btn {
-    padding: 0.35rem 0.75rem; border: 1px solid #d4c8b8;
-    background: var(--washi); font-family: 'Noto Sans JP', sans-serif;
-    font-size: 0.78rem; cursor: pointer; transition: all 0.15s; min-width: 36px; text-align: center;
-  }
-  .page-btn:hover:not(:disabled) { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
-  .page-btn.active { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
-  .page-btn:disabled { opacity: 0.3; cursor: default; }
-  .page-ellipsis { padding: 0.35rem 0.3rem; font-size: 0.78rem; color: #aaa; }
 
-  /* Detail panel */
-  .detail-panel {
-    position: fixed; right: 0; top: 0; bottom: 0; width: 480px;
-    background: white; border-left: 1px solid #d4c8b8;
-    transform: translateX(100%); transition: transform 0.28s ease;
-    overflow-y: auto; z-index: 200;
-    box-shadow: -12px 0 50px rgba(0,0,0,0.08);
+  .kigo-card:hover {
+    transform: translateY(-3px) scale(1.02);
+    border-color: var(--vermillion);
+    box-shadow: 0 12px 25px var(--deep-shadow);
   }
-  .detail-panel.open { transform: translateX(0); }
-  .detail-close {
-    position: sticky; top: 0; z-index: 1;
-    display: flex; align-items: center; justify-content: flex-end;
-    padding: 0.8rem 1rem;
-    background: white; border-bottom: 1px solid #f0e8e0;
+
+  .kigo-word {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--sumi);
+    font-family: 'Zen Maru Gothic', sans-serif;
+    letter-spacing: 0.02em;
+    text-align: center;
+    margin-bottom: 0.3rem;
   }
-  .close-btn {
-    background: none; border: 1px solid #d4c8b8; cursor: pointer;
-    color: var(--sumi-faint); width: 28px; height: 28px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.9rem; transition: all 0.15s;
+
+  .kigo-reading {
+    font-size: 0.85rem;
+    color: var(--sumi);
+    opacity: 0.7;
+    text-align: center;
+    margin-bottom: 0.5rem;
   }
-  .close-btn:hover { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
-  .detail-body { padding: 1.5rem 2rem 3rem; }
-  .detail-season-bar {
-    height: 3px; width: 40px; margin-bottom: 1.2rem;
-    border-radius: 2px;
-  }
-  .detail-word { font-size: 3.2rem; font-weight: 300; letter-spacing: 0.12em; line-height: 1; margin-bottom: 0.4rem; }
-  .detail-kana {
-    font-family: 'Noto Sans JP', sans-serif; font-size: 0.85rem;
-    color: var(--sumi-faint); letter-spacing: 0.25em; margin-bottom: 1.2rem;
-  }
-  .detail-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-  .dtag {
-    font-family: 'Noto Sans JP', sans-serif; font-size: 0.65rem;
-    letter-spacing: 0.1em; padding: 0.2rem 0.65rem;
-    border: 1px solid currentColor;
-  }
-  .detail-divider { border: none; border-top: 1px solid #e8e0d8; margin: 1.2rem 0; }
-  .detail-section-label {
-    font-family: 'Noto Sans JP', sans-serif; font-size: 0.62rem;
-    color: var(--sumi-faint); letter-spacing: 0.25em; margin-bottom: 0.6rem;
-  }
-  .related-words { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .related-chip {
-    font-size: 0.82rem; padding: 0.25rem 0.65rem;
-    background: var(--washi); border: 1px solid #d4c8b8;
-    cursor: pointer; transition: all 0.15s;
-  }
-  .related-chip:hover { background: var(--sumi); color: var(--washi); }
-  .boudai-list {
+
+  .kigo-info {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 1px; background: #d4c8b8;
-    border: 1px solid #d4c8b8;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 0.4rem;
+    margin-top: auto;
+  }
+
+  .kigo-badge {
+    padding: 0.3rem 0.6rem;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    white-space: nowrap;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .badge-season {
+    background: var(--sakura);
+    color: var(--sumi);
+  }
+
+  .badge-period {
+    background: var(--murasaki);
+    color: var(--yuki);
+    font-size: 0.65rem;
+  }
+
+  .badge-category {
+    background: var(--midori);
+    color: var(--yuki);
+    grid-column: 1 / -1;
+  }
+
+  .kigo-list {
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .list-header {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    background: linear-gradient(135deg, var(--kinpaku), var(--sakura));
+    border: 2px solid var(--kinpaku);
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+  }
+
+  .kigo-row {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    background: var(--card-bg);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .kigo-row:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--shadow);
+  }
+
+  .pagination {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
     margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--card-border);
   }
-  .boudai-tag {
-    background: var(--washi); padding: 1rem 1.1rem;
-    cursor: pointer; transition: all 0.12s;
-    position: relative; min-height: 80px;
-    display: flex; flex-direction: column; justify-content: center;
-    border: none; /* グリッドの境界線で表現 */
+
+  .page-btn {
+    padding: 0.5rem 0.8rem;
+    border: 2px solid var(--card-border);
+    background: var(--card-bg);
+    color: var(--sumi);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
   }
-  .boudai-tag:hover { 
-    background: #fdfaf5; 
+
+  .page-btn:hover {
+    background: var(--sakura);
     transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  .boudai-word { 
-    font-size: 1.2rem; font-weight: 300; 
-    letter-spacing: 0.08em; line-height: 1.2; 
-    font-family: 'Noto Serif JP', serif;
-  }
-  .boudai-kana {
-    font-family: 'Noto Sans JP', sans-serif; font-size: 0.6rem;
-    color: var(--sumi-faint); letter-spacing: 0.15em; 
-    margin-top: 0.3rem;
-  }
-  .boudai-season-dot {
-    position: absolute; top: 0.5rem; right: 0.5rem;
-    width: 6px; height: 6px; border-radius: 50%;
-    opacity: 0.6; /* 傍題では少し薄く */
   }
 
-  @media (max-width: 900px) {
-    .main-container { grid-template-columns: 1fr; padding: 1rem; }
-    .sidebar { position: static; }
-    .detail-panel { width: 100%; }
-    .kigo-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-    .boudai-list { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-    .kigo-row { grid-template-columns: 1fr 80px; }
-    .kigo-row .row-kana, .kigo-row .row-cat { display: none; }
-    .list-header { grid-template-columns: 1fr 80px; }
-    .list-header .lh-kana, .list-header .lh-cat { display: none; }
+  .page-btn.active {
+    background: var(--vermillion);
+    color: var(--yuki);
+    border-color: var(--vermillion);
   }
 
-  /* ── 編集モーダル ── */
-  .edit-btn {
-    background: none; border: 1.5px solid var(--sumi-faint); color: var(--sumi-faint);
-    border-radius: 6px; padding: 4px 12px; font-size: 12px; cursor: pointer;
-    transition: all .15s; font-family: inherit;
-  }
-  .edit-btn:hover { border-color: var(--sumi-light); color: var(--sumi-light); background: var(--washi-dark); }
-  .add-btn {
-    background: var(--vermillion); border: none; color: #fff;
-    border-radius: 6px; padding: 6px 16px; font-size: 13px; cursor: pointer;
-    font-family: inherit; transition: opacity .15s;
-  }
-  .add-btn:hover { opacity: .85; }
+  @media (max-width: 1024px) {
+    .main-container {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      height: auto;
+      padding: 1rem;
+    }
 
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
-    z-index: 200; align-items: center; justify-content: center;
+    .sidebar {
+      position: static;
+      max-height: none;
+      order: 2;
+    }
+
+    main {
+      order: 1;
+      height: 60vh;
+    }
+
+    .kigo-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .list-header,
+    .kigo-row {
+      grid-template-columns: 2fr 1fr;
+    }
+
+    .kigo-row .category,
+    .list-header .category {
+      display: none;
+    }
   }
-  .modal-overlay.open { display: flex; }
-  .modal-box {
-    background: var(--washi); border-radius: 12px; padding: 28px 32px;
-    width: min(560px, 92vw); max-height: 90vh; overflow-y: auto;
-    box-shadow: 0 8px 40px rgba(0,0,0,.25);
-    font-family: inherit;
+
+  /* 季語詳細モーダル */
+  .kigo-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
   }
-  .modal-title {
-    font-size: 17px; font-weight: bold; color: var(--sumi-light);
-    margin-bottom: 20px; border-bottom: 1px solid var(--washi-dark); padding-bottom: 10px;
-    display: flex; align-items: center; gap: 8px;
+
+  .kigo-modal.show {
+    display: flex;
   }
-  .modal-title .modal-close {
-    margin-left: auto; background: none; border: none; font-size: 18px;
-    cursor: pointer; color: var(--sumi-faint); line-height: 1;
+
+  .modal-content {
+    background: var(--card-bg);
+    backdrop-filter: blur(15px);
+    border: 3px solid var(--kinpaku);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px var(--deep-shadow);
+    position: relative;
+    animation: modalSlideIn 0.3s ease-out;
   }
-  .form-row { margin-bottom: 14px; }
-  .form-row label { display: block; font-size: 12px; color: var(--sumi-faint); margin-bottom: 4px; }
-  .form-row input, .form-row select, .form-row textarea {
-    width: 100%; box-sizing: border-box;
-    border: 1.5px solid #d4c8b8; border-radius: 6px;
-    padding: 7px 10px; font-size: 14px; font-family: inherit;
-    background: #fff; color: var(--sumi); outline: none;
-    transition: border-color .15s;
+
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
-  .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
-    border-color: var(--sumi-light);
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--vermillion);
+    color: var(--yuki);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: bold;
   }
-  .form-row textarea { resize: vertical; min-height: 72px; }
-  .form-row-half { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-  .modal-actions .btn-save {
-    background: var(--vermillion); border: none; color: #fff;
-    border-radius: 6px; padding: 8px 22px; font-size: 14px;
-    cursor: pointer; font-family: inherit; transition: opacity .15s;
+
+  .modal-close:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 4px 15px rgba(255, 69, 0, 0.5);
   }
-  .modal-actions .btn-save:hover { opacity: .85; }
-  .modal-actions .btn-cancel {
-    background: none; border: 1.5px solid #d4c8b8; color: var(--sumi-faint);
-    border-radius: 6px; padding: 8px 18px; font-size: 14px;
-    cursor: pointer; font-family: inherit; transition: all .15s;
+
+  .modal-kigo-main {
+    text-align: center;
+    margin-bottom: 2rem;
   }
-  .modal-actions .btn-cancel:hover { border-color: var(--sumi-faint); }
-  .modal-actions .btn-delete {
-    background: none; border: 1.5px solid #e07070; color: #c0392b;
-    border-radius: 6px; padding: 8px 18px; font-size: 14px;
-    cursor: pointer; font-family: inherit; margin-right: auto; transition: all .15s;
+
+  .modal-kigo-word {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--sumi);
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px var(--shadow);
+    letter-spacing: 0.02em;
   }
-  .modal-actions .btn-delete:hover { background: #fdf0f0; }
-  .boudai-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-  .boudai-input-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
-  .boudai-input-row input { flex: 1; }
-  .boudai-input-row input.kana-input { width: 100px; flex: none; }
-  .btn-add-boudai {
-    background: none; border: 1.5px dashed #b0a090; color: var(--sumi-faint);
-    border-radius: 6px; padding: 5px 12px; font-size: 12px; cursor: pointer;
-    font-family: inherit; white-space: nowrap; transition: all .15s;
+
+  .modal-kigo-reading {
+    font-size: 1.1rem;
+    color: var(--sumi);
+    opacity: 0.8;
+    margin-bottom: 1rem;
   }
-  .btn-add-boudai:hover { border-color: var(--sumi-faint); color: var(--sumi-light); }
-  .boudai-row-remove {
-    background: none; border: none; color: #c0392b; font-size: 15px;
-    cursor: pointer; padding: 0 4px; line-height: 1;
+
+  .modal-kigo-badges {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+    flex-wrap: wrap;
   }
-  .toast {
-    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-    background: var(--sumi-light); color: #fff; border-radius: 8px;
-    padding: 10px 22px; font-size: 13px; z-index: 300;
-    opacity: 0; transition: opacity .3s; pointer-events: none;
+
+  .modal-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
-  .toast.show { opacity: 1; }
-  .detail-edit-row { display: flex; justify-content: flex-end; margin-bottom: 6px; }
-  .toolbar-add { display: flex; justify-content: flex-end; padding: 0 0 8px 0; }
+
+  .modal-badge.season {
+    background: var(--sakura);
+    color: var(--sumi);
+  }
+
+  .modal-badge.period {
+    background: var(--murasaki);
+    color: var(--yuki);
+  }
+
+  .modal-badge.category {
+    background: var(--midori);
+    color: var(--yuki);
+  }
+
+  .modal-relations {
+    margin-top: 2rem;
+  }
+
+  .modal-relations h3 {
+    font-size: 1.2rem;
+    color: var(--sumi);
+    margin-bottom: 1rem;
+    text-align: center;
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-weight: 600;
+  }
+
+  .relation-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.8rem;
+  }
+
+  .relation-item {
+    background: linear-gradient(135deg, var(--kinpaku), rgba(255, 215, 0, 0.1));
+    border: 2px solid var(--kinpaku);
+    border-radius: 10px;
+    padding: 0.8rem;
+    text-align: center;
+    font-weight: 500;
+    color: var(--sumi);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .relation-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 215, 0, 0.3);
+    border-color: var(--vermillion);
+  }
 </style>
 </head>
 <body>
 
+<!-- 桜の花びらアニメーション -->
+<script>
+function createSakuraPetal() {
+  const petal = document.createElement('div');
+  petal.className = 'sakura-petal';
+  petal.style.left = Math.random() * 100 + 'vw';
+  petal.style.animationDuration = (Math.random() * 10 + 15) + 's';
+  petal.style.animationDelay = Math.random() * 5 + 's';
+  document.body.appendChild(petal);
+  
+  setTimeout(() => petal.remove(), 25000);
+}
+
+setInterval(createSakuraPetal, 3000);
+</script>
+
 <header>
-  <div class="header-inner">
-    <div class="title-block">
-      <h1 class="site-title">季語辞典</h1>
-      <span class="site-en">KIGO DICTIONARY</span>
-    </div>
-    <div class="header-stats">
-      <div class="num" id="totalCount">0</div>
-      <div>語収録</div>
-    </div>
-  </div>
+  <h1 class="site-title">季語辞典</h1>
 </header>
 
 <div class="main-container">
   <aside class="sidebar">
-    <div class="search-wrap">
-      <input type="text" class="search-box" id="searchBox" placeholder="季語／読み方を検索…" oninput="onSearch(this.value)">
-      <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+    <!-- 検索 -->
+    <div class="filter-section">
+      <label class="filter-label">🔍 季語検索</label>
+      <input type="text" class="search-input" id="searchInput" placeholder="季語名や読み方を入力..." oninput="handleSearch()">
     </div>
 
-    <div class="panel-label">季節</div>
-    <div class="season-grid">
-      <button class="season-btn all active" onclick="setFilter('season','all')" id="sb-all">
-        <span class="dot" style="background:#888"></span> すべて
-      </button>
-      <button class="season-btn" onclick="setFilter('season','新年')" id="sb-新年">
-        <span class="dot" style="background:var(--newyear)"></span> 新年
-      </button>
-      <button class="season-btn" onclick="setFilter('season','春')" id="sb-春">
-        <span class="dot" style="background:var(--spring)"></span> 春
-      </button>
-      <button class="season-btn" onclick="setFilter('season','夏')" id="sb-夏">
-        <span class="dot" style="background:var(--summer)"></span> 夏
-      </button>
-      <button class="season-btn" onclick="setFilter('season','秋')" id="sb-秋">
-        <span class="dot" style="background:var(--autumn)"></span> 秋
-      </button>
-      <button class="season-btn" onclick="setFilter('season','冬')" id="sb-冬">
-        <span class="dot" style="background:var(--winter)"></span> 冬
-      </button>
-    </div>
-
-    <div class="period-section">
-      <div class="panel-label">時期</div>
-      <div id="periodList"></div>
-    </div>
-
-    <div class="cat-section">
-      <div class="panel-label">部類</div>
-      <div class="cat-btns" id="catBtns"></div>
-    </div>
-
-    <div class="mora-section">
-      <div class="panel-label">音数</div>
-      <div class="mora-btns" id="moraBtns">
-        <button class="mora-btn active" onclick="setFilter('mora','all')" id="mb-all">すべて</button>
-        <button class="mora-btn" onclick="setFilter('mora','1')" id="mb-1">１音</button>
-        <button class="mora-btn" onclick="setFilter('mora','2')" id="mb-2">２音</button>
-        <button class="mora-btn" onclick="setFilter('mora','3')" id="mb-3">３音</button>
-        <button class="mora-btn" onclick="setFilter('mora','4')" id="mb-4">４音</button>
-        <button class="mora-btn" onclick="setFilter('mora','5')" id="mb-5">５音</button>
-        <button class="mora-btn" onclick="setFilter('mora','6')" id="mb-6">６音</button>
-        <button class="mora-btn" onclick="setFilter('mora','7')" id="mb-7">７音</button>
-        <button class="mora-btn" onclick="setFilter('mora','8+')" id="mb-8+">８音以上</button>
+    <!-- 季節フィルター -->
+    <div class="filter-section">
+      <label class="filter-label">🌸 季節</label>
+      <div class="filter-buttons">
+        <button class="filter-btn season-btn active" data-value="">すべて</button>
+        <button class="filter-btn season-btn" data-value="新年">🎍 新年</button>
+        <button class="filter-btn season-btn" data-value="春">🌸 春</button>
+        <button class="filter-btn season-btn" data-value="夏">🌻 夏</button>
+        <button class="filter-btn season-btn" data-value="秋">🍁 秋</button>
+        <button class="filter-btn season-btn" data-value="冬">❄️ 冬</button>
       </div>
+    </div>
+
+    <!-- 時期フィルター -->
+    <div class="filter-section">
+      <label class="filter-label">📅 時期</label>
+      <div class="filter-buttons">
+        <button class="filter-btn period-btn active" data-value="">すべて</button>
+        <button class="filter-btn period-btn" data-value="初春">初春</button>
+        <button class="filter-btn period-btn" data-value="仲春">仲春</button>
+        <button class="filter-btn period-btn" data-value="晩春">晩春</button>
+        <button class="filter-btn period-btn" data-value="三春">三春</button>
+        <button class="filter-btn period-btn" data-value="初夏">初夏</button>
+        <button class="filter-btn period-btn" data-value="仲夏">仲夏</button>
+        <button class="filter-btn period-btn" data-value="晩夏">晩夏</button>
+        <button class="filter-btn period-btn" data-value="三夏">三夏</button>
+        <button class="filter-btn period-btn" data-value="初秋">初秋</button>
+        <button class="filter-btn period-btn" data-value="仲秋">仲秋</button>
+        <button class="filter-btn period-btn" data-value="晩秋">晩秋</button>
+        <button class="filter-btn period-btn" data-value="三秋">三秋</button>
+        <button class="filter-btn period-btn" data-value="初冬">初冬</button>
+        <button class="filter-btn period-btn" data-value="仲冬">仲冬</button>
+        <button class="filter-btn period-btn" data-value="晩冬">晩冬</button>
+        <button class="filter-btn period-btn" data-value="三冬">三冬</button>
+      </div>
+    </div>
+
+    <!-- 部類フィルター -->
+    <div class="filter-section">
+      <label class="filter-label">📂 部類</label>
+      <div class="filter-buttons">
+        <button class="filter-btn category-btn active" data-value="">すべて</button>
+        <button class="filter-btn category-btn" data-value="時候">🌡️ 時候</button>
+        <button class="filter-btn category-btn" data-value="天文">⭐ 天文</button>
+        <button class="filter-btn category-btn" data-value="地理">🏔️ 地理</button>
+        <button class="filter-btn category-btn" data-value="行事">🎊 行事</button>
+        <button class="filter-btn category-btn" data-value="生活">🏠 生活</button>
+        <button class="filter-btn category-btn" data-value="植物">🌿 植物</button>
+        <button class="filter-btn category-btn" data-value="動物">🐾 動物</button>
+      </div>
+    </div>
+
+    <!-- 音数フィルター -->
+    <div class="filter-section">
+      <label class="filter-label">🎵 音数</label>
+      <div class="filter-buttons">
+        <button class="filter-btn mora-btn active" data-value="">すべて</button>
+        <button class="filter-btn mora-btn" data-value="1">１音</button>
+        <button class="filter-btn mora-btn" data-value="2">２音</button>
+        <button class="filter-btn mora-btn" data-value="3">３音</button>
+        <button class="filter-btn mora-btn" data-value="4">４音</button>
+        <button class="filter-btn mora-btn" data-value="5">５音</button>
+        <button class="filter-btn mora-btn" data-value="6">６音</button>
+        <button class="filter-btn mora-btn" data-value="7">７音</button>
+        <button class="filter-btn mora-btn" data-value="8+">８音以上</button>
+      </div>
+    </div>
+
+    <!-- 結果数表示 -->
+    <div class="result-counter">
+      該当: <span id="resultCount">0</span>個
     </div>
   </aside>
 
   <main>
-    <div class="result-bar">
-      <div class="result-info" id="resultInfo"></div>
-      <div class="view-toggle">
-        <button class="view-btn active" id="vbGrid" onclick="setView('grid')" title="グリッド表示">⊞</button>
-        <button class="view-btn" id="vbList" onclick="setView('list')" title="リスト表示">☰</button>
-      </div>
-      
-                 
+    <div class="content-header">
+      <div class="result-info" id="resultInfo">季語辞典</div>
     </div>
-    <div class="kigo-grid" id="kigoGrid"></div>
-    <div class="kigo-list" id="kigoList">
-      <div class="list-header">
-        <span>季語</span><span class="lh-kana">読み</span><span class="lh-cat">部類</span><span>季節</span>
-      </div>
-      <div id="kigoListBody"></div>
+
+    <div class="content-body">
+      <div class="kigo-grid" id="kigoGrid"></div>
     </div>
+
     <div class="pagination" id="pagination"></div>
   </main>
 </div>
 
-<div class="detail-panel" id="detailPanel">
-  <div class="detail-close">
-    <button class="close-btn" onclick="closeDetail()">✕</button>
-  </div>
-  <div class="detail-body" id="detailBody"></div>
-</div>
-
-
-
 <script>
-// =====================================================
-// KIGO DATA — sourced from traditional saijiki
-// =====================================================
-let RAW = [
+// 季語辞典の完全なデータ
+const RAW = [
   // ============ 新年 ============
   // 全新年／時候
   {w:'新年',k:'しんねん',s:'新年',p:'全新年',c:'時候'},
@@ -3347,11 +3584,7 @@ let RAW = [
   {w:'寒木瓜',k:'かんぼけ',s:'冬',p:'晩冬',c:'植物'},
 ];
 
-
-// =====================================================
-// BOUDAI (傍題) DATA - New Format: Independent Entities
-// =====================================================
-let BOUDAI_NEW = [
+const BOUDAI_NEW = [
   {w:'藍植う',k:'あいうう',parent:'藍蒔く',type:'boudai'},
   {w:'花青木',k:'はなあおき',parent:'青木の花',type:'boudai'},
   {w:'麦青む',k:'むぎあおむ',parent:'青麦',type:'boudai'},
@@ -8101,8 +8334,7 @@ let BOUDAI_NEW = [
 {w:'幸籠',k:'さいわいかご',parent:'藁盒子',type:'boudai'}
 ];
 
-
-// 親季語から季節／時期／部類を取得するヘルパー関数
+// 親季語から季節・時期・部類を取得するヘルパー関数
 function getParentInfo(parentName) {
   const parent = RAW.find(k => k.w === parentName);
   return parent ? {s: parent.s, p: parent.p, c: parent.c} : {s: '春', p: '三春', c: '時候'};
@@ -8121,671 +8353,316 @@ function getBoudaiExtended(boudai) {
   };
 }
 
-;
-
 // メインの季語データと傍題データを統合（傍題は親季語情報を拡張）
-let ALL_KIGO = RAW.concat(BOUDAI_NEW.map(getBoudaiExtended));
-console.log(`総データ数: ${ALL_KIGO.length} (季語: ${RAW.length}, 傍題: ${BOUDAI_NEW.length})`);
+const kigoData = RAW.concat(BOUDAI_NEW.map(getBoudaiExtended));
+console.log(`季語データ読み込み完了: ${kigoData.length}個`);
 
-// =====================================================
-
-// =====================================================
-// BOUDAI (傍題) DATA
-// =====================================================
-
-const SEASON_COLOR = {
-  '新年': 'var(--newyear)',
-  '春':  'var(--spring)',
-  '夏':  'var(--summer)',
-  '秋':  'var(--autumn)',
-  '冬':  'var(--winter)',
+let filteredData = kigoData;
+let currentPage = 1;
+let currentFilters = {
+  search: '',
+  season: '',
+  period: '',
+  category: '',
+  mora: ''
 };
+const itemsPerPage = 50;
 
-const PERIOD_ORDER = {
-  '新年': ['全新年','上新年','中新年','下新年'],
-  '春':  ['三春','初春','仲春','晩春'],
-  '夏':  ['三夏','初夏','仲夏','晩夏'],
-  '秋':  ['三秋','初秋','仲秋','晩秋'],
-  '冬':  ['三冬','初冬','仲冬','晩冬'],
-};
-const CAT_ORDER = ['時候','天文','地理','生活','行事','動物','植物'];
-
-let state = {
-  season: 'all', period: 'all', cat: 'all', mora: 'all',
-  q: '', page: 1, view: 'grid', selected: null
-};
-const PER_PAGE = 60;
-
-function getColor(s) { return SEASON_COLOR[s] || '#888'; }
-
-// 音数（モーラ）計算関数
-function countMora(kana) {
-  if (!kana || kana.trim() === '') return 0;
-  
-  // 「／」で区切られている場合は、最初の読み方のみを使用
-  let targetKana = kana;
-  if (kana.includes('／')) {
-    targetKana = kana.split('／')[0].trim();
+// ボタンクリックイベントの設定
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('filter-btn')) {
+    const filterType = getFilterType(e.target);
+    const value = e.target.dataset.value;
+    
+    // 同じタイプの他のボタンを非アクティブに
+    document.querySelectorAll(`.${filterType}`).forEach(btn => {
+      btn.classList.remove('active');
+    });
+    
+    // クリックされたボタンをアクティブに
+    e.target.classList.add('active');
+    
+    // フィルターを更新
+    const filterKey = filterType.replace('-btn', '');
+    currentFilters[filterKey] = value;
+    
+    handleFilter();
   }
-  // 「／」で区切られている場合も同様に処理
-  if (targetKana.includes('／')) {
-    targetKana = targetKana.split('／')[0].trim();
-  }
-  
-  // ひらがなでない文字を除外してクリーンアップ（長音記号「ー」は残す）
-  let cleanKana = targetKana.replace(/[^あ-んー]/g, '');
-  if (cleanKana === '') return 0;
-  
-  let moraCount = 0;
-  let i = 0;
-  
-  while (i < cleanKana.length) {
-    const char = cleanKana[i];
-    
-    // 促音「っ」は1音
-    if (char === 'っ') {
-      moraCount++;
-      i++;
-      continue;
-    }
-    
-    // 撥音「ん」は1音
-    if (char === 'ん') {
-      moraCount++;
-      i++;
-      continue;
-    }
-    
-    // 長音記号「ー」は1音として数える
-    if (char === 'ー') {
-      moraCount++;
-      i++;
-      continue;
-    }
-    
-    // 小文字（ぁぃぅぇぉゃゅょ）は拗音／促音の一部
-    if ('ぁぃぅぇぉゃゅょ'.includes(char)) {
-      i++;
-      continue; // 前の文字でカウント済み
-    }
-    
-    // 拗音の判定：拗音可能な子音 + ゃゅょ
-    const isYouonBase = 'きしちにひみりぎじぢびぴくぐすずつづぬぶぷふきくしすちつにぬひふみむりる'.includes(char);
-    if (isYouonBase && i + 1 < cleanKana.length) {
-      const nextChar = cleanKana[i + 1];
-      if ('ゃゅょ'.includes(nextChar)) {
-        // 拗音として1音（きゃ、しゅ、ちょ、にゃ、ひゅ、みょ等）
-        moraCount++;
-        i += 2;
-        continue;
-      }
-    }
-    
-    // 通常の音（1文字1音）
-    moraCount++;
-    i++;
-  }
-  
-  return moraCount;
+});
+
+function getFilterType(element) {
+  if (element.classList.contains('season-btn')) return 'season-btn';
+  if (element.classList.contains('period-btn')) return 'period-btn';
+  if (element.classList.contains('category-btn')) return 'category-btn';
+  if (element.classList.contains('mora-btn')) return 'mora-btn';
+  return '';
 }
 
-// 複数の読み方がある季語の音数リストを取得
-function getMoraList(kana) {
-  if (!kana || kana.trim() === '') return [];
-  
-  let readings = [];
-  
-  // 「／」で分割
-  if (kana.includes('／')) {
-    readings = kana.split('／').map(r => r.trim());
-  } 
-  // 「／」で分割
-  else if (kana.includes('／')) {
-    readings = kana.split('／').map(r => r.trim());
-  }
-  // 単一の読み方
-  else {
-    readings = [kana.trim()];
-  }
-  
-  // 各読み方の音数を計算
-  return readings.map(reading => {
-    const cleanKana = reading.replace(/[^あ-んー]/g, '');
-    if (cleanKana === '') return 0;
-    
-    let moraCount = 0;
-    let i = 0;
-    
-    while (i < cleanKana.length) {
-      const char = cleanKana[i];
-      
-      if (char === 'っ' || char === 'ん') {
-        moraCount++;
-        i++;
-        continue;
-      }
-      
-      if (char === 'ー') {
-        moraCount++;  // 長音記号を1音として計算
-        i++;
-        continue;
-      }
-      
-      if ('ぁぃぅぇぉゃゅょ'.includes(char)) {
-        i++;
-        continue;
-      }
-      
-      const isYouonBase = 'きしちにひみりぎじぢびぴくぐすずつづぬぶぷふきくしすちつにぬひふみむりる'.includes(char);
-      if (isYouonBase && i + 1 < cleanKana.length && 'ゃゅょ'.includes(cleanKana[i + 1])) {
-        moraCount++;
-        i += 2;
-        continue;
-      }
-      
-      moraCount++;
-      i++;
-    }
-    
-    return moraCount;
-  });
+function handleSearch() {
+  currentFilters.search = document.getElementById('searchInput').value.toLowerCase();
+  handleFilter();
 }
 
-function filtered() {
-  const filteredResults = ALL_KIGO.filter(k => {
-    if (state.season !== 'all' && k.s !== state.season) return false;
-    if (state.period !== 'all' && k.p !== state.period) return false;
-    if (state.cat !== 'all' && k.c !== state.cat) return false;
-    
-    // 音数フィルター（複数読みがある場合はいずれかがマッチすればOK）
-    if (state.mora !== 'all') {
-      if (state.mora === '8+') {
-        // 8音以上の場合
-        const moraList = getMoraList(k.k);
-        const hasEightOrMore = moraList.some(mora => mora >= 8);
-        if (!hasEightOrMore) return false;
-      } else {
-        // 具体的な音数の場合
-        const targetMora = parseInt(state.mora);
-        const moraList = getMoraList(k.k);
-        const hasMatchingMora = moraList.some(mora => mora === targetMora);
-        if (!hasMatchingMora) return false;
-      }
+function handleFilter() {
+  filteredData = kigoData.filter(item => {
+    // 検索テキストフィルター
+    if (currentFilters.search && !item.w.includes(currentFilters.search) && !item.k.includes(currentFilters.search)) {
+      return false;
     }
-    
-    if (state.q) {
-      const q = state.q;
-      
-      // 検索文字が漢字またはカタカナかを判定
-      // 漢字: 一般的な漢字範囲 + ひらがな以外の文字
-      // カタカナ: 全角カタカナ + 半角カタカナ
-      const isKanjiOrKatakana = /[一-龯ァ-ヶｱ-ﾝ]/.test(q) && !/[あ-ん]/.test(q);
-      
-      if (isKanjiOrKatakana) {
-        // 漢字／カタカナの場合：その文字が直接含まれている季語のみ表示
-        // 親季語／傍題の関係は考慮しない
-        return k.w.includes(q) || k.k.includes(q);
-      } else {
-        // ひらがなや英数字の場合：従来の検索ロジック（関連性も考慮）
-        // 季語名／読み方で直接検索
-        if (k.w.includes(q) || k.k.includes(q)) return true;
-        
-        // 傍題の場合は親季語名も検索対象に含める
-        if (k.type === 'boudai' && k.parent && k.parent.includes(q)) return true;
-        
+
+    // 季節フィルター
+    if (currentFilters.season && item.s !== currentFilters.season) return false;
+
+    // 時期フィルター
+    if (currentFilters.period && item.p !== currentFilters.period) return false;
+
+    // 部類フィルター
+    if (currentFilters.category && item.c !== currentFilters.category) return false;
+
+    // 音数フィルター（「／」区切り対応）
+    if (currentFilters.mora) {
+      if (!matchesMoraFilter(item.k, currentFilters.mora)) {
         return false;
       }
     }
+
     return true;
   });
 
-  // 検索クエリがある場合は季節順にソート
-  if (state.q && state.q.trim() !== '') {
-    const seasonOrder = ['新年', '春', '夏', '秋', '冬'];
-    const periodOrder = {
-      '新年': ['上新年', '中新年', '下新年'],
-      '春': ['初春', '仲春', '晩春', '全春', '三春'],
-      '夏': ['初夏', '仲夏', '晩夏', '全夏', '三夏'],
-      '秋': ['初秋', '仲秋', '晩秋', '全秋', '三秋'],
-      '冬': ['初冬', '仲冬', '晩冬', '全冬', '三冬']
-    };
-
-    return filteredResults.sort((a, b) => {
-      // まず季節順でソート
-      const seasonIndexA = seasonOrder.indexOf(a.s);
-      const seasonIndexB = seasonOrder.indexOf(b.s);
-      
-      if (seasonIndexA !== seasonIndexB) {
-        return seasonIndexA - seasonIndexB;
-      }
-      
-      // 同じ季節内では時期順でソート
-      const periodsA = periodOrder[a.s] || [];
-      const periodsB = periodOrder[b.s] || [];
-      const periodIndexA = periodsA.indexOf(a.p);
-      const periodIndexB = periodsB.indexOf(b.p);
-      
-      if (periodIndexA !== periodIndexB) {
-        return periodIndexA - periodIndexB;
-      }
-      
-      // 同じ時期内では親季語を先に、傍題を後に
-      if (a.type === 'boudai' && b.type !== 'boudai') return 1;
-      if (a.type !== 'boudai' && b.type === 'boudai') return -1;
-      
-      // 最後にあいうえお順
-      return a.w.localeCompare(b.w, 'ja');
-    });
-  }
-
-  // 検索クエリがない場合は元の順序を保持
-  return filteredResults;
+  currentPage = 1;
+  updateResultCount();
+  renderGrid();
 }
 
-function setFilter(type, val) {
-  if (type === 'season') {
-    state.season = val;
-    state.period = 'all';
-    // update season buttons
-    document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('sb-' + val).classList.add('active');
-  }
-  if (type === 'period') state.period = val;
-  if (type === 'cat') state.cat = val;
-  if (type === 'mora') {
-    state.mora = val;
-    // update mora buttons
-    document.querySelectorAll('.mora-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('mb-' + val).classList.add('active');
-  }
-  state.page = 1;
-  render();
-}
-
-function onSearch(v) {
-  state.q = v;
-  state.page = 1;
-  document.getElementById('searchClear').classList.toggle('visible', v.length > 0);
-  render();
-}
-
-function clearSearch() {
-  state.q = '';
-  document.getElementById('searchBox').value = '';
-  document.getElementById('searchClear').classList.remove('visible');
-  state.page = 1;
-  render();
-}
-
-function setView(v) {
-  state.view = v;
-  document.getElementById('vbGrid').classList.toggle('active', v === 'grid');
-  document.getElementById('vbList').classList.toggle('active', v === 'list');
-  render();
-}
-
-function render() {
-  const data = filtered();
-  const total = data.length;
-  const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
-  if (state.page > totalPages) state.page = 1;
-  const slice = data.slice((state.page - 1) * PER_PAGE, state.page * PER_PAGE);
-
-  document.getElementById('resultInfo').textContent = `${total.toLocaleString()} 語`;
-
-  renderPeriodList();
-  renderCatBtns();
+function renderGrid() {
+  const startIdx = (currentPage - 1) * itemsPerPage;
+  const endIdx = startIdx + itemsPerPage;
+  const pageData = filteredData.slice(startIdx, endIdx);
 
   const grid = document.getElementById('kigoGrid');
-  const list = document.getElementById('kigoList');
-  const listBody = document.getElementById('kigoListBody');
+  grid.innerHTML = '';
 
-  if (state.view === 'grid') {
-    grid.style.display = '';
-    list.style.display = 'none';
-    grid.innerHTML = '';
+  pageData.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'kigo-card';
+    card.style.cursor = 'pointer';
+    card.innerHTML = `
+      <div class="kigo-word">${item.w}</div>
+      <div class="kigo-reading">${item.k || '読み方なし'}</div>
+      <div class="kigo-info">
+        <span class="kigo-badge badge-season">${item.s || '季節なし'}</span>
+        <span class="kigo-badge badge-period">${item.p || '時期なし'}</span>
+        <span class="kigo-badge badge-category">${item.c || '部類なし'}</span>
+      </div>
+    `;
     
-    // 検索結果がある場合は季節ごとにグループ化
-    if (state.q && state.q.trim() !== '' && slice.length > 1) {
-      let currentSeason = '';
-      
-      slice.forEach(k => {
-        // 季節が変わったらヘッダーを挿入
-        if (k.s !== currentSeason) {
-          currentSeason = k.s;
-          const seasonHeader = document.createElement('div');
-          seasonHeader.className = 'season-group-header';
-          seasonHeader.style.cssText = `
-            grid-column: 1 / -1;
-            font-weight: 700;
-            color: ${getColor(k.s)};
-            border-bottom: 2px solid ${getColor(k.s)};
-            padding: 0.8rem 0 0.5rem;
-            margin: 1rem 0 0.5rem;
-            font-size: 0.9rem;
-            letter-spacing: 0.1em;
-          `;
-          seasonHeader.textContent = k.s;
-          grid.appendChild(seasonHeader);
-        }
-        
-        const color = getColor(k.s);
-        const d = document.createElement('div');
-        d.className = 'kigo-card' + (state.selected === k.w ? ' selected' : '');
-        d.innerHTML = `
-          <span class="kigo-season-dot" style="background:${color}"></span>
-          <div class="kigo-word">${k.w}</div>
-          <div class="kigo-kana">${k.k}${k.type === 'boudai' && k.parent ? `<div style="font-size:0.5em;color:#bbb;margin-top:0.2em;">← ${k.parent}</div>` : ''}</div>
-          <div class="kigo-mora-count" style="position:absolute; bottom:0.5rem; right:0.5rem; font-size:0.5rem; color:#bbb;">${k.k ? (() => {
-            const moraList = getMoraList(k.k);
-            if (moraList.length > 1) {
-              const displayList = moraList.map(m => m >= 8 ? '8+' : m.toString());
-              return displayList.join('/') + '音';
-            } else {
-              const mora = moraList[0];
-              return (mora >= 8 ? '8+' : mora.toString()) + '音';
-            }
-          })() : ''}</div>
-        `;
-        d.onclick = () => openDetail(k);
-        grid.appendChild(d);
-      });
-    } else {
-      // 通常表示（グループ化なし）
-      slice.forEach(k => {
-        const color = getColor(k.s);
-        const d = document.createElement('div');
-        d.className = 'kigo-card' + (state.selected === k.w ? ' selected' : '');
-        d.innerHTML = `
-          <span class="kigo-season-dot" style="background:${color}"></span>
-          <div class="kigo-word">${k.w}</div>
-          <div class="kigo-kana">${k.k}${k.type === 'boudai' && k.parent ? `<div style="font-size:0.5em;color:#bbb;margin-top:0.2em;">← ${k.parent}</div>` : ''}</div>
-          <div class="kigo-mora-count" style="position:absolute; bottom:0.5rem; right:0.5rem; font-size:0.5rem; color:#bbb;">${k.k ? (() => {
-            const moraList = getMoraList(k.k);
-            if (moraList.length > 1) {
-              const displayList = moraList.map(m => m >= 8 ? '8+' : m.toString());
-              return displayList.join('/') + '音';
-            } else {
-              const mora = moraList[0];
-              return (mora >= 8 ? '8+' : mora.toString()) + '音';
-            }
-          })() : ''}</div>
-        `;
-        d.onclick = () => openDetail(k);
-        grid.appendChild(d);
-      });
-    }
-  } else {
-    grid.style.display = 'none';
-    list.style.display = 'block';
-    listBody.innerHTML = '';
-    slice.forEach(k => {
-      const color = getColor(k.s);
-      const row = document.createElement('div');
-      row.className = 'kigo-row' + (state.selected === k.w ? ' selected' : '');
-      row.innerHTML = `
-        <div class="row-word">${k.w}</div>
-        <div class="row-kana">${k.k}</div>
-        <div class="row-badge" style="color:${color}">${k.c}</div>
-        <div class="row-badge" style="color:${color}">${k.s}</div>
-      `;
-      row.onclick = () => openDetail(k);
-      listBody.appendChild(row);
+    // クリックイベントを追加
+    card.addEventListener('click', () => showKigoModal(item));
+    
+    grid.appendChild(card);
+  });
+
+  renderPagination();
+}
+
+// モーダル表示関数
+function showKigoModal(kigo) {
+  // 基本情報を表示
+  document.getElementById('modalKigoWord').textContent = kigo.w;
+  document.getElementById('modalKigoReading').textContent = kigo.k || '読み方なし';
+  document.getElementById('modalSeason').textContent = kigo.s || '季節なし';
+  document.getElementById('modalPeriod').textContent = kigo.p || '時期なし';
+  document.getElementById('modalCategory').textContent = kigo.c || '部類なし';
+
+  // 関連季語を表示
+  const relationsDiv = document.getElementById('modalRelations');
+  const relationList = document.getElementById('relationList');
+  const relationsTitle = document.getElementById('relationsTitle');
+  
+  relationList.innerHTML = '';
+
+  if (kigo.type === 'boudai' && kigo.parent) {
+    // 傍題の場合、親季語を表示
+    relationsTitle.textContent = '本季語';
+    
+    const parentItem = document.createElement('div');
+    parentItem.className = 'relation-item';
+    parentItem.textContent = kigo.parent;
+    parentItem.addEventListener('click', () => {
+      // 親季語の詳細を表示
+      const parentKigo = kigoData.find(k => k.w === kigo.parent);
+      if (parentKigo) {
+        showKigoModal(parentKigo);
+      }
     });
+    
+    relationList.appendChild(parentItem);
+    relationsDiv.style.display = 'block';
+  } else {
+    // 本季語の場合、傍題を表示
+    const boudaiList = kigoData.filter(k => k.type === 'boudai' && k.parent === kigo.w);
+    
+    if (boudaiList.length > 0) {
+      relationsTitle.textContent = `傍題 (${boudaiList.length}個)`;
+      
+      boudaiList.forEach(boudai => {
+        const boudaiItem = document.createElement('div');
+        boudaiItem.className = 'relation-item';
+        boudaiItem.textContent = boudai.w;
+        boudaiItem.addEventListener('click', () => {
+          showKigoModal(boudai);
+        });
+        
+        relationList.appendChild(boudaiItem);
+      });
+      
+      relationsDiv.style.display = 'block';
+    } else {
+      relationsDiv.style.display = 'none';
+    }
   }
 
-  renderPagination(total, totalPages);
+  // モーダルを表示
+  document.getElementById('kigoModal').classList.add('show');
+  document.body.style.overflow = 'hidden'; // 背景スクロールを無効化
 }
 
-function renderPeriodList() {
-  const pl = document.getElementById('periodList');
-  pl.innerHTML = '';
-  const seasons = state.season === 'all'
-    ? Object.keys(PERIOD_ORDER)
-    : [state.season];
-
-  seasons.forEach(s => {
-    const periods = PERIOD_ORDER[s];
-    const color = getColor(s);
-    const grp = document.createElement('div');
-    grp.className = 'period-group';
-    grp.innerHTML = `<div class="period-header"><span class="dot" style="background:${color}"></span>${s}</div>`;
-    const btns = document.createElement('div');
-    btns.className = 'period-btns';
-    periods.forEach(p => {
-      const cnt = RAW.filter(k => k.p === p).length;
-      const b = document.createElement('button');
-      b.className = 'period-btn' + (state.period === p ? ' active' : '');
-      b.textContent = p + ' ' + cnt;
-      b.onclick = () => {
-        state.season = s;
-        state.period = state.period === p ? 'all' : p;
-        document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('sb-' + s).classList.add('active');
-        state.page = 1; render();
-      };
-      btns.appendChild(b);
-    });
-    grp.appendChild(btns);
-    pl.appendChild(grp);
-  });
+// モーダル閉じる関数
+function closeKigoModal() {
+  document.getElementById('kigoModal').classList.remove('show');
+  document.body.style.overflow = 'auto'; // 背景スクロールを再有効化
 }
 
-function renderCatBtns() {
-  const cb = document.getElementById('catBtns');
-  cb.innerHTML = '';
-  const add = (label, val, count) => {
-    const b = document.createElement('button');
-    b.className = 'cat-btn' + (state.cat === val ? ' active' : '');
-    b.textContent = count !== undefined ? `${label} ${count}` : label;
-    b.onclick = () => { state.cat = state.cat === val ? 'all' : val; state.page = 1; render(); };
-    cb.appendChild(b);
-  };
-  const base = state.season === 'all' ? RAW : RAW.filter(k => k.s === state.season);
-  CAT_ORDER.forEach(c => {
-    const cnt = base.filter(k => k.c === c).length;
-    if (cnt > 0) add(c, c, cnt);
-  });
+// モーダル外クリックで閉じる
+document.addEventListener('click', (e) => {
+  const modal = document.getElementById('kigoModal');
+  if (e.target === modal) {
+    closeKigoModal();
+  }
+});
+
+// ESCキーで閉じる
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeKigoModal();
+  }
+});
+
+function countMora(kana) {
+  if (!kana) return 0;
+  
+  let count = 0;
+  let i = 0;
+  
+  while (i < kana.length) {
+    const char = kana[i];
+    
+    // ひらがな・カタカナの判定
+    if (/[あ-んァ-ンー]/.test(char)) {
+      count++;
+      
+      // 次の文字が小書き文字（ぁぃぅぇぉゃゅょァィゥェォャュョ）の場合、
+      // 現在の文字と組み合わせて1音とする
+      if (i < kana.length - 1 && /[ぁぃぅぇぉゃゅょァィゥェォャュョ]/.test(kana[i + 1])) {
+        i++; // 小書き文字をスキップ（既に1音として数えているため）
+      }
+      
+      // 「っ」「ん」「ー」はそれぞれ1音として扱う（上記の処理で既にカウント済み）
+    }
+    i++;
+  }
+  
+  return count;
 }
 
-function renderPagination(total, totalPages) {
-  const pg = document.getElementById('pagination');
-  pg.innerHTML = '';
+// 複数の読み方がある季語の音数をチェック
+function matchesMoraFilter(kana, targetMora) {
+  if (!kana || !targetMora) return false;
+  
+  // 「／」で区切られている場合は、それぞれの読み方をチェック
+  if (kana.includes('／')) {
+    const readings = kana.split('／').map(r => r.trim()).filter(r => r);
+    
+    for (const reading of readings) {
+      const moraCount = countMora(reading);
+      
+      if (targetMora === '8+') {
+        if (moraCount >= 8) return true;
+      } else {
+        if (moraCount === parseInt(targetMora)) return true;
+      }
+    }
+    return false;
+  } else {
+    // 単一の読み方
+    const moraCount = countMora(kana);
+    
+    if (targetMora === '8+') {
+      return moraCount >= 8;
+    } else {
+      return moraCount === parseInt(targetMora);
+    }
+  }
+}
+
+function updateResultCount() {
+  document.getElementById('resultCount').textContent = filteredData.length;
+}
+
+function renderPagination() {
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const pagination = document.getElementById('pagination');
+  pagination.innerHTML = '';
+
   if (totalPages <= 1) return;
 
-  const mk = (label, page, disabled, active) => {
-    if (label === '…') {
-      const sp = document.createElement('span');
-      sp.className = 'page-ellipsis'; sp.textContent = '…'; return sp;
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 2) {
+      const btn = document.createElement('button');
+      btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+      btn.textContent = i;
+      btn.onclick = () => {
+        currentPage = i;
+        renderGrid();
+      };
+      pagination.appendChild(btn);
+    } else if (i === currentPage - 3 || i === currentPage + 3) {
+      const ellipsis = document.createElement('span');
+      ellipsis.textContent = '...';
+      ellipsis.style.padding = '0.5rem';
+      pagination.appendChild(ellipsis);
     }
-    const b = document.createElement('button');
-    b.className = 'page-btn' + (active ? ' active' : '');
-    b.textContent = label; b.disabled = disabled;
-    if (!disabled) b.onclick = () => { state.page = page; render(); window.scrollTo(0,0); };
-    return b;
-  };
-
-  pg.appendChild(mk('‹', state.page - 1, state.page === 1));
-  const s = Math.max(1, state.page - 2), e = Math.min(totalPages, state.page + 2);
-  if (s > 1) { pg.appendChild(mk('1', 1, false, false)); if (s > 2) pg.appendChild(mk('…')); }
-  for (let i = s; i <= e; i++) pg.appendChild(mk(i, i, false, i === state.page));
-  if (e < totalPages) { if (e < totalPages - 1) pg.appendChild(mk('…')); pg.appendChild(mk(totalPages, totalPages, false, false)); }
-  pg.appendChild(mk('›', state.page + 1, state.page === totalPages));
-}
-
-function openDetail(k) {
-  state.selected = k.w;
-  const color = getColor(k.s);
-  
-  // 傍題の場合と親季語の場合で処理を分ける
-  let displayContent = '';
-  
-  if (k.type === 'boudai') {
-    // 傍題の場合：親季語の情報も表示
-    const parentKigo = RAW.find(p => p.w === k.parent);
-    const relatedBoudai = BOUDAI_NEW.filter(b => b.parent === k.parent && b.w !== k.w).map(getBoudaiExtended);
-    
-    displayContent = `
-      <div class="detail-season-bar" style="background:${color}"></div>
-      <div class="detail-word">${k.w}</div>
-      <div class="detail-kana">${k.k}</div>
-      <div class="detail-tags">
-        <span class="dtag" style="color:${color};border-color:${color}">${k.s}</span>
-        <span class="dtag" style="color:${color};border-color:${color}">${k.p}</span>
-        <span class="dtag" style="color:var(--sumi-faint);border-color:#d4c8b8">${k.c}</span>
-      </div>
-      ${parentKigo ? `
-        <hr class="detail-divider">
-        <div class="detail-section-label">本季語</div>
-        <div class="boudai-tag" onclick="openDetail(RAW.find(p => p.w === '${parentKigo.w}'))" style="cursor:pointer;">
-          <span class="boudai-season-dot" style="background:${color}"></span>
-          <div class="boudai-word">${parentKigo.w}</div>
-          <div class="boudai-kana">${parentKigo.k}</div>
-        </div>
-      ` : ''}
-      ${relatedBoudai.length > 0 ? `
-        <hr class="detail-divider">
-        <div class="detail-section-label">傍題</div>
-        <div class="boudai-list">${relatedBoudai.map(b => `
-          <div class="boudai-tag" onclick="openDetail(BOUDAI_NEW.find(item => item.w === '${b.w}'))" style="cursor:pointer;">
-            <span class="boudai-season-dot" style="background:${color}"></span>
-            <div class="boudai-word">${b.w}</div>
-            <div class="boudai-kana">${b.k}</div>
-          </div>
-        `).join('')}</div>
-      ` : ''}
-    `;
-  } else {
-    // 親季語の場合：傍題を表示
-    const boudaiList = BOUDAI_NEW.filter(b => b.parent === k.w).map(getBoudaiExtended);
-    
-    displayContent = `
-      <div class="detail-season-bar" style="background:${color}"></div>
-      <div class="detail-word">${k.w}</div>
-      <div class="detail-kana">${k.k}</div>
-      <div class="detail-tags">
-        <span class="dtag" style="color:${color};border-color:${color}">${k.s}</span>
-        <span class="dtag" style="color:${color};border-color:${color}">${k.p}</span>
-        <span class="dtag" style="color:var(--sumi-faint);border-color:#d4c8b8">${k.c}</span>
-      </div>
-      ${boudaiList.length > 0 ? `
-        <hr class="detail-divider">
-        <div class="detail-section-label">傍　題</div>
-        <div class="boudai-list">${boudaiList.map(b => `
-          <div class="boudai-tag" onclick="openDetail(BOUDAI_NEW.find(item => item.w === '${b.w}'))" style="cursor:pointer;">
-            <span class="boudai-season-dot" style="background:${color}"></span>
-            <div class="boudai-word">${b.w}</div>
-            <div class="boudai-kana">${b.k}</div>
-          </div>
-        `).join('')}</div>
-      ` : '<hr class="detail-divider"><div class="detail-section-label" style="color:#ccc">傍題データなし</div>'}
-    `;
   }
-  
-  document.getElementById('detailBody').innerHTML = displayContent;
-  document.getElementById('detailPanel').classList.add('open');
-  render();
 }
 
-function closeDetail() {
-  state.selected = null;
-  document.getElementById('detailPanel').classList.remove('open');
-  render();
-}
-
-
-
-// Init
-document.getElementById('totalCount').textContent = RAW.length.toLocaleString();
-
-// BOUDAI軽量化テスト
-console.log("=== BOUDAI軽量化テスト ===");
-console.log("軽量化前: {w:'花青木',k:'はなあおき',s:'春',p:'晩春',c:'植物',parent:'青木の花',type:'boudai'}");
-console.log("軽量化後: {w:'花青木',k:'はなあおき',parent:'青木の花',type:'boudai'}");
-
-// データクリーンアップ結果
-console.log("=== データクリーンアップ完了 ===");
-console.log("不正な親季語参照を持つ傍題データを343個削除");
-console.log("削除例: 傍題「川菜」→ 存在しない親季語「石蓴」");
-console.log("結果: データ整合性確保、エラー防止、検索機能の信頼性向上");
-console.log(`現在のデータ: 見出し季語${RAW.length}個、有効傍題4658個`);
-// 最初の傍題で軽量化テスト
-if (BOUDAI_NEW.length > 0) {
-  const firstBoudai = BOUDAI_NEW[0];
-  const extendedBoudai = getBoudaiExtended(firstBoudai);
-  console.log("元データ:", firstBoudai);
-  console.log("拡張後:", extendedBoudai);
-  console.log("データサイズ削減: s、p、cフィールド削除により約30%軽量化");
-}
-
-// 新しい検索ロジック
-console.log("=== 新しい検索ロジック ===");
-console.log("漢字／カタカナ検索: その文字が直接含まれている季語のみ表示");
-console.log("ひらがな検索: 従来通り関連する親季語／傍題も表示");
-console.log("");
-console.log("例1: '花'（漢字）で検索");
-console.log("  ✅ 表示: '花青木'（傍題）, '桜の花'（親季語）");
-console.log("  ❌ 非表示: '青木の花'（親季語）← 傍題の関係で表示しない");
-console.log("");
-console.log("例2: 'はな'（ひらがな）で検索");
-console.log("  ✅ 表示: 'はな'を含む読み方の季語 + 関連する親季語／傍題");
-console.log("");
-console.log("例3: 'カキ'（カタカナ）で検索");  
-console.log("  ✅ 表示: 'カキ'が直接含まれている季語のみ");
-
-// 複数読み音数計算テスト
-console.log("=== 複数読み音数計算テスト ===");
-const testCases = [
-  {word: "去年", kana: "こぞ／きょねん", expected: [2, 4]},
-  {word: "菖蒲", kana: "しょうぶ／あやめ", expected: [4, 3]},
-  {word: "桜", kana: "さくら", expected: [3]},
-  {word: "春雨", kana: "はるさめ", expected: [4]}
-];
-
-// 拗音テスト
-console.log("=== 音数計算テスト（長音記号含む） ===");
-const youonTests = [
-  // 1音の例
-  {word: "灯", kana: "ひ", expected: 1}, // ひ(1音)
-  {word: "実", kana: "み", expected: 1}, // み(1音)
-  {word: "絵", kana: "え", expected: 1}, // え(1音)
-  // 2音の例
-  {word: "蝶", kana: "ちょう", expected: 2}, // ちょ(1音) + う(1音)
-  {word: "梅", kana: "うめ", expected: 2}, // う(1音) + め(1音)
-  {word: "竹", kana: "たけ", expected: 2}, // た(1音) + け(1音)
-  // 長音記号「ー」を含むテストケース
-  {word: "コーヒー", kana: "こーひー", expected: 4}, // こ(1音) + ー(1音) + ひ(1音) + ー(1音)
-  {word: "ビール", kana: "びーる", expected: 3}, // び(1音) + ー(1音) + る(1音)
-  {word: "テーブル", kana: "てーぶる", expected: 4}, // て(1音) + ー(1音) + ぶ(1音) + る(1音)
-  {word: "ケーキ", kana: "けーき", expected: 3}, // け(1音) + ー(1音) + き(1音)
-  {word: "ソース", kana: "そーす", expected: 3}, // そ(1音) + ー(1音) + す(1音)
-  // 通常の音数
-  {word: "雀", kana: "すずめ", expected: 3}, // す(1音) + ず(1音) + め(1音)
-  {word: "蜻蛉", kana: "とんぼ", expected: 3}, // とん(2音) + ぼ(1音)
-  {word: "蝶々", kana: "ちょうちょう", expected: 4}, // ちょ(1音) + う(1音) + ちょ(1音) + う(1音)
-  {word: "人形", kana: "にんぎょう", expected: 4}, // に(1音) + ん(1音) + ぎょ(1音) + う(1音)
-  {word: "急須", kana: "きゅうす", expected: 3}, // きゅ(1音) + う(1音) + す(1音)
-  {word: "茶", kana: "ちゃ", expected: 1}, // ちゃ(1音)
-  {word: "笹", kana: "ささ", expected: 2}, // さ(1音) + さ(1音)
-  // 長い季語の例（8音以上になるもの）
-  {word: "長い季語", kana: "ながいきごのれいなのです", expected: 11}, // テスト用の長い例
-];
-
-youonTests.forEach(test => {
-  const calculated = countMora(test.kana);
-  const status = calculated === test.expected ? "✅" : "❌";
-  console.log(`${status} ${test.word}(${test.kana}): 計算=${calculated}音, 期待=${test.expected}音`);
+// 初期化
+document.addEventListener('DOMContentLoaded', () => {
+  updateResultCount();
+  renderGrid();
 });
-
-testCases.forEach(test => {
-  const calculated = getMoraList(test.kana);
-  const match = JSON.stringify(calculated) === JSON.stringify(test.expected);
-  const status = match ? "✅" : "❌";
-  console.log(`${status} ${test.word}(${test.kana}): 計算=[${calculated.join(',')}]音, 期待=[${test.expected.join(',')}]音`);
-});
-
-render();
 </script>
+
+<!-- 季語詳細モーダル -->
+<div class="kigo-modal" id="kigoModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeKigoModal()">×</button>
+    
+    <div class="modal-kigo-main">
+      <div class="modal-kigo-word" id="modalKigoWord">-</div>
+      <div class="modal-kigo-reading" id="modalKigoReading">-</div>
+      <div class="modal-kigo-badges">
+        <span class="modal-badge season" id="modalSeason">-</span>
+        <span class="modal-badge period" id="modalPeriod">-</span>
+        <span class="modal-badge category" id="modalCategory">-</span>
+      </div>
+    </div>
+
+    <div class="modal-relations" id="modalRelations" style="display: none;">
+      <h3 id="relationsTitle">関連季語</h3>
+      <div class="relation-list" id="relationList"></div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

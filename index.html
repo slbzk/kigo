@@ -334,8 +334,8 @@
   }
 
   @media (max-width: 900px) {
-    .main-container { grid-template-columns: 1fr; padding: 1rem; }
-    .sidebar { position: static; }
+    .main-container { grid-template-columns: 1fr; padding: 1rem; flex-direction: column; }
+    .sidebar { position: static; display: flex; flex-direction: column; }
     .detail-panel { width: 100%; }
     .kigo-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
     .boudai-list { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
@@ -343,6 +343,21 @@
     .kigo-row .row-kana, .kigo-row .row-cat { display: none; }
     .list-header { grid-template-columns: 1fr 80px; }
     .list-header .lh-kana, .list-header .lh-cat { display: none; }
+    
+    /* ゲームセクションを最下部に移動 */
+    .random-section {
+      order: 10;
+      margin-top: 1.5rem;
+      border-top: 2px solid var(--sumi-light);
+      padding-top: 1rem;
+    }
+    
+    /* 他のセクションの順序調整 */
+    .search-section { order: 1; }
+    .season-section { order: 2; }
+    .period-section { order: 3; }
+    .cat-section { order: 4; }
+    .mora-section { order: 5; }
   }
 
   /* ── 編集モーダル ── */
@@ -609,12 +624,13 @@
 
 <div class="main-container">
   <aside class="sidebar">
-    <div class="search-wrap">
+    <div class="search-wrap search-section">
       <input type="text" class="search-box" id="searchBox" placeholder="季語／読み方を検索…" oninput="onSearch(this.value)">
       <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
     </div>
 
-    <div class="panel-label">季節</div>
+    <div class="season-section">
+      <div class="panel-label">季節</div>
     <div class="season-grid">
       <button class="season-btn all active" onclick="setFilter('season','all')" id="sb-all">
         <span class="dot" style="background:#888"></span> すべて
@@ -634,6 +650,7 @@
       <button class="season-btn" onclick="setFilter('season','冬')" id="sb-冬">
         <span class="dot" style="background:var(--winter)"></span> 冬
       </button>
+    </div>
     </div>
 
     <div class="period-section">

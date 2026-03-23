@@ -104,45 +104,64 @@
     margin: 0 auto;
     padding: 1.5rem;
     display: grid;
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 1fr;
     gap: 2rem;
     position: relative;
     z-index: 2;
     height: calc(100vh - 120px);
   }
 
-  .sidebar {
+  .content-wrapper {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .search-bar {
     background: var(--card-bg);
     backdrop-filter: blur(10px);
     border-radius: 20px;
-    padding: 1.5rem;
+    padding: 1rem 1.5rem;
     border: 2px solid var(--card-border);
     box-shadow: 0 10px 30px var(--shadow);
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    height: 100%;
-    overflow-y: auto;
-  }
-
-  .filter-section {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .filter-label {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--sumi);
-    margin-bottom: 0.5rem;
-    display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .hamburger-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    transition: all 0.3s ease;
+  }
+
+  .hamburger-line {
+    width: 20px;
+    height: 2px;
+    background: var(--sumi);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .hamburger-btn.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .hamburger-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-btn.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
   }
 
   .search-input {
-    width: 100%;
+    flex: 1;
     padding: 0.8rem;
     border: 2px solid var(--card-border);
     border-radius: 12px;
@@ -159,27 +178,124 @@
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
   }
 
-  .filter-buttons {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+  .result-counter-inline {
+    background: linear-gradient(135deg, var(--kinpaku), var(--sakura));
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    color: var(--sumi);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    white-space: nowrap;
+  }
+
+  /* 左スライドメニュー */
+  .slide-menu {
+    position: fixed;
+    top: 0;
+    left: -350px;
+    width: 350px;
+    height: 100vh;
+    background: var(--card-bg);
+    backdrop-filter: blur(15px);
+    border-right: 2px solid var(--card-border);
+    box-shadow: 5px 0 25px var(--deep-shadow);
+    z-index: 2000;
+    transition: all 0.3s ease;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+
+  .slide-menu.open {
+    left: 0;
+  }
+
+  .menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: 1500;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .menu-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--card-border);
+  }
+
+  .menu-title {
+    font-family: 'Zen Kurenaido', cursive;
+    font-size: 1.5rem;
+    color: var(--sumi);
+    font-weight: 600;
+  }
+
+  .menu-close {
+    background: var(--vermillion);
+    color: var(--yuki);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: bold;
+  }
+
+  .menu-close:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 4px 15px rgba(255, 69, 0, 0.5);
+  }
+
+  .filter-section {
+    margin-bottom: 2rem;
+  }
+
+  .filter-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--sumi);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
     gap: 0.5rem;
   }
 
-  .filter-buttons.single-column {
-    grid-template-columns: 1fr;
+  .filter-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
   }
 
   .filter-btn {
-    padding: 0.6rem 0.8rem;
+    padding: 0.8rem;
     border: 2px solid var(--card-border);
     background: var(--card-bg);
     backdrop-filter: blur(5px);
     font-family: 'Zen Maru Gothic', sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     cursor: pointer;
     color: var(--sumi);
     transition: all 0.3s ease;
-    border-radius: 10px;
+    border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     text-align: center;
     font-weight: 500;
@@ -221,17 +337,6 @@
     background: var(--midori);
     color: var(--yuki);
     border-color: var(--midori);
-  }
-
-  .result-counter {
-    text-align: center;
-    background: linear-gradient(135deg, var(--kinpaku), var(--sakura));
-    padding: 1rem;
-    border-radius: 12px;
-    font-weight: 600;
-    color: var(--sumi);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    margin-top: auto;
   }
 
   main {
@@ -436,13 +541,15 @@
     display: flex;
     gap: 0.5rem;
     justify-content: center;
+    align-items: center;
     margin-top: 1rem;
     padding-top: 1rem;
     border-top: 1px solid var(--card-border);
+    flex-wrap: wrap;
   }
 
   .page-btn {
-    padding: 0.5rem 0.8rem;
+    padding: 0.6rem 1rem;
     border: 2px solid var(--card-border);
     background: var(--card-bg);
     color: var(--sumi);
@@ -450,17 +557,57 @@
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 0.85rem;
+    font-weight: 500;
+    min-width: 60px;
+    white-space: nowrap;
   }
 
   .page-btn:hover {
     background: var(--sakura);
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--shadow);
   }
 
   .page-btn.active {
     background: var(--vermillion);
     color: var(--yuki);
     border-color: var(--vermillion);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(255, 69, 0, 0.3);
+  }
+
+  .page-ellipsis {
+    padding: 0.6rem 0.5rem;
+    color: var(--sumi);
+    opacity: 0.5;
+    font-size: 0.85rem;
+  }
+
+  .page-info {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    color: var(--sumi);
+    margin-left: 1rem;
+    padding: 0.6rem 1rem;
+    background: linear-gradient(135deg, var(--kinpaku), rgba(255, 215, 0, 0.1));
+    border-radius: 8px;
+    border: 1px solid var(--kinpaku);
+  }
+
+  .page-current {
+    font-weight: 700;
+    color: var(--vermillion);
+  }
+
+  .page-total {
+    font-weight: 600;
+  }
+
+  .item-info {
+    opacity: 0.7;
+    font-size: 0.8rem;
   }
 
   @media (max-width: 1024px) {
@@ -471,29 +618,43 @@
       padding: 1rem;
     }
 
-    .sidebar {
-      position: static;
-      max-height: none;
-      order: 2;
-    }
-
     main {
-      order: 1;
-      height: 60vh;
+      height: auto;
+      min-height: 60vh;
     }
 
     .kigo-grid {
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
 
-    .list-header,
-    .kigo-row {
-      grid-template-columns: 2fr 1fr;
+    .search-bar {
+      flex-wrap: wrap;
+      gap: 0.8rem;
     }
 
-    .kigo-row .category,
-    .list-header .category {
-      display: none;
+    .result-counter-inline {
+      order: 3;
+      width: 100%;
+      text-align: center;
+    }
+
+    .pagination {
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+
+    .page-btn {
+      padding: 0.5rem 0.8rem;
+      font-size: 0.8rem;
+      min-width: 50px;
+    }
+
+    .page-info {
+      margin-left: 0;
+      margin-top: 0.5rem;
+      width: 100%;
+      justify-content: center;
+      font-size: 0.8rem;
     }
   }
 
@@ -682,87 +843,22 @@ setInterval(createSakuraPetal, 3000);
 </header>
 
 <div class="main-container">
-  <aside class="sidebar">
-    <!-- 検索 -->
-    <div class="filter-section">
-      <label class="filter-label">🔍 季語検索</label>
-      <input type="text" class="search-input" id="searchInput" placeholder="季語名や読み方を入力..." oninput="handleSearch()">
-    </div>
-
-    <!-- 季節フィルター -->
-    <div class="filter-section">
-      <label class="filter-label">🌸 季節</label>
-      <div class="filter-buttons">
-        <button class="filter-btn season-btn active" data-value="">すべて</button>
-        <button class="filter-btn season-btn" data-value="新年">🎍 新年</button>
-        <button class="filter-btn season-btn" data-value="春">🌸 春</button>
-        <button class="filter-btn season-btn" data-value="夏">🌻 夏</button>
-        <button class="filter-btn season-btn" data-value="秋">🍁 秋</button>
-        <button class="filter-btn season-btn" data-value="冬">❄️ 冬</button>
-      </div>
-    </div>
-
-    <!-- 時期フィルター -->
-    <div class="filter-section">
-      <label class="filter-label">📅 時期</label>
-      <div class="filter-buttons">
-        <button class="filter-btn period-btn active" data-value="">すべて</button>
-        <button class="filter-btn period-btn" data-value="初春">初春</button>
-        <button class="filter-btn period-btn" data-value="仲春">仲春</button>
-        <button class="filter-btn period-btn" data-value="晩春">晩春</button>
-        <button class="filter-btn period-btn" data-value="三春">三春</button>
-        <button class="filter-btn period-btn" data-value="初夏">初夏</button>
-        <button class="filter-btn period-btn" data-value="仲夏">仲夏</button>
-        <button class="filter-btn period-btn" data-value="晩夏">晩夏</button>
-        <button class="filter-btn period-btn" data-value="三夏">三夏</button>
-        <button class="filter-btn period-btn" data-value="初秋">初秋</button>
-        <button class="filter-btn period-btn" data-value="仲秋">仲秋</button>
-        <button class="filter-btn period-btn" data-value="晩秋">晩秋</button>
-        <button class="filter-btn period-btn" data-value="三秋">三秋</button>
-        <button class="filter-btn period-btn" data-value="初冬">初冬</button>
-        <button class="filter-btn period-btn" data-value="仲冬">仲冬</button>
-        <button class="filter-btn period-btn" data-value="晩冬">晩冬</button>
-        <button class="filter-btn period-btn" data-value="三冬">三冬</button>
-      </div>
-    </div>
-
-    <!-- 部類フィルター -->
-    <div class="filter-section">
-      <label class="filter-label">📂 部類</label>
-      <div class="filter-buttons">
-        <button class="filter-btn category-btn active" data-value="">すべて</button>
-        <button class="filter-btn category-btn" data-value="時候">🌡️ 時候</button>
-        <button class="filter-btn category-btn" data-value="天文">⭐ 天文</button>
-        <button class="filter-btn category-btn" data-value="地理">🏔️ 地理</button>
-        <button class="filter-btn category-btn" data-value="行事">🎊 行事</button>
-        <button class="filter-btn category-btn" data-value="生活">🏠 生活</button>
-        <button class="filter-btn category-btn" data-value="植物">🌿 植物</button>
-        <button class="filter-btn category-btn" data-value="動物">🐾 動物</button>
-      </div>
-    </div>
-
-    <!-- 音数フィルター -->
-    <div class="filter-section">
-      <label class="filter-label">🎵 音数</label>
-      <div class="filter-buttons">
-        <button class="filter-btn mora-btn active" data-value="">すべて</button>
-        <button class="filter-btn mora-btn" data-value="1">１音</button>
-        <button class="filter-btn mora-btn" data-value="2">２音</button>
-        <button class="filter-btn mora-btn" data-value="3">３音</button>
-        <button class="filter-btn mora-btn" data-value="4">４音</button>
-        <button class="filter-btn mora-btn" data-value="5">５音</button>
-        <button class="filter-btn mora-btn" data-value="6">６音</button>
-        <button class="filter-btn mora-btn" data-value="7">７音</button>
-        <button class="filter-btn mora-btn" data-value="8+">８音以上</button>
-      </div>
-    </div>
-
-    <!-- 結果数表示 -->
-    <div class="result-counter">
+  <!-- 検索バー -->
+  <div class="search-bar">
+    <button class="hamburger-btn" id="menuToggle" onclick="toggleMenu()">
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+    </button>
+    
+    <input type="text" class="search-input" id="searchInput" placeholder="季語名や読み方を入力..." oninput="handleSearch()">
+    
+    <div class="result-counter-inline">
       該当: <span id="resultCount">0</span>個
     </div>
-  </aside>
+  </div>
 
+  <!-- メインコンテンツ -->
   <main>
     <div class="content-header">
       <div class="result-info" id="resultInfo">季語辞典</div>
@@ -775,6 +871,85 @@ setInterval(createSakuraPetal, 3000);
     <div class="pagination" id="pagination"></div>
   </main>
 </div>
+
+<!-- 左スライドメニュー -->
+<div class="slide-menu" id="slideMenu">
+  <div class="menu-header">
+    <div class="menu-title">🔍 フィルター</div>
+    <button class="menu-close" onclick="closeMenu()">×</button>
+  </div>
+
+  <!-- 季節フィルター -->
+  <div class="filter-section">
+    <label class="filter-label">🌸 季節</label>
+    <div class="filter-buttons">
+      <button class="filter-btn season-btn active" data-value="">すべて</button>
+      <button class="filter-btn season-btn" data-value="新年">🎍 新年</button>
+      <button class="filter-btn season-btn" data-value="春">🌸 春</button>
+      <button class="filter-btn season-btn" data-value="夏">🌻 夏</button>
+      <button class="filter-btn season-btn" data-value="秋">🍁 秋</button>
+      <button class="filter-btn season-btn" data-value="冬">❄️ 冬</button>
+    </div>
+  </div>
+
+  <!-- 時期フィルター -->
+  <div class="filter-section">
+    <label class="filter-label">📅 時期</label>
+    <div class="filter-buttons">
+      <button class="filter-btn period-btn active" data-value="">すべて</button>
+      <button class="filter-btn period-btn" data-value="初春">初春</button>
+      <button class="filter-btn period-btn" data-value="仲春">仲春</button>
+      <button class="filter-btn period-btn" data-value="晩春">晩春</button>
+      <button class="filter-btn period-btn" data-value="三春">三春</button>
+      <button class="filter-btn period-btn" data-value="初夏">初夏</button>
+      <button class="filter-btn period-btn" data-value="仲夏">仲夏</button>
+      <button class="filter-btn period-btn" data-value="晩夏">晩夏</button>
+      <button class="filter-btn period-btn" data-value="三夏">三夏</button>
+      <button class="filter-btn period-btn" data-value="初秋">初秋</button>
+      <button class="filter-btn period-btn" data-value="仲秋">仲秋</button>
+      <button class="filter-btn period-btn" data-value="晩秋">晩秋</button>
+      <button class="filter-btn period-btn" data-value="三秋">三秋</button>
+      <button class="filter-btn period-btn" data-value="初冬">初冬</button>
+      <button class="filter-btn period-btn" data-value="仲冬">仲冬</button>
+      <button class="filter-btn period-btn" data-value="晩冬">晩冬</button>
+      <button class="filter-btn period-btn" data-value="三冬">三冬</button>
+    </div>
+  </div>
+
+  <!-- 部類フィルター -->
+  <div class="filter-section">
+    <label class="filter-label">📂 部類</label>
+    <div class="filter-buttons">
+      <button class="filter-btn category-btn active" data-value="">すべて</button>
+      <button class="filter-btn category-btn" data-value="時候">🌡️ 時候</button>
+      <button class="filter-btn category-btn" data-value="天文">⭐ 天文</button>
+      <button class="filter-btn category-btn" data-value="地理">🏔️ 地理</button>
+      <button class="filter-btn category-btn" data-value="行事">🎊 行事</button>
+      <button class="filter-btn category-btn" data-value="生活">🏠 生活</button>
+      <button class="filter-btn category-btn" data-value="植物">🌿 植物</button>
+      <button class="filter-btn category-btn" data-value="動物">🐾 動物</button>
+    </div>
+  </div>
+
+  <!-- 音数フィルター -->
+  <div class="filter-section">
+    <label class="filter-label">🎵 音数</label>
+    <div class="filter-buttons">
+      <button class="filter-btn mora-btn active" data-value="">すべて</button>
+      <button class="filter-btn mora-btn" data-value="1">１音</button>
+      <button class="filter-btn mora-btn" data-value="2">２音</button>
+      <button class="filter-btn mora-btn" data-value="3">３音</button>
+      <button class="filter-btn mora-btn" data-value="4">４音</button>
+      <button class="filter-btn mora-btn" data-value="5">５音</button>
+      <button class="filter-btn mora-btn" data-value="6">６音</button>
+      <button class="filter-btn mora-btn" data-value="7">７音</button>
+      <button class="filter-btn mora-btn" data-value="8+">８音以上</button>
+    </div>
+  </div>
+</div>
+
+<!-- オーバーレイ -->
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
 <script>
 // 季語辞典の完全なデータ
@@ -8366,7 +8541,7 @@ let currentFilters = {
   category: '',
   mora: ''
 };
-const itemsPerPage = 50;
+const itemsPerPage = 10; // 50から10に変更
 
 // ボタンクリックイベントの設定
 document.addEventListener('click', (e) => {
@@ -8533,10 +8708,54 @@ function closeKigoModal() {
   document.body.style.overflow = 'auto'; // 背景スクロールを再有効化
 }
 
-// モーダル外クリックで閉じる
+// 左スライドメニューの開閉
+function toggleMenu() {
+  const menuToggle = document.getElementById('menuToggle');
+  const slideMenu = document.getElementById('slideMenu');
+  const menuOverlay = document.getElementById('menuOverlay');
+  
+  menuToggle.classList.toggle('active');
+  slideMenu.classList.toggle('open');
+  menuOverlay.classList.toggle('show');
+  
+  // body スクロールを制御
+  if (slideMenu.classList.contains('open')) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
+}
+
+function closeMenu() {
+  const menuToggle = document.getElementById('menuToggle');
+  const slideMenu = document.getElementById('slideMenu');
+  const menuOverlay = document.getElementById('menuOverlay');
+  
+  menuToggle.classList.remove('active');
+  slideMenu.classList.remove('open');
+  menuOverlay.classList.remove('show');
+  document.body.style.overflow = 'auto';
+}
+
+// ESCキーでメニューを閉じる
+document.addEventListener('keydown', (e) => {
+  const slideMenu = document.getElementById('slideMenu');
+  
+  if (e.key === 'Escape') {
+    if (slideMenu.classList.contains('open')) {
+      closeMenu();
+    } else {
+      closeKigoModal();
+    }
+  }
+});
+
+// 外部クリック処理（モーダル用）
 document.addEventListener('click', (e) => {
-  const modal = document.getElementById('kigoModal');
-  if (e.target === modal) {
+  const kigoModal = document.getElementById('kigoModal');
+  
+  // モーダル外クリック
+  if (e.target === kigoModal) {
     closeKigoModal();
   }
 });
@@ -8616,23 +8835,98 @@ function renderPagination() {
 
   if (totalPages <= 1) return;
 
-  for (let i = 1; i <= totalPages; i++) {
-    if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 2) {
-      const btn = document.createElement('button');
-      btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-      btn.textContent = i;
-      btn.onclick = () => {
-        currentPage = i;
-        renderGrid();
-      };
-      pagination.appendChild(btn);
-    } else if (i === currentPage - 3 || i === currentPage + 3) {
+  // 前へボタン
+  if (currentPage > 1) {
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'page-btn';
+    prevBtn.innerHTML = '← 前へ';
+    prevBtn.onclick = () => {
+      currentPage--;
+      renderGrid();
+    };
+    pagination.appendChild(prevBtn);
+  }
+
+  // ページ番号ボタン
+  const maxVisiblePages = 5;
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+  
+  if (endPage - startPage + 1 < maxVisiblePages) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+  }
+
+  // 最初のページ
+  if (startPage > 1) {
+    const firstBtn = document.createElement('button');
+    firstBtn.className = 'page-btn';
+    firstBtn.textContent = '1';
+    firstBtn.onclick = () => {
+      currentPage = 1;
+      renderGrid();
+    };
+    pagination.appendChild(firstBtn);
+
+    if (startPage > 2) {
       const ellipsis = document.createElement('span');
       ellipsis.textContent = '...';
-      ellipsis.style.padding = '0.5rem';
+      ellipsis.className = 'page-ellipsis';
       pagination.appendChild(ellipsis);
     }
   }
+
+  // 表示範囲のページ番号
+  for (let i = startPage; i <= endPage; i++) {
+    const btn = document.createElement('button');
+    btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+    btn.textContent = i;
+    btn.onclick = () => {
+      currentPage = i;
+      renderGrid();
+    };
+    pagination.appendChild(btn);
+  }
+
+  // 最後のページ
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      const ellipsis = document.createElement('span');
+      ellipsis.textContent = '...';
+      ellipsis.className = 'page-ellipsis';
+      pagination.appendChild(ellipsis);
+    }
+
+    const lastBtn = document.createElement('button');
+    lastBtn.className = 'page-btn';
+    lastBtn.textContent = totalPages;
+    lastBtn.onclick = () => {
+      currentPage = totalPages;
+      renderGrid();
+    };
+    pagination.appendChild(lastBtn);
+  }
+
+  // 次へボタン
+  if (currentPage < totalPages) {
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'page-btn';
+    nextBtn.innerHTML = '次へ →';
+    nextBtn.onclick = () => {
+      currentPage++;
+      renderGrid();
+    };
+    pagination.appendChild(nextBtn);
+  }
+
+  // ページ情報表示
+  const pageInfo = document.createElement('div');
+  pageInfo.className = 'page-info';
+  pageInfo.innerHTML = `
+    <span class="page-current">${currentPage}</span> / 
+    <span class="page-total">${totalPages}</span> ページ
+    <span class="item-info">(全 ${filteredData.length} 件)</span>
+  `;
+  pagination.appendChild(pageInfo);
 }
 
 // 初期化

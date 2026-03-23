@@ -601,6 +601,23 @@
     font-size: 0.8rem;
   }
 
+  /* 音数ボタン用の特別なレイアウト */
+  .mora-section .filter-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+  }
+
+  .mora-btn {
+    min-height: 50px;
+    padding: 0.8rem 0.5rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   @media (max-width: 1024px) {
     .main-container {
       grid-template-columns: 1fr;
@@ -629,23 +646,70 @@
       text-align: center;
     }
 
-    .pagination {
-      flex-wrap: wrap;
-      gap: 0.3rem;
+    /* モバイルでの音数ボタン調整 */
+    .mora-section .filter-buttons {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
     }
 
-    .page-btn {
-      padding: 0.5rem 0.8rem;
+    .mora-btn {
+      min-height: 48px;
+      padding: 0.7rem 0.3rem;
       font-size: 0.8rem;
-      min-width: 50px;
     }
 
-    .page-info {
-      margin-left: 0;
-      margin-top: 0.5rem;
+    /* フィルターボタン全般のモバイル調整 */
+    .filter-btn {
+      padding: 0.7rem 0.5rem;
+      font-size: 0.8rem;
+      min-height: 44px;
+    }
+
+    .slide-menu {
+      width: 300px;
+      left: -300px;
+    }
+  }
+
+  /* 極小画面（スマートフォン）対応 */
+  @media (max-width: 480px) {
+    .slide-menu {
+      width: 280px;
+      left: -280px;
+      padding: 1.5rem;
+    }
+
+    .filter-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-buttons {
+      gap: 0.5rem;
+    }
+
+    /* 音数ボタンを縦並びに */
+    .mora-section .filter-buttons {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+
+    .mora-btn {
+      min-height: 44px;
+      padding: 0.8rem;
+      font-size: 0.85rem;
       width: 100%;
-      justify-content: center;
+      text-align: center;
+    }
+
+    /* 他のボタンも調整 */
+    .filter-btn {
+      min-height: 44px;
+      padding: 0.8rem 0.6rem;
       font-size: 0.8rem;
+    }
+
+    .search-input {
+      font-size: 16px; /* iOS でズームインを防ぐ */
     }
   }
 
@@ -1364,7 +1428,7 @@ const RAW = [
   // 初春／行事
   {w:'建国記念の日',k:'けんこくきねんのひ',s:'春',p:'初春',c:'行事'},
   {w:'初午',k:'はつうま',s:'春',p:'初春',c:'行事'},
-  {w:'絵踏',k:'えふみ',s:'春',p:'初春',c:'行事'},
+  {w:'絵踏',k:'えぶみ',s:'春',p:'初春',c:'行事'},
   {w:'二月礼者',k:'にがつれいじゃ',s:'春',p:'初春',c:'行事'},
   {w:'北野菜種御供',k:'きたのなたねごく',s:'春',p:'初春',c:'行事'},
   {w:'涅槃会',k:'ねはんえ',s:'春',p:'初春',c:'行事'},
@@ -3214,7 +3278,7 @@ const RAW = [
   {w:'冬野',k:'ふゆの',s:'冬',p:'三冬',c:'地理'},
   {w:'枯野',k:'かれの',s:'冬',p:'三冬',c:'地理'},
   {w:'冬田',k:'ふゆた',s:'冬',p:'三冬',c:'地理'},
-  {w:'冬景色',k:'ふゆけしき',s:'冬',p:'三冬',c:'地理'},
+  {w:'冬景色',k:'ふゆげしき',s:'冬',p:'三冬',c:'地理'},
   {w:'水涸る',k:'みずかる',s:'冬',p:'三冬',c:'地理'},
   {w:'冬の水',k:'ふゆのみず',s:'冬',p:'三冬',c:'地理'},
   {w:'冬の川',k:'ふゆのかわ',s:'冬',p:'三冬',c:'地理'},

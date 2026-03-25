@@ -179,33 +179,6 @@
     white-space: nowrap;
   }
 
-  /* 縦書き切り替えボタン */
-  .writing-mode-toggle {
-    display: none; /* デスクトップでのみ表示 */
-    background: var(--card-bg);
-    border: 2px solid var(--card-border);
-    border-radius: 8px;
-    padding: 0.6rem 1rem;
-    cursor: pointer;
-    font-size: 0.85rem;
-    color: var(--sumi);
-    transition: all 0.3s ease;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-
-  .writing-mode-toggle:hover {
-    background: var(--sakura);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px var(--shadow);
-  }
-
-  .writing-mode-toggle.active {
-    background: var(--murasaki);
-    color: var(--yuki);
-    border-color: var(--murasaki);
-  }
-
   /* 左スライドメニュー */
   .slide-menu {
     position: fixed;
@@ -633,72 +606,6 @@
     margin-bottom: 0.5rem;
   }
 
-  /* 縦書き対応 - 画面幅フル活用版 */
-  .kigo-card.tategaki {
-    min-height: 180px;
-    width: 100%;
-    max-width: 110px;
-    padding: 0.8rem 0.3rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-width: 1px;
-    border-radius: 10px;
-  }
-
-  .kigo-card.tategaki .kigo-word {
-    writing-mode: vertical-rl;
-    text-orientation: upright;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    line-height: 1.0;
-    font-size: 1.2rem;
-    width: 100%;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  .kigo-card.tategaki .kigo-reading {
-    writing-mode: horizontal-tb;
-    text-orientation: mixed;
-    font-size: 0.6rem;
-    margin-bottom: 0.5rem;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    opacity: 0.7;
-    text-align: center;
-  }
-
-  .kigo-card.tategaki .kigo-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    width: 100%;
-    margin-top: auto;
-  }
-
-  .kigo-card.tategaki .kigo-badge {
-    writing-mode: horizontal-tb;
-    text-orientation: mixed;
-    padding: 0.2rem 0.4rem;
-    font-size: 0.5rem;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 18px;
-    border-radius: 6px;
-    font-weight: 600;
-    line-height: 1.0;
-    white-space: nowrap;
-  }
-
   .kigo-info {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -861,100 +768,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  @media (min-width: 1025px) {
-    .writing-mode-toggle {
-      display: block;
-    }
-
-    .search-bar {
-      align-items: center;
-    }
-
-    /* 縦書きモード時のグリッド - 画面幅いっぱいに10件表示 */
-    .kigo-grid.tategaki {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 1rem;
-      padding: 1rem;
-      width: 100%;
-      justify-items: center;
-    }
-
-    .kigo-card.tategaki {
-      width: 100%;
-      max-width: 120px;
-      min-height: 190px;
-    }
-
-    /* 通常の横書きグリッド */
-    .kigo-grid:not(.tategaki) {
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      display: grid;
-    }
-  }
-
-  /* 画面幅が狭い場合の縦書き調整 */
-  @media (min-width: 1025px) and (max-width: 1200px) {
-    .kigo-grid.tategaki {
-      gap: 0.8rem;
-    }
-    
-    .kigo-card.tategaki {
-      max-width: 100px;
-      min-height: 180px;
-    }
-
-    .kigo-card.tategaki .kigo-word {
-      font-size: 1.1rem;
-      height: 75px;
-    }
-  }
-
-  /* 中程度の画面での調整 */
-  @media (min-width: 1200px) and (max-width: 1400px) {
-    .kigo-grid.tategaki {
-      gap: 1.2rem;
-    }
-    
-    .kigo-card.tategaki {
-      max-width: 110px;
-      min-height: 185px;
-    }
-
-    .kigo-card.tategaki .kigo-word {
-      font-size: 1.2rem;
-      height: 80px;
-    }
-  }
-
-  /* 非常に広い画面での調整 */
-  @media (min-width: 1400px) {
-    .kigo-grid.tategaki {
-      gap: 1.5rem;
-    }
-    
-    .kigo-card.tategaki {
-      max-width: 130px;
-      min-height: 210px;
-    }
-
-    .kigo-card.tategaki .kigo-word {
-      font-size: 1.4rem;
-      height: 90px;
-    }
-
-    .kigo-card.tategaki .kigo-reading {
-      height: 25px;
-      font-size: 0.7rem;
-    }
-
-    .kigo-card.tategaki .kigo-badge {
-      height: 20px;
-      font-size: 0.6rem;
-      padding: 0.25rem 0.5rem;
-    }
   }
 
   @media (max-width: 1024px) {
@@ -1233,10 +1046,6 @@
     
     <input type="text" class="search-input" id="searchInput" placeholder="季語名や読み方を入力..." oninput="handleSearch()">
     
-    <button class="writing-mode-toggle" id="writingModeToggle" onclick="toggleWritingMode()">
-      📝 縦書き
-    </button>
-    
     <div class="result-counter-inline">
       該当: <span id="resultCount">0</span>個
     </div>
@@ -1379,13 +1188,13 @@
       <p>鹼→鹸　搔→掻　蠟→蝋　鷗→鴎　蟬→蝉　剝→剥　啞→唖　屛→屏</p>
       
       <h3>✉ その他</h3>
-      <p>情報は正確を期していますが、誤り等がありましたら、<a href="/cdn-cgi/l/email-protection#bfcbc8d6cbcbdacde0cecad6c5ffc6ded7d0d091dcd091d5cf">メール</a>または<a href="https://x.com/slbzk">Ｘ（旧Twitter）</a>までご連絡ください。</p>
+      <p>情報は正確を期していますが、誤り等がありましたら、<a href="mailto:twitter_quiz@yahoo.co.jp">メール</a>または<a href="https://x.com/slbzk">Ｘ（旧Twitter）</a>までご連絡ください。</p>
 
     </div>
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // 季語辞典の完全なデータ
 const RAW = [
   // ============ 新年 ============
@@ -8997,7 +8806,6 @@ let currentFilters = {
   category: '',
   mora: ''
 };
-let isVerticalWriting = false; // 縦書きモードの状態
 const itemsPerPage = 10; // 50から10に変更
 
 // ボタンクリックイベントの設定
@@ -9067,36 +8875,24 @@ function handleFilter() {
 }
 
 function renderGrid() {
-  const grid = document.getElementById('kigoGrid');
-  const contentBody = document.querySelector('.content-body');
-  
-  // 両モードで10件ずつページング表示
   const startIdx = (currentPage - 1) * itemsPerPage;
   const endIdx = startIdx + itemsPerPage;
-  const displayData = filteredData.slice(startIdx, endIdx);
+  const pageData = filteredData.slice(startIdx, endIdx);
 
+  const grid = document.getElementById('kigoGrid');
   grid.innerHTML = '';
 
-  // グリッドとコンテンツボディに縦書きクラスを適用
-  if (isVerticalWriting) {
-    grid.classList.add('tategaki');
-    contentBody.classList.add('tategaki');
-  } else {
-    grid.classList.remove('tategaki');
-    contentBody.classList.remove('tategaki');
-  }
-
-  displayData.forEach(item => {
+  pageData.forEach(item => {
     const card = document.createElement('div');
-    card.className = `kigo-card${isVerticalWriting ? ' tategaki' : ''}`;
+    card.className = 'kigo-card';
     card.style.cursor = 'pointer';
     card.innerHTML = `
       <div class="kigo-word">${item.w}</div>
-      <div class="kigo-reading">${item.k || ''}</div>
+      <div class="kigo-reading">${item.k || '読み方なし'}</div>
       <div class="kigo-info">
-        <span class="kigo-badge badge-season">${item.s || ''}</span>
-        <span class="kigo-badge badge-period">${item.p || ''}</span>
-        <span class="kigo-badge badge-category">${item.c || ''}</span>
+        <span class="kigo-badge badge-season">${item.s || '季節なし'}</span>
+        <span class="kigo-badge badge-period">${item.p || '時期なし'}</span>
+        <span class="kigo-badge badge-category">${item.c || '部類なし'}</span>
       </div>
     `;
     
@@ -9106,7 +8902,6 @@ function renderGrid() {
     grid.appendChild(card);
   });
 
-  // 両モードでページネーションを表示
   renderPagination();
 }
 
@@ -9218,28 +9013,6 @@ function closeAboutModal() {
   const aboutModal = document.getElementById('aboutModal');
   aboutModal.classList.remove('show');
   document.body.style.overflow = 'auto';
-}
-
-// 縦書きモード切り替え
-function toggleWritingMode() {
-  isVerticalWriting = !isVerticalWriting;
-  const toggleBtn = document.getElementById('writingModeToggle');
-  
-  if (isVerticalWriting) {
-    toggleBtn.classList.add('active');
-    toggleBtn.innerHTML = '📝 横書き';
-  } else {
-    toggleBtn.classList.remove('active');
-    toggleBtn.innerHTML = '📝 縦書き';
-    // 横書きに戻す際は現在のページを維持（ただし範囲をチェック）
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-    if (currentPage > totalPages) {
-      currentPage = Math.max(1, totalPages);
-    }
-  }
-  
-  // 表示を更新
-  renderGrid();
 }
 
 // ESCキーでメニューとモーダルを閉じる
@@ -9464,4 +9237,12 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
 
-    <div class="modal-relations" id="modalRelations" style="display: non
+    <div class="modal-relations" id="modalRelations" style="display: none;">
+      <h3 id="relationsTitle">関連季語</h3>
+      <div class="relation-list" id="relationList"></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -270,10 +270,21 @@
     gap: 0.5rem;
   }
 
-  .filter-buttons {
+  /* 時期フィルター用の特別レイアウト */
+  .filter-section .filter-buttons {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0.8rem;
+  }
+
+  /* 時期フィルターは5個なので特別なレイアウト */
+  .filter-section:nth-of-type(2) .filter-buttons {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+  }
+
+  .filter-section:nth-of-type(2) .filter-buttons .filter-btn:first-child {
+    grid-column: 1 / -1;
   }
 
   .filter-btn {
@@ -1090,22 +1101,10 @@
     <label class="filter-label">📅 時期</label>
     <div class="filter-buttons">
       <button class="filter-btn period-btn active" data-value="">すべて</button>
-      <button class="filter-btn period-btn" data-value="初春">初春</button>
-      <button class="filter-btn period-btn" data-value="仲春">仲春</button>
-      <button class="filter-btn period-btn" data-value="晩春">晩春</button>
-      <button class="filter-btn period-btn" data-value="三春">三春</button>
-      <button class="filter-btn period-btn" data-value="初夏">初夏</button>
-      <button class="filter-btn period-btn" data-value="仲夏">仲夏</button>
-      <button class="filter-btn period-btn" data-value="晩夏">晩夏</button>
-      <button class="filter-btn period-btn" data-value="三夏">三夏</button>
-      <button class="filter-btn period-btn" data-value="初秋">初秋</button>
-      <button class="filter-btn period-btn" data-value="仲秋">仲秋</button>
-      <button class="filter-btn period-btn" data-value="晩秋">晩秋</button>
-      <button class="filter-btn period-btn" data-value="三秋">三秋</button>
-      <button class="filter-btn period-btn" data-value="初冬">初冬</button>
-      <button class="filter-btn period-btn" data-value="仲冬">仲冬</button>
-      <button class="filter-btn period-btn" data-value="晩冬">晩冬</button>
-      <button class="filter-btn period-btn" data-value="三冬">三冬</button>
+      <button class="filter-btn period-btn" data-value="三">三</button>
+      <button class="filter-btn period-btn" data-value="初">初</button>
+      <button class="filter-btn period-btn" data-value="仲">仲</button>
+      <button class="filter-btn period-btn" data-value="晩">晩</button>
     </div>
   </div>
 
@@ -1188,13 +1187,13 @@
       <p>鹼→鹸　搔→掻　蠟→蝋　鷗→鴎　蟬→蝉　剝→剥　啞→唖　屛→屏</p>
       
       <h3>✉ その他</h3>
-      <p>情報は正確を期していますが、誤り等がありましたら、<a href="mailto:twitter_quiz@yahoo.co.jp">メール</a>または<a href="https://x.com/slbzk">Ｘ（旧Twitter）</a>までご連絡ください。</p>
+      <p>情報は正確を期していますが、誤り等がありましたら、<a href="/cdn-cgi/l/email-protection#5b2f2c322f2f3e29042a2e32211b223a33343475383475312b">メール</a>または<a href="https://x.com/slbzk">Ｘ（旧Twitter）</a>までご連絡ください。</p>
 
     </div>
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // 季語辞典の完全なデータ
 const RAW = [
   // ============ 新年 ============
@@ -6492,12 +6491,12 @@ const BOUDAI_NEW = [
   {w:'風鈴売',k:'ふうりんうり',parent:'風鈴',type:'boudai'},
   {w:'ハイビスカス',k:'はいびすかす',parent:'仏桑花',type:'boudai'},
   {w:'琉球木槿',k:'りゅうきゅうむくげ',parent:'仏桑花',type:'boudai'},
-  {w:'ぼうたん',:k:'ぼうたん',parent:'牡丹',type:'boudai'},
-    {w:'富貴草',:k:'ふうきそう',parent:'牡丹',type:'boudai'},
-    {w:'深見草',:k:'ふかみぐさ',parent:'牡丹',type:'boudai'},
-  {w:'白牡丹',:k:'はくぼたん',parent:'牡丹',type:'boudai'},
-    {w:'緋牡丹',:k:'ひぼたん',parent:'牡丹',type:'boudai'},
-    {w:'牡丹園',:k:'ぼたんえん',parent:'牡丹',type:'boudai'},
+  {w:'ぼうたん',k:'ぼうたん',parent:'牡丹',type:'boudai'},
+    {w:'富貴草',k:'ふうきそう',parent:'牡丹',type:'boudai'},
+    {w:'深見草',k:'ふかみぐさ',parent:'牡丹',type:'boudai'},
+  {w:'白牡丹',k:'はくぼたん',parent:'牡丹',type:'boudai'},
+    {w:'緋牡丹',k:'ひぼたん',parent:'牡丹',type:'boudai'},
+    {w:'牡丹園',k:'ぼたんえん',parent:'牡丹',type:'boudai'},
   {w:'夏祭',k:'なつまつり',parent:'祭',type:'boudai'},
    {w:'神祭',k:'かみまつり',parent:'祭',type:'boudai'},
   {w:'祭笛',k:'まつりぶえ',parent:'祭',type:'boudai'},
@@ -8872,8 +8871,12 @@ function handleFilter() {
     // 季節フィルター
     if (currentFilters.season && item.s !== currentFilters.season) return false;
 
-    // 時期フィルター
-    if (currentFilters.period && item.p !== currentFilters.period) return false;
+    // 時期フィルター（季節と組み合わせ）
+    if (currentFilters.period) {
+      if (!matchesCombinedPeriod(item, currentFilters.season, currentFilters.period)) {
+        return false;
+      }
+    }
 
     // 部類フィルター
     if (currentFilters.category && item.c !== currentFilters.category) return false;
@@ -8891,6 +8894,46 @@ function handleFilter() {
   currentPage = 1;
   updateResultCount();
   renderGrid();
+}
+
+// 季節と時期の組み合わせマッチング関数
+function matchesCombinedPeriod(item, season, periodType) {
+  if (!periodType) return true;
+  
+  const itemPeriod = item.p;
+  if (!itemPeriod) return false;
+  
+  // 新年の特別処理
+  if (item.s === '新年') {
+    switch (periodType) {
+      case '三': return itemPeriod === '全新年';
+      case '初': return itemPeriod === '上新年';
+      case '仲': return itemPeriod === '中新年';
+      case '晩': return itemPeriod === '下新年';
+      default: return false;
+    }
+  }
+  
+  // 通常の季節の処理
+  if (season) {
+    const targetPeriod = periodType + season;
+    return itemPeriod === targetPeriod;
+  }
+  
+  // 季節が選択されていない場合は、すべての季節の該当時期を検索
+  const allPeriods = [
+    periodType + '春',
+    periodType + '夏', 
+    periodType + '秋',
+    periodType + '冬'
+  ];
+  
+  // 「三」の場合は「三春」「三夏」「三秋」「三冬」も含める
+  if (periodType === '三') {
+    allPeriods.push('三春', '三夏', '三秋', '三冬');
+  }
+  
+  return allPeriods.includes(itemPeriod);
 }
 
 function renderGrid() {
@@ -9256,12 +9299,4 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
 
-    <div class="modal-relations" id="modalRelations" style="display: none;">
-      <h3 id="relationsTitle">関連季語</h3>
-      <div class="relation-list" id="relationList"></div>
-    </div>
-  </div>
-</div>
-
-</body>
-</html>
+    <div class="modal-relations" id="modalRelations" style="display: non

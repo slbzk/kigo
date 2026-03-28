@@ -270,21 +270,10 @@
     gap: 0.5rem;
   }
 
-  /* 時期フィルター用の特別レイアウト */
-  .filter-section .filter-buttons {
+  .filter-buttons {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0.8rem;
-  }
-
-  /* 時期フィルターは5個なので特別なレイアウト */
-  .filter-section:nth-of-type(2) .filter-buttons {
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto auto;
-  }
-
-  .filter-section:nth-of-type(2) .filter-buttons .filter-btn:first-child {
-    grid-column: 1 / -1;
   }
 
   .filter-btn {
@@ -1105,6 +1094,7 @@
       <button class="filter-btn period-btn" data-value="初">初</button>
       <button class="filter-btn period-btn" data-value="仲">仲</button>
       <button class="filter-btn period-btn" data-value="晩">晩</button>
+      <div style="grid-column: 2;"></div>
     </div>
   </div>
 

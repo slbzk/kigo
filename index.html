@@ -8959,6 +8959,8 @@ function renderGrid() {
 
 // モーダル表示関数
 function showKigoModal(kigo) {
+  console.log('showKigoModal called with:', kigo);
+  
   // 基本情報を表示
   document.getElementById('modalKigoWord').textContent = kigo.w;
   document.getElementById('modalKigoReading').textContent = kigo.k || '読み方なし';
@@ -8971,9 +8973,15 @@ function showKigoModal(kigo) {
   const relationList = document.getElementById('relationList');
   const relationsTitle = document.getElementById('relationsTitle');
   
+  if (!relationsDiv || !relationList || !relationsTitle) {
+    console.error('Modal elements not found');
+    return;
+  }
+  
   relationList.innerHTML = '';
 
   if (kigo.type === 'boudai' && kigo.parent) {
+    console.log('Showing parent for boudai:', kigo.parent);
     // 傍題の場合、親季語を表示
     relationsTitle.textContent = '本季語';
     
@@ -8993,6 +9001,7 @@ function showKigoModal(kigo) {
   } else {
     // 本季語の場合、傍題を表示
     const boudaiList = kigoData.filter(k => k.type === 'boudai' && k.parent === kigo.w);
+    console.log('Found boudai for main kigo:', kigo.w, boudaiList);
     
     if (boudaiList.length > 0) {
       relationsTitle.textContent = `傍題 (${boudaiList.length}個)`;
@@ -9289,4 +9298,12 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
 
-    <div class="modal-relations" id="modalRelations" style="display: non
+    <div class="modal-relations" id="modalRelations" style="display: none;">
+      <h3 id="relationsTitle">関連季語</h3>
+      <div class="relation-list" id="relationList"></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

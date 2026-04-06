@@ -1157,17 +1157,8 @@
 
   <!-- メインコンテンツ -->
   <main>
-    <div class="content-header">
-      <div class="compact-mode-toggle">
-        <button class="compact-toggle-btn" id="compactToggleBtn" onclick="toggleCompactMode()" title="季節・時期・分類を非表示にして10件をまとめて表示">
-          <span id="compactToggleIcon">☰</span>
-          <span id="compactToggleLabel">コンパクト表示</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="content-body">
-      <div class="kigo-grid" id="kigoGrid"></div>
+    <div class="content-body compact-body">
+      <div class="kigo-grid compact" id="kigoGrid"></div>
     </div>
 
     <div class="pagination" id="pagination"></div>
@@ -6633,7 +6624,7 @@ const BOUDAI_NEW = [
   {w:'南部風鈴',k:'なんぶふうりん',parent:'風鈴',type:'boudai'},
   {w:'貝風鈴',k:'かいふうりん',parent:'風鈴',type:'boudai'},
   {w:'風鈴売',k:'ふうりんうり',parent:'風鈴',type:'boudai'},
-{w:'プールサイド',k:'ぷーるさいど',parent:'プール',type:'boudai'},
+{w:'プールサイド',k:'ぷーるさいど',parent:'泳ぎ',type:'boudai'},
   {w:'ハイビスカス',k:'はいびすかす',parent:'仏桑花',type:'boudai'},
   {w:'琉球木槿',k:'りゅうきゅうむくげ',parent:'仏桑花',type:'boudai'},
 {w:'ほうたる',k:'ほうたる',parent:'蛍',type:'boudai'},
@@ -8995,33 +8986,7 @@ let currentFilters = {
   category: '',
   mora: ''
 };
-const itemsPerPage = 10; // 50から10に変更
-let isCompactMode = false; // コンパクトモードフラグ
-
-// コンパクトモード切替
-function toggleCompactMode() {
-  isCompactMode = !isCompactMode;
-  const btn = document.getElementById('compactToggleBtn');
-  const icon = document.getElementById('compactToggleIcon');
-  const label = document.getElementById('compactToggleLabel');
-  const grid = document.getElementById('kigoGrid');
-  const contentBody = document.querySelector('.content-body');
-
-  if (isCompactMode) {
-    btn.classList.add('active');
-    icon.textContent = '⊞';
-    label.textContent = '通常表示';
-    grid.classList.add('compact');
-    contentBody.classList.add('compact-body');
-  } else {
-    btn.classList.remove('active');
-    icon.textContent = '☰';
-    label.textContent = 'コンパクト表示';
-    grid.classList.remove('compact');
-    contentBody.classList.remove('compact-body');
-  }
-  renderGrid();
-}
+const itemsPerPage = 10;
 
 // ボタンクリックイベントの設定
 document.addEventListener('click', (e) => {
@@ -9140,13 +9105,6 @@ function renderGrid() {
 
   const grid = document.getElementById('kigoGrid');
   grid.innerHTML = '';
-
-  // コンパクトモードのクラスを維持
-  if (isCompactMode) {
-    grid.classList.add('compact');
-  } else {
-    grid.classList.remove('compact');
-  }
 
   pageData.forEach(item => {
     const card = document.createElement('div');

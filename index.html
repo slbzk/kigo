@@ -1105,21 +1105,23 @@
     display: none;
   }
 
-  /* モバイル：5列×2行、スクロールなし */
+  /* モバイル：2列×5行、横書き、スクロールなし */
   @media (max-width: 768px) {
     .kigo-grid.compact {
-      grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(5, 1fr);
       height: 100%;
       flex: 1;
     }
     .kigo-grid.compact .kigo-card {
       height: 100%;
       padding: 0.5rem;
+      writing-mode: horizontal-tb;
     }
     .kigo-grid.compact .kigo-card .kigo-word {
-      font-size: clamp(0.95rem, 4vw, 1.4rem);
+      font-size: clamp(1rem, 5vw, 1.5rem);
       text-align: center;
+      writing-mode: horizontal-tb;
     }
     .content-body.compact-body {
       overflow-y: hidden;
@@ -1150,9 +1152,7 @@
     
     <input type="text" class="search-input" id="searchInput" placeholder="季語名や読み方を入力..." oninput="handleSearch()">
     
-    <div class="result-counter-inline">
-      該当: <span id="resultCount">0</span>個
-    </div>
+    <span id="resultCount" style="display:none"></span>
   </div>
 
   <!-- メインコンテンツ -->

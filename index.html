@@ -8988,8 +8988,11 @@ function handleFilter() {
       return false;
     }
 
-    // 季節フィルター
-    if (currentFilters.season && item.s !== currentFilters.season) return false;
+    // 変更後（配列対応）
+if (currentFilters.season) {
+  const seasons = Array.isArray(item.s) ? item.s : [item.s];
+  if (!seasons.includes(currentFilters.season)) return false;
+}
 
     // 時期フィルター（季節と組み合わせ）
     if (currentFilters.period) {

@@ -4601,7 +4601,6 @@ const BOUDAI_NEW = [
   {w:'沈丁',k:'じんちょう',parent:'沈丁花',type:'boudai'},
   {w:'丁字',k:'ちょうじ',parent:'沈丁花',type:'boudai'},
   {w:'瑞香',k:'ずいこう',parent:'沈丁花',type:'boudai'},
-  {w:'芸香',k:'うんこう',parent:'沈丁花',type:'boudai'},
   {w:'すかんぽ',k:'すかんぽ',parent:'酸葉',type:'boudai'},
   {w:'酸模',k:'すいば',parent:'酸葉',type:'boudai'},
   {w:'すいすい',k:'すいすい',parent:'酸葉',type:'boudai'},
@@ -9167,7 +9166,7 @@ function showKigoModal(kigo) {
   if (kigo.type === 'boudai' && kigo.parent) {
     console.log('Showing parent for boudai:', kigo.parent);
     // 傍題の場合、親季語を表示
-    relationsTitle.textContent = '本季語';
+    relationsTitle.textContent = '親季語';
     
     const parentItem = document.createElement('div');
     parentItem.className = 'relation-item';
@@ -9188,7 +9187,7 @@ function showKigoModal(kigo) {
     console.log('Found boudai for main kigo:', kigo.w, boudaiList);
     
     if (boudaiList.length > 0) {
-      relationsTitle.textContent = `傍題 (${boudaiList.length}個)`;
+      relationsTitle.textContent = `子季語 (${boudaiList.length}個)`;
       
       boudaiList.forEach(boudai => {
         const boudaiItem = document.createElement('div');

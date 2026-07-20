@@ -1096,6 +1096,102 @@
       height: calc(100vh - 120px) !important;
     }
   }
+  .view-toggle-btn {
+    background: var(--murasaki);
+    color: var(--yuki);
+    border: none;
+    border-radius: 10px;
+    padding: 0.6rem 0.8rem;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(147,112,219,0.35);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .view-toggle-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(147,112,219,0.5);
+  }
+  .content-body.list-body {
+    overflow-y: auto;
+    flex: unset;
+    height: calc(100vh - 160px);
+  }
+  .kigo-grid.list-mode {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    grid-template-columns: unset;
+    grid-template-rows: unset;
+  }
+  .kigo-grid.list-mode .kigo-card {
+    display: table-row;
+    min-height: unset;
+    height: auto;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  .kigo-grid.list-mode .kigo-card::before { display: none; }
+  .kigo-grid.list-mode .kigo-card:hover { transform: none; box-shadow: none; }
+  .kigo-grid.list-mode .kigo-card:nth-child(odd) { background: rgba(255,255,255,0.35); }
+  .kigo-grid.list-mode .kigo-card:hover .list-cell { background: rgba(147,112,219,0.12); }
+  .list-cell {
+    display: table-cell;
+    padding: 0.55rem 0.5rem;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+  }
+  .list-cell.cell-word {
+    color: var(--sumi);
+    white-space: nowrap;
+    width: 40%;
+    text-align: center;
+  }
+  .list-cell.cell-reading {
+    color: var(--sumi);
+    opacity: 0.6;
+    white-space: nowrap;
+    width: 40%;
+    text-align: center;
+  }
+  .list-cell.cell-period {
+    color: var(--sumi);
+    opacity: 0.75;
+    white-space: nowrap;
+    width: 3em;
+    min-width: 3em;
+    max-width: 3em;
+    text-align: center;
+  }
+  .list-cell.cell-category {
+    color: var(--murasaki);
+    font-weight: 600;
+    white-space: nowrap;
+    width: 3em;
+    min-width: 3em;
+    max-width: 3em;
+    text-align: center;
+  }
+  .list-header { display: table-row; }
+  .list-header .list-cell {
+    opacity: 0.45;
+    letter-spacing: 0.08em;
+    border-bottom: 2px solid var(--card-border);
+    padding-bottom: 0.4rem;
+    text-align: center;
+  }
+  @media (max-width: 768px) {
+    .list-cell.cell-reading { min-width: 4rem; }
+    .list-cell.cell-word { min-width: 4rem; }
+  }
 </style>
 </head>
 <body>
@@ -1117,12 +1213,16 @@
     
     <input type="text" class="search-input" id="searchInput" placeholder="季語名や読み方を入力..." oninput="handleSearch()">
     
+    <button class="view-toggle-btn" id="viewToggleBtn" onclick="toggleViewMode()" title="表示切り替え">
+      <span id="viewToggleIcon">☰</span>
+    </button>
+
     <span id="resultCount" style="display:none"></span>
   </div>
 
   <!-- メインコンテンツ -->
   <main>
-    <div class="content-body compact-body">
+    <div class="content-body compact-body" id="contentBody">
       <div class="kigo-grid compact" id="kigoGrid"></div>
     </div>
 
@@ -9100,6 +9200,28 @@ let currentFilters = {
   mora: ''
 };
 const itemsPerPage = 10;
+let viewMode = 'compact'; // 'compact' | 'list'
+
+function toggleViewMode() {
+  viewMode = viewMode === 'compact' ? 'list' : 'compact';
+  const icon = document.getElementById('viewToggleIcon');
+  const contentBody = document.getElementById('contentBody');
+  const grid = document.getElementById('kigoGrid');
+  if (viewMode === 'list') {
+    icon.textContent = '⊞';
+    contentBody.classList.remove('compact-body');
+    contentBody.classList.add('list-body');
+    grid.classList.remove('compact');
+    grid.classList.add('list-mode');
+  } else {
+    icon.textContent = '☰';
+    contentBody.classList.remove('list-body');
+    contentBody.classList.add('compact-body');
+    grid.classList.remove('list-mode');
+    grid.classList.add('compact');
+  }
+  renderGrid();
+}
 
 // ボタンクリックイベントの設定
 document.addEventListener('click', (e) => {
@@ -9222,25 +9344,50 @@ function renderGrid() {
   const grid = document.getElementById('kigoGrid');
   grid.innerHTML = '';
 
-  pageData.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'kigo-card';
-    card.style.cursor = 'pointer';
-    card.innerHTML = `
-      <div class="kigo-word">${item.w}</div>
-      <div class="kigo-reading">${item.k || '読み方なし'}</div>
-      <div class="kigo-info">
-        <span class="kigo-badge badge-season">${item.s || '季節なし'}</span>
-        <span class="kigo-badge badge-period">${item.p || '時期なし'}</span>
-        <span class="kigo-badge badge-category">${item.c || '部類なし'}</span>
-      </div>
+  if (viewMode === 'list') {
+    // ── リスト表示 ──
+    const header = document.createElement('div');
+    header.className = 'list-header';
+    header.innerHTML = `
+      <div class="list-cell">季語</div>
+      <div class="list-cell">分類</div>
+      <div class="list-cell">時期</div>
     `;
-    
-    // クリックイベントを追加
-    card.addEventListener('click', () => showKigoModal(item));
-    
-    grid.appendChild(card);
-  });
+    grid.appendChild(header);
+
+    pageData.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'kigo-card';
+      row.style.cursor = 'pointer';
+      const period = Array.isArray(item.p) ? item.p.join('・') : (item.p || '');
+      row.innerHTML = `
+        <div class="list-cell cell-word">${item.w}</div>
+        <div class="list-cell cell-category">${item.c || ''}</div>
+        <div class="list-cell cell-period">${period}</div>
+      `;
+      row.addEventListener('click', () => showKigoModal(item));
+      grid.appendChild(row);
+    });
+
+  } else {
+    // ── コンパクト表示（グリッド） ──
+    pageData.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'kigo-card';
+      card.style.cursor = 'pointer';
+      card.innerHTML = `
+        <div class="kigo-word">${item.w}</div>
+        <div class="kigo-reading">${item.k || '読み方なし'}</div>
+        <div class="kigo-info">
+          <span class="kigo-badge badge-season">${item.s || '季節なし'}</span>
+          <span class="kigo-badge badge-period">${item.p || '時期なし'}</span>
+          <span class="kigo-badge badge-category">${item.c || '部類なし'}</span>
+        </div>
+      `;
+      card.addEventListener('click', () => showKigoModal(item));
+      grid.appendChild(card);
+    });
+  }
 
   renderPagination();
 }

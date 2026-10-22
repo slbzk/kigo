@@ -1369,6 +1369,7 @@ const RAW = [
   {w:'当年',k:'とうねん',s:'新年',p:'全新年',c:'時候',parent:'今年',type:'boudai'},
   {w:'若き年',k:'わかきとし',s:'新年',p:'全新年',c:'時候',parent:'今年',type:'boudai'},
   {w:'去年今年',k:'こぞことし',s:'新年',p:'全新年',c:'時候'},
+  {w:'去年今年貫く棒の如きもの',k:'高浜虚子',s:'新年',p:'全新年',c:'時候',parent:'初春',type:'reiku'},
   {w:'去年',k:'こぞ／きょねん',s:'新年',p:'全新年',c:'時候'},
   {w:'古年',k:'ふるとし',s:'新年',p:'全新年',c:'時候',parent:'去年',type:'boudai'},
   {w:'旧年',k:'きゅうねん',s:'新年',p:'全新年',c:'時候',parent:'去年',type:'boudai'},
@@ -9509,6 +9510,28 @@ function showKigoModal(kigo) {
     }
   }
 
+  // 例句を表示
+  const reikuList = kigoData.filter(
+    k => k.type === 'reiku' && k.parent === kigo.w
+  );
+
+  if (reikuList.length > 0) {
+    const reikuTitle = document.createElement('h3');
+    reikuTitle.textContent = '例句';
+    relationList.appendChild(reikuTitle);
+
+    reikuList.forEach(reiku => {
+      const item = document.createElement('div');
+      item.className = 'relation-item';
+      item.style.cursor = 'default';
+      item.textContent = `${reiku.w}（${reiku.k}）`;
+      relationList.appendChild(item);
+    });
+
+    relationsTitle.textContent = '例句';
+    relationsDiv.style.display = 'block';
+  }
+  
   // モーダルを表示
   document.getElementById('kigoModal').classList.add('show');
   document.body.style.overflow = 'hidden'; // 背景スクロールを無効化

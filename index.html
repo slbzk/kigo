@@ -9243,7 +9243,7 @@ const kigoData = RAW;
 const searchData = RAW.filter(k => k.type !== 'reiku');
 console.log(`季語データ読み込み完了: ${kigoData.length}個`);
 
-let filteredData = kigoData;
+let filteredData = searchData;
 let currentPage = 1;
 let currentFilters = {
   search: '',
@@ -9463,6 +9463,34 @@ function showKigoModal(kigo) {
   const relationsTitle = document.getElementById('relationsTitle');
 
   relationList.innerHTML = '';
+
+// 指定された親季語に対応する例句
+const reikuList = kigoData.filter(
+  item => item.type === 'reiku' &&
+          item.parent === kigo.w
+);
+
+if (reikuList.length > 0) {
+  relationsTitle.textContent = '例句';
+  relationsDiv.style.display = 'block';
+
+  reikuList.forEach(reiku => {
+    const item = document.createElement('div');
+    item.className = 'relation-item';
+
+    const poem = document.createElement('div');
+    poem.textContent = reiku.w;
+
+    const author = document.createElement('div');
+    author.textContent = reiku.k || '作者不明';
+    author.style.fontSize = '0.85rem';
+    author.style.marginTop = '0.4rem';
+
+    item.appendChild(poem);
+    item.appendChild(author);
+    relationList.appendChild(item);
+  });
+}
 
 const reikuList = kigoData.filter(
   k => k.type === 'reiku' && k.parent === kigo.w

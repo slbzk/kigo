@@ -9239,7 +9239,7 @@ const RAW = [
   {w:'寒木瓜',k:'かんぼけ',s:'冬',p:'晩冬',c:'植物'},
 ];
 
-const kigoData = RAW;
+const kigoData = RAW.filter(k => k.type !== 'reiku');
 console.log(`季語データ読み込み完了: ${kigoData.length}個`);
 
 let filteredData = kigoData;
@@ -9463,10 +9463,9 @@ function showKigoModal(kigo) {
 
   relationList.innerHTML = '';
 
-  // 例句を取得（parent がタップした季語名と一致するもの）
-  const reikuList = kigoData.filter(
-    k => k.type === 'reiku' && k.parent === kigo.w
-  );
+const reikuList = kigoData.filter(
+  k => k.type === 'reiku' && k.parent === kigo.w
+);
 
   // 傍題を取得
   const boudaiList = kigoData.filter(

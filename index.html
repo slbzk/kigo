@@ -9456,80 +9456,75 @@ function showKigoModal(kigo) {
   document.getElementById('modalCategory').textContent = kigo.c || '部類なし';
 
   // 関連季語を表示
+  // 関連季語・例句を表示
   const relationsDiv = document.getElementById('modalRelations');
   const relationList = document.getElementById('relationList');
   const relationsTitle = document.getElementById('relationsTitle');
-  
-  if (!relationsDiv || !relationList || !relationsTitle) {
-    console.error('Modal elements not found');
-    return;
-  }
-  
+
   relationList.innerHTML = '';
 
-  if (kigo.type === 'boudai' && kigo.parent) {
-    console.log('Showing parent for boudai:', kigo.parent);
-    // 傍題の場合、親季語を表示
-    relationsTitle.textContent = '親季語';
-    
-    const parentItem = document.createElement('div');
-    parentItem.className = 'relation-item';
-    parentItem.textContent = kigo.parent;
-    parentItem.addEventListener('click', () => {
-      // 親季語の詳細を表示
-      const parentKigo = kigoData.find(k => k.w === kigo.parent);
-      if (parentKigo) {
-        showKigoModal(parentKigo);
-      }
-    });
-    
-    relationList.appendChild(parentItem);
-    relationsDiv.style.display = 'block';
-  } else {
-    // 本季語の場合、傍題を表示
-    const boudaiList = kigoData.filter(k => k.type === 'boudai' && k.parent === kigo.w);
-    console.log('Found boudai for main kigo:', kigo.w, boudaiList);
-    
-    if (boudaiList.length > 0) {
-      relationsTitle.textContent = `子季語 (${boudaiList.length}個)`;
-      
-      boudaiList.forEach(boudai => {
-        const boudaiItem = document.createElement('div');
-        boudaiItem.className = 'relation-item';
-        boudaiItem.textContent = boudai.w;
-        boudaiItem.addEventListener('click', () => {
-          showKigoModal(boudai);
-        });
-        
-        relationList.appendChild(boudaiItem);
-      });
-      
-      relationsDiv.style.display = 'block';
-    } else {
-      relationsDiv.style.display = 'none';
-    }
-  }
-
-  // 例句を表示
+  // 例句を取得（parent がタップした季語名と一致するもの）
   const reikuList = kigoData.filter(
     k => k.type === 'reiku' && k.parent === kigo.w
   );
 
+  // 傍題を取得
+  const boudaiList = kigoData.filter(
+    k => k.type === 'boudai' && k.parent === kigo.w
+  );
+
   if (reikuList.length > 0) {
-    const reikuTitle = document.createElement('h3');
-    reikuTitle.textContent = '例句';
-    relationList.appendChild(reikuTitle);
+    relationsTitle.textContent = '例句';
 
     reikuList.forEach(reiku => {
       const item = document.createElement('div');
       item.className = 'relation-item';
       item.style.cursor = 'default';
-      item.textContent = `${reiku.w}（${reiku.k}）`;
+
+      const poem = document.createElement('div');
+      poem.textContent = reiku.w;
+
+      const author = document.createElement('div');
+      author.textContent = reiku.k || '作者不明';
+      author.style.fontSize = '0.85rem';
+      author.style.opacity = '0.7';
+      author.style.marginTop = '0.4rem';
+
+      item.appendChild(poem);
+      item.appendChild(author);
       relationList.appendChild(item);
     });
 
-    relationsTitle.textContent = '例句';
     relationsDiv.style.display = 'block';
+  } else if (kigo.type === 'boudai' && kigo.parent) {
+    // 傍題の場合は親季語を表示
+    relationsTitle.textContent = '親季語';
+
+    const parentItem = document.createElement('div');
+    parentItem.className = 'relation-item';
+    parentItem.textContent = kigo.parent;
+    parentItem.addEventListener('click', () => {
+      const parentKigo = kigoData.find(k => k.w === kigo.parent);
+      if (parentKigo) showKigoModal(parentKigo);
+    });
+
+    relationList.appendChild(parentItem);
+    relationsDiv.style.display = 'block';
+  } else if (boudaiList.length > 0) {
+    // 本季語の場合は傍題を表示
+    relationsTitle.textContent = `傍題（${boudaiList.length}個）`;
+
+    boudaiList.forEach(boudai => {
+      const item = document.createElement('div');
+      item.className = 'relation-item';
+      item.textContent = boudai.w;
+      item.addEventListener('click', () => showKigoModal(boudai));
+      relationList.appendChild(item);
+    });
+
+    relationsDiv.style.display = 'block';
+  } else {
+    relationsDiv.style.display = 'none';
   }
   
   // モーダルを表示

@@ -9239,7 +9239,8 @@ const RAW = [
   {w:'寒木瓜',k:'かんぼけ',s:'冬',p:'晩冬',c:'植物'},
 ];
 
-const kigoData = RAW.filter(k => k.type !== 'reiku');
+const kigoData = RAW;
+const searchData = RAW.filter(k => k.type !== 'reiku');
 console.log(`季語データ読み込み完了: ${kigoData.length}個`);
 
 let filteredData = kigoData;

@@ -111,8 +111,10 @@
     background: var(--card-bg);
     backdrop-filter: blur(10px);
     border-radius: 20px;
-    padding: 0.5rem 1.5rem;
-       display: flex;
+    padding: 1rem 1.5rem;
+    border: 2px solid var(--card-border);
+    box-shadow: 0 10px 30px var(--shadow);
+    display: flex;
     align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
@@ -553,7 +555,7 @@
     backdrop-filter: blur(10px);
     border: 2px solid var(--card-border);
     border-radius: 15px;
-    padding: 0.2rem;
+    padding: 1rem;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -1369,7 +1371,6 @@ const RAW = [
   {w:'当年',k:'とうねん',s:'新年',p:'全新年',c:'時候',parent:'今年',type:'boudai'},
   {w:'若き年',k:'わかきとし',s:'新年',p:'全新年',c:'時候',parent:'今年',type:'boudai'},
   {w:'去年今年',k:'こぞことし',s:'新年',p:'全新年',c:'時候'},
-  {w:'去年今年貫く棒の如きもの',k:'高浜虚子',s:'新年',p:'全新年',c:'時候',parent:'去年今年',type:'reiku'},
   {w:'去年',k:'こぞ／きょねん',s:'新年',p:'全新年',c:'時候'},
   {w:'古年',k:'ふるとし',s:'新年',p:'全新年',c:'時候',parent:'去年',type:'boudai'},
   {w:'旧年',k:'きゅうねん',s:'新年',p:'全新年',c:'時候',parent:'去年',type:'boudai'},
@@ -6505,7 +6506,7 @@ const RAW = [
   {w:'初菊',k:'はつぎく',s:'秋',p:'三秋',c:'植物',parent:'菊',type:'boudai'},
   {w:'厚物咲',k:'あつものざき',s:'秋',p:'三秋',c:'植物',parent:'菊',type:'boudai'},
   {w:'懸崖菊',k:'けんがいぎく',s:'秋',p:'三秋',c:'植物',parent:'菊',type:'boudai'},
-  {w:'菊畑',k:'きくばたけ',s:'秋',p:'三秋',c:'植物',parent:'菊',type:'boudai'},
+  {w:'菊畑',k:'きくばたけ',s'秋',p:'三秋',c:'植物',parent:'菊',type:'boudai'},
   {w:'菊の宿',k:'きくのやど',s:'秋',p:'三秋',c:'植物',parent:'菊',type:'boudai'},
   {w:'菊作り',k:'きくづくり',s:'秋',p:'三秋',c:'植物',parent:'菊',type:'boudai'},
   {w:'菊日和',k:'きくびより',s:'秋',p:'三秋',c:'植物',parent:'菊',type:'boudai'},
@@ -8938,7 +8939,6 @@ const RAW = [
   {w:'降誕祭',k:'こうたんさい',s:'冬',p:'仲冬',c:'行事',parent:'クリスマス',type:'boudai'},
   {w:'聖誕節',k:'せいたんせつ',s:'冬',p:'仲冬',c:'行事',parent:'クリスマス',type:'boudai'},
   {w:'聖夜',k:'せいや',s:'冬',p:'仲冬',c:'行事',parent:'クリスマス',type:'boudai'},
-   {w:'聖夜の灯',k:'せいやのひ',s:'冬',p:'仲冬',c:'行事',parent:'クリスマス',type:'boudai'},
   {w:'聖歌',k:'せいか',s:'冬',p:'仲冬',c:'行事',parent:'クリスマス',type:'boudai'},
   {w:'クリスマスツリー',k:'くりすますつりー',s:'冬',p:'仲冬',c:'行事',parent:'クリスマス',type:'boudai'},
   {w:'聖樹',k:'せいじゅ',s:'冬',p:'仲冬',c:'行事',parent:'クリスマス',type:'boudai'},
@@ -9240,10 +9240,9 @@ const RAW = [
 ];
 
 const kigoData = RAW;
-const searchData = RAW.filter(k => k.type !== 'reiku');
 console.log(`季語データ読み込み完了: ${kigoData.length}個`);
 
-let filteredData = searchData;
+let filteredData = kigoData;
 let currentPage = 1;
 let currentFilters = {
   search: '',
@@ -9457,104 +9456,60 @@ function showKigoModal(kigo) {
   document.getElementById('modalCategory').textContent = kigo.c || '部類なし';
 
   // 関連季語を表示
-  // 関連季語・例句を表示
   const relationsDiv = document.getElementById('modalRelations');
   const relationList = document.getElementById('relationList');
   const relationsTitle = document.getElementById('relationsTitle');
-
+  
+  if (!relationsDiv || !relationList || !relationsTitle) {
+    console.error('Modal elements not found');
+    return;
+  }
+  
   relationList.innerHTML = '';
 
-// 指定された親季語に対応する例句
-const reikuList = kigoData.filter(
-  item => item.type === 'reiku' &&
-          item.parent === kigo.w
-);
-
-if (reikuList.length > 0) {
-  relationsTitle.textContent = '例句';
-  relationsDiv.style.display = 'block';
-
-  reikuList.forEach(reiku => {
-    const item = document.createElement('div');
-    item.className = 'relation-item';
-
-    const poem = document.createElement('div');
-    poem.textContent = reiku.w;
-
-    const author = document.createElement('div');
-    author.textContent = reiku.k || '作者不明';
-    author.style.fontSize = '0.85rem';
-    author.style.marginTop = '0.4rem';
-
-    item.appendChild(poem);
-    item.appendChild(author);
-    relationList.appendChild(item);
-  });
-}
-
-const reikuList = kigoData.filter(
-  k => k.type === 'reiku' && k.parent === kigo.w
-);
-
-  // 傍題を取得
-  const boudaiList = kigoData.filter(
-    k => k.type === 'boudai' && k.parent === kigo.w
-  );
-
-  if (reikuList.length > 0) {
-    relationsTitle.textContent = '例句';
-
-    reikuList.forEach(reiku => {
-      const item = document.createElement('div');
-      item.className = 'relation-item';
-      item.style.cursor = 'default';
-
-      const poem = document.createElement('div');
-      poem.textContent = reiku.w;
-
-      const author = document.createElement('div');
-      author.textContent = reiku.k || '作者不明';
-      author.style.fontSize = '0.85rem';
-      author.style.opacity = '0.7';
-      author.style.marginTop = '0.4rem';
-
-      item.appendChild(poem);
-      item.appendChild(author);
-      relationList.appendChild(item);
-    });
-
-    relationsDiv.style.display = 'block';
-  } else if (kigo.type === 'boudai' && kigo.parent) {
-    // 傍題の場合は親季語を表示
+  if (kigo.type === 'boudai' && kigo.parent) {
+    console.log('Showing parent for boudai:', kigo.parent);
+    // 傍題の場合、親季語を表示
     relationsTitle.textContent = '親季語';
-
+    
     const parentItem = document.createElement('div');
     parentItem.className = 'relation-item';
     parentItem.textContent = kigo.parent;
     parentItem.addEventListener('click', () => {
+      // 親季語の詳細を表示
       const parentKigo = kigoData.find(k => k.w === kigo.parent);
-      if (parentKigo) showKigoModal(parentKigo);
+      if (parentKigo) {
+        showKigoModal(parentKigo);
+      }
     });
-
+    
     relationList.appendChild(parentItem);
     relationsDiv.style.display = 'block';
-  } else if (boudaiList.length > 0) {
-    // 本季語の場合は傍題を表示
-    relationsTitle.textContent = `傍題（${boudaiList.length}個）`;
-
-    boudaiList.forEach(boudai => {
-      const item = document.createElement('div');
-      item.className = 'relation-item';
-      item.textContent = boudai.w;
-      item.addEventListener('click', () => showKigoModal(boudai));
-      relationList.appendChild(item);
-    });
-
-    relationsDiv.style.display = 'block';
   } else {
-    relationsDiv.style.display = 'none';
+    // 本季語の場合、傍題を表示
+    const boudaiList = kigoData.filter(k => k.type === 'boudai' && k.parent === kigo.w);
+    console.log('Found boudai for main kigo:', kigo.w, boudaiList);
+    
+    if (boudaiList.length > 0) {
+      relationsTitle.textContent = `子季語 (${boudaiList.length}個)`;
+      
+      boudaiList.forEach(boudai => {
+        const boudaiItem = document.createElement('div');
+        boudaiItem.className = 'relation-item';
+        boudaiItem.textContent = boudai.w;
+        boudaiItem.addEventListener('click', () => {
+          showKigoModal(boudai);
+        });
+        
+        relationList.appendChild(boudaiItem);
+      });
+      
+      relationsDiv.style.display = 'block';
+    } else {
+      relationsDiv.style.display = 'none';
+    }
   }
-  
+
   // モーダルを表示
   document.getElementById('kigoModal').classList.add('show');
   document.body.style.overflow = 'hidden'; // 背景スクロールを無効化

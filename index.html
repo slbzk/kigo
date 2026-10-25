@@ -926,6 +926,46 @@
     margin-top: 2rem;
   }
 
+  .modal-reiku {
+    margin-top: 2rem;
+  }
+
+  .modal-reiku h3 {
+    font-size: 1.2rem;
+    color: var(--sumi);
+    margin-bottom: 1rem;
+    text-align: center;
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-weight: 600;
+  }
+
+  .reiku-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .reiku-item {
+    padding: 0.9rem 1.2rem;
+    border-left: 3px solid var(--vermillion);
+    background: rgba(0,0,0,0.03);
+    border-radius: 4px;
+    line-height: 1.8;
+  }
+
+  .reiku-text {
+    display: block;
+    font-size: 1.1rem;
+    color: var(--sumi);
+  }
+
+  .reiku-author {
+    display: block;
+    text-align: right;
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
   .modal-relations h3 {
     font-size: 1.2rem;
     color: var(--sumi);
@@ -1358,38 +1398,75 @@ const RAW = [
   {w:'年改まる',k:'としあらたまる',s:'新年',p:'全新年',c:'時候',parent:'新年',type:'boudai'},
   {w:'年来る',k:'としくる／としきたる',s:'新年',p:'全新年',c:'時候',parent:'新年',type:'boudai'},
   {w:'年迎ふ',k:'としむかう',s:'新年',p:'全新年',c:'時候',parent:'新年',type:'boudai'},
+{w:'年改まり人改まり行くのみぞ',k:'高浜虚子',s:'新年',p:'全新年',c:'時候',parent:'新年',type:'reiku'},
+{w:'オリオンの楯新しき年に入る',k:'橋本多佳子',s:'新年',p:'全新年',c:'時候',parent:'新年',type:'reiku'},
+{w:'搾乳のあらたまの白ほとばしる',k:'大野崇文',s:'新年',p:'全新年',c:'時候',parent:'新年',type:'reiku'},
+{w:'古きよき言の葉をもて年迎ふ',k:'富安風生',s:'新年',p:'全新年',c:'時候',parent:'新年',type:'reiku'},
+
   {w:'初春',k:'はつはる',s:'新年',p:'全新年',c:'時候'},
   {w:'新春',k:'しんしゅん',s:'新年',p:'全新年',c:'時候',parent:'初春',type:'boudai'},
   {w:'明の春',k:'あけのはる',s:'新年',p:'全新年',c:'時候',parent:'初春',type:'boudai'},
   {w:'今朝の春',k:'けさのはる',s:'新年',p:'全新年',c:'時候',parent:'初春',type:'boudai'},
   {w:'千代の春',k:'ちよのはる',s:'新年',p:'全新年',c:'時候',parent:'初春',type:'boudai'},
+  {w:'目出度さもちう位なりおらが春',k:'小林一茶',s:'新年',p:'全新年',c:'時候',parent:'初春',type:'reiku'},
+    {w:'酒もすき餅もすきなり今朝の春',k:'高浜虚子',s:'新年',p:'全新年',c:'時候',parent:'初春',type:'reiku'},
+  {w:'いでてゆく船に犬吠え浦の春',k:'岸 風三樓',s:'新年',p:'全新年',c:'時候',parent:'初春',type:'reiku'},
+  
   {w:'正月',k:'しょうがつ',s:'新年',p:'全新年',c:'時候'},
   {w:'お正月',k:'おしょうがつ',s:'新年',p:'全新年',c:'時候',parent:'正月',type:'boudai'},
   {w:'祝月',k:'いわいづき',s:'新年',p:'全新年',c:'時候',parent:'正月',type:'boudai'},
   {w:'元月',k:'がんげつ',s:'新年',p:'全新年',c:'時候',parent:'正月',type:'boudai'},
+{w:'正月の地べたを使ふ遊びかな',k:'茨木和生',s:'新年',p:'全新年',c:'時候',parent:'正月',type:'reiku'},
+{w:'正月や楷書のごとき山の晴',k:'林　徹',s:'新年',p:'全新年',c:'時候',parent:'正月',type:'reiku'},
+  
   {w:'今年',k:'ことし／こんねん',s:'新年',p:'全新年',c:'時候'},
   {w:'当年',k:'とうねん',s:'新年',p:'全新年',c:'時候',parent:'今年',type:'boudai'},
   {w:'若き年',k:'わかきとし',s:'新年',p:'全新年',c:'時候',parent:'今年',type:'boudai'},
+{w:'旅先に鶴見て今年はじまりぬ',k:'鈴木真砂女',s:'新年',p:'全新年',c:'時候',parent:'今年',type:'reiku'},
+  
   {w:'去年今年',k:'こぞことし',s:'新年',p:'全新年',c:'時候'},
+{w:'去年今年貫く棒の如きもの',k:'高浜虚子',s:'新年',p:'全新年',c:'時候',parent:'去年今年',type:'reiku'},
+{w:'大いなる闇うごきだす去年今年',k:'桂　信子',s:'新年',p:'全新年',c:'時候',parent:'去年今年',type:'reiku'},
+{w:'暗きより火種をはこぶ去年今年',k:'柿本多映',s:'新年',p:'全新年',c:'時候',parent:'去年今年',type:'reiku'},
+  
   {w:'去年',k:'こぞ／きょねん',s:'新年',p:'全新年',c:'時候'},
   {w:'古年',k:'ふるとし',s:'新年',p:'全新年',c:'時候',parent:'去年',type:'boudai'},
   {w:'旧年',k:'きゅうねん',s:'新年',p:'全新年',c:'時候',parent:'去年',type:'boudai'},
   {w:'初昔',k:'はつむかし',s:'新年',p:'全新年',c:'時候',parent:'去年',type:'boudai'},
   {w:'宵の年',k:'よいのとし',s:'新年',p:'全新年',c:'時候',parent:'去年',type:'boudai'},
+{w:'雀あそぶ去年の筋目の畑かな',k:'寺島ただし',s:'新年',p:'全新年',c:'時候',parent:'去年',type:'reiku'},
+{w:'枕に手置いてはるかや初昔',k:'鷲谷七菜子',s:'新年',p:'全新年',c:'時候',parent:'去年',type:'reiku'},
+  
     // 全新年／天文
   {w:'淑気',k:'しゅくき',s:'新年',p:'全新年',c:'天文'},
   {w:'淑気満つ',k:'しゅくきみつ',s:'新年',p:'全新年',c:'天文',parent:'淑気',type:'boudai'},
+  {w:'淑気立つ',k:'しゅくきたつ',s:'新年',p:'全新年',c:'天文',parent:'淑気',type:'boudai'},
+{w:'遠山の折り目正しき淑気かな',k:'伊藤敬子',s:'新年',p:'全新年',c:'天文',parent:'淑気',type:'reiku'},
+{w:'木曾谷の素白の石の淑気かな',k:'山上樹実雄',s:'新年',p:'全新年',c:'天文',parent:'淑気',type:'reiku'},
+  
     // 全新年／生活
   {w:'福藁',k:'ふくわら',s:'新年',p:'全新年',c:'生活'},
   {w:'福藁敷く',k:'ふくわらしく',s:'新年',p:'全新年',c:'生活',parent:'福藁',type:'boudai'},
   {w:'ふくさ藁',k:'ふくさわら',s:'新年',p:'全新年',c:'生活',parent:'福藁',type:'boudai'},
+{w:'福藁や鼻梁をすべる眼鏡あり',k:'中原道夫',s:'新年',p:'全新年',c:'生活',parent:'福藁',type:'reiku'},
+{w:'福藁や暖かそうに犬眠る',k:'安藤橡面坊',s:'新年',p:'全新年',c:'生活',parent:'福藁',type:'reiku'},
+  
   {w:'初旅',k:'はつたび',s:'新年',p:'全新年',c:'生活'},
   {w:'旅始',k:'たびはじめ',s:'新年',p:'全新年',c:'生活',parent:'初旅',type:'boudai'},
   {w:'旅行始',k:'りょこうはじめ',s:'新年',p:'全新年',c:'生活',parent:'初旅',type:'boudai'},
+{w:'海見ゆる窓得て母の旅初め',k:'永方裕子',s:'新年',p:'全新年',c:'生活',parent:'初旅',type:'reiku'},
+  
   {w:'新年会',k:'しんねんかい',s:'新年',p:'全新年',c:'生活'},
   {w:'新年宴会',k:'しんねんえんかい',s:'新年',p:'全新年',c:'生活',parent:'新年会',type:'boudai'},
+{w:'今も師に遠く坐すなり新年会',k:'風間ゆき',s:'新年',p:'全新年',c:'生活',parent:'新年会',type:'reiku'},
+  
   {w:'初句会',k:'はつくかい',s:'新年',p:'全新年',c:'生活'},
   {w:'新年句会',k:'しんねんくかい',s:'新年',p:'全新年',c:'生活',parent:'初句会',type:'boudai'},
+{w:'一回も名乗りをあげず初句会',k:'荒川実',s:'新年',p:'全新年',c:'生活',parent:'初句会',type:'reiku'},
+{w:'眉太き青年来たる初句会',k:'涼野海音',s:'新年',p:'全新年',c:'生活',parent:'初句会',type:'reiku'},
+{w:'入魂の一句採られず初句会',k:'井出野浩貴',s:'新年',p:'全新年',c:'生活',parent:'初句会',type:'reiku'},
+{w:'投じたる懐剣一句初句会',k:'轡田進',s:'新年',p:'全新年',c:'生活',parent:'初句会',type:'reiku'},
+  
   {w:'万歳',k:'まんざい',s:'新年',p:'全新年',c:'生活'},
   {w:'三河万歳',k:'みかわまんざい',s:'新年',p:'全新年',c:'生活',parent:'万歳',type:'boudai'},
   {w:'大和万歳',k:'やまとまんざい',s:'新年',p:'全新年',c:'生活',parent:'万歳',type:'boudai'},
@@ -3740,6 +3817,7 @@ const RAW = [
   {w:'夜桜',k:'よざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
   {w:'若桜',k:'わかざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
   {w:'老桜',k:'おいざくら',s:'春',p:'晩春',c:'植物',parent:'桜',type:'boudai'},
+  {w:'さまざまのこと思ひ出す桜かな',k:'松尾芭蕉',s:'春',p:'晩春',c:'植物',parent:'桜',type:'reiku'},
   {w:'花',k:'はな',s:'春',p:'晩春',c:'植物'},
   {w:'花盛り',k:'はなざかり',s:'春',p:'晩春',c:'植物',parent:'花',type:'boudai'},
   {w:'花明り',k:'はなあかり',s:'春',p:'晩春',c:'植物',parent:'花',type:'boudai'},
@@ -9243,7 +9321,9 @@ const RAW = [
 const kigoData = RAW;
 console.log(`季語データ読み込み完了: ${kigoData.length}個`);
 
-let filteredData = kigoData;
+// 例句(reiku)は検索・一覧の対象外
+const searchableData = kigoData.filter(k => k.type !== 'reiku');
+let filteredData = searchableData;
 let currentPage = 1;
 let currentFilters = {
   search: '',
@@ -9312,7 +9392,7 @@ function handleSearch() {
 }
 
 function handleFilter() {
-  filteredData = kigoData.filter(item => {
+  filteredData = searchableData.filter(item => {
     // 検索テキストフィルター
     if (currentFilters.search && !item.w.includes(currentFilters.search) && !item.k.includes(currentFilters.search)) {
       return false;
@@ -9478,7 +9558,7 @@ function showKigoModal(kigo) {
     parentItem.textContent = kigo.parent;
     parentItem.addEventListener('click', () => {
       // 親季語の詳細を表示
-      const parentKigo = kigoData.find(k => k.w === kigo.parent);
+      const parentKigo = kigoData.find(k => k.w === kigo.parent && k.type !== 'reiku');
       if (parentKigo) {
         showKigoModal(parentKigo);
       }
@@ -9509,6 +9589,30 @@ function showKigoModal(kigo) {
     } else {
       relationsDiv.style.display = 'none';
     }
+  }
+
+  // 例句の表示
+  const reikuDiv = document.getElementById('modalReiku');
+  const reikuListEl = document.getElementById('reikuList');
+  reikuListEl.innerHTML = '';
+  const reikuList = kigoData.filter(k => k.type === 'reiku' && k.parent === kigo.w);
+  if (reikuList.length > 0) {
+    reikuList.forEach(r => {
+      const item = document.createElement('div');
+      item.className = 'reiku-item';
+      const text = document.createElement('span');
+      text.className = 'reiku-text';
+      text.textContent = r.w;
+      const author = document.createElement('span');
+      author.className = 'reiku-author';
+      author.textContent = '— ' + r.k;
+      item.appendChild(text);
+      item.appendChild(author);
+      reikuListEl.appendChild(item);
+    });
+    reikuDiv.style.display = 'block';
+  } else {
+    reikuDiv.style.display = 'none';
   }
 
   // モーダルを表示
@@ -9789,6 +9893,11 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="modal-relations" id="modalRelations" style="display: none;">
       <h3 id="relationsTitle">関連季語</h3>
       <div class="relation-list" id="relationList"></div>
+    </div>
+
+    <div class="modal-reiku" id="modalReiku" style="display: none;">
+      <h3>例句</h3>
+      <div class="reiku-list" id="reikuList"></div>
     </div>
   </div>
 </div>
